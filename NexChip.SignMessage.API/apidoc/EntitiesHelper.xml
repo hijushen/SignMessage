@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NexChip.SignMessage.Entities</name>
+    </assembly>
+    <members>
+        <member name="T:NexChip.SignMessage.Entities.DateFormatDef">
+            <summary>
+            日期
+            </summary>
+        </member>
+        <member name="M:NexChip.SignMessage.Entities.DateFormatDef.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:NexChip.SignMessage.Entities.DateTimeFormatDef">
+            <summary>
+            时间
+            </summary>
+        </member>
+        <member name="M:NexChip.SignMessage.Entities.DateTimeFormatDef.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:NexChip.SignMessage.Entities.MessageModel`1">
+            <summary>
+            通用类
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.TableModel`1.Code">
+            <summary>
+            表格数据，支持分页
+            </summary>
+        </member>
+        <member name="T:NexChip.SignMessage.Entities.Student">
+            <summary>
+            学生实体
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.Student.Tid">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.Student.ClassId">
+            <summary>
+            班级Id
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.Student.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="T:NexChip.SignMessage.Entities.SignMessageMessageBodyViewModel">
+            <summary>
+            签核箱消息内容实体
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageMessageBodyViewModel.sourceid">
+            <summary>
+            原系统id
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageMessageBodyViewModel.fromid">
+            <summary>
+            发送人id
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageMessageBodyViewModel.fromname">
+            <summary>
+            发送人名称
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageMessageBodyViewModel.toids">
+            <summary>
+            接收方ids
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageMessageBodyViewModel.tonames">
+            <summary>
+            接收方名字
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageMessageBodyViewModel.handletype">
+            <summary>
+            1.新增 2.完成 3.取消
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageMessageBodyViewModel.callbackurl">
+            <summary>
+            跳转回 业务系统 url
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageMessageBodyViewModel.emergencylevel">
+            <summary>
+            紧急程度1.平件 2.急件 3.特急（默认1）
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageMessageBodyViewModel.substance">
+            <summary>
+            主旨
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageMessageBodyViewModel.showmsg">
+            <summary>
+            需要额外显示在签核箱中的内容
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageMessageBodyViewModel.createtime">
+            <summary>
+            发送时间
+            <example>2019-08-31 19:00:00</example>
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageMessageBodyViewModel.updatetime">
+            <summary>
+            发送时间
+            <example>2019-08-31 19:00:00</example>
+            </summary>
+        </member>
+        <member name="T:NexChip.SignMessage.Entities.SignMessageModel">
+            <summary>
+            签核箱 消息接口实体
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageModel.appname">
+            <summary>
+            发送来源平台名称
+            <example>某个名称</example>
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageModel.sendtime">
+            <summary>
+            发送时间
+            <example>2019-08-31 19:00:00</example>
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageModel.msgbody">
+            <summary>
+            签核箱消息内容主体
+            </summary>
+        </member>
+    </members>
+</doc>

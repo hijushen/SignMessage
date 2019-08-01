@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.757
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NexChip.SignMessage.Web", "NexChip.SignMessage.Web\NexChip.SignMessage.Web.csproj", "{1C4E2CB4-1EF7-4D37-972D-E273646EB63C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NexChip.SignMessage.API", "NexChip.SignMessage.API\NexChip.SignMessage.API.csproj", "{DC5F8D75-64F4-465C-BB9D-2D3C4F4C3C20}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NexChip.SignMessage.Entities", "NexChip.SignMessage.Entities\NexChip.SignMessage.Entities.csproj", "{1D913DF1-ECD8-497A-96BB-8CE2BCE1EE5B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NexChip.SignMessage.Bussiness", "NexChip.SignMessage.Bussiness\NexChip.SignMessage.Bussiness.csproj", "{6EB64CAB-3ADC-434B-AC37-282D9FE940D5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C4E2CB4-1EF7-4D37-972D-E273646EB63C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C4E2CB4-1EF7-4D37-972D-E273646EB63C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C4E2CB4-1EF7-4D37-972D-E273646EB63C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C4E2CB4-1EF7-4D37-972D-E273646EB63C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC5F8D75-64F4-465C-BB9D-2D3C4F4C3C20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC5F8D75-64F4-465C-BB9D-2D3C4F4C3C20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC5F8D75-64F4-465C-BB9D-2D3C4F4C3C20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC5F8D75-64F4-465C-BB9D-2D3C4F4C3C20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D913DF1-ECD8-497A-96BB-8CE2BCE1EE5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D913DF1-ECD8-497A-96BB-8CE2BCE1EE5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D913DF1-ECD8-497A-96BB-8CE2BCE1EE5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D913DF1-ECD8-497A-96BB-8CE2BCE1EE5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EB64CAB-3ADC-434B-AC37-282D9FE940D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EB64CAB-3ADC-434B-AC37-282D9FE940D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EB64CAB-3ADC-434B-AC37-282D9FE940D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EB64CAB-3ADC-434B-AC37-282D9FE940D5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FE847C34-62EA-4CCC-BEB1-576CB307F744}
+	EndGlobalSection
+EndGlobal

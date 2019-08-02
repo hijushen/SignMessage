@@ -4,6 +4,13 @@
         <name>NexChip.SignMessage.API</name>
     </assembly>
     <members>
+        <member name="M:NexChip.SignMessage.API.Controllers.Admin.EntityController.CreateEntity(System.String)">
+            <summary>
+            生成实体类
+            </summary>
+            <param name="entityName"></param>
+            <returns></returns>
+        </member>
         <member name="T:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController">
             <summary>
             签核箱 消息接口

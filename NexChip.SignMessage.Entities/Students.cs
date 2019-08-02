@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SqlSugar;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,11 +8,13 @@ namespace NexChip.SignMessage.Entities
     /// <summary>
     /// 学生实体
     /// </summary>
-    public class Student
+    [SugarTable("Student")]
+    public partial class Student
     {
         /// <summary>
         /// Id
         /// </summary>
+        
         public int Tid { get; set; }
         /// <summary>
         /// 班级Id

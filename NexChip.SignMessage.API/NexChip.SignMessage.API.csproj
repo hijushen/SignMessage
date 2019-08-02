@@ -27,8 +27,4 @@
     <ProjectReference Include="..\NexChip.SignMessage.Entities\NexChip.SignMessage.Entities.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\Admin\" />
-  </ItemGroup>
-
 </Project>

@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NexChip.SignMessage.Entities\NexChip.SignMessage.Entities.csproj" />
+    <ProjectReference Include="..\NexChip.SignMessage.IServices\NexChip.SignMessage.IServices.csproj" />
+    <ProjectReference Include="..\NexChip.SignMessage.Services\NexChip.SignMessage.Services.csproj" />
   </ItemGroup>
 
 </Project>

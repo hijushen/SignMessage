@@ -1,5 +1,6 @@
 ﻿
 using NexChip.SignMessage.Entities;
+using NexChip.SignMessage.Model;
 using SqlSugar;
 using System;
 using System.Collections.Generic;

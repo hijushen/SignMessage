@@ -28,7 +28,8 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
         [Route("NewSignMsg")]
         public JsonResult PostNewSignMsg([FromBody]SignMessageModel value)
         {
-            return Json(bll.PostNewSignMsg(value));
+            //return Json(bll.PostNewSignMsg(value));
+            return null;
         }
 
         /// <summary>
@@ -40,7 +41,8 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
         [Route("UpdateSignMsg")]
         public JsonResult PostUpdateMsg([FromBody]SignMessageModel value)
         {
-            return Json(bll.PostUpdateMsg(value));
+            //return Json(bll.PostUpdateMsg(value));
+            return null;
         }
     }
 }

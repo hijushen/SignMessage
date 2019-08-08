@@ -11,6 +11,40 @@
             <param name="entityName"></param>
             <returns></returns>
         </member>
+        <member name="T:NexChip.SignMessage.API.Controllers.Admin.StudentController">
+            <summary>
+            学生模块
+            </summary>
+        </member>
+        <member name="M:NexChip.SignMessage.API.Controllers.Admin.StudentController.GetStudentPageList(System.Int32,System.Int32)">
+            <summary>
+            获取学生分页列表
+            </summary>
+            <param name="pageIndex"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NexChip.SignMessage.API.Controllers.Admin.StudentController.GetStudentById(System.Int64)">
+            <summary>
+            获取单个学生
+            </summary>
+            <param name="id">Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:NexChip.SignMessage.API.Controllers.Admin.StudentController.Add(NexChip.SignMessage.Entities.Student)">
+            <summary>
+            添加
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NexChip.SignMessage.API.Controllers.Admin.StudentController.Update(NexChip.SignMessage.Entities.Student)">
+            <summary>
+            编辑学生
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
         <member name="T:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController">
             <summary>
             签核箱 消息接口

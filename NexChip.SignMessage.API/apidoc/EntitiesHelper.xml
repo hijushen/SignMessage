@@ -24,16 +24,6 @@
             
             </summary>
         </member>
-        <member name="T:NexChip.SignMessage.Entities.MessageModel`1">
-            <summary>
-            通用类
-            </summary>
-        </member>
-        <member name="P:NexChip.SignMessage.Entities.TableModel`1.Code">
-            <summary>
-            表格数据，支持分页
-            </summary>
-        </member>
         <member name="T:NexChip.SignMessage.Entities.Student">
             <summary>
             学生实体
@@ -42,7 +32,7 @@
         <member name="P:NexChip.SignMessage.Entities.Student.Tid">
             <summary>
             Id
-            </summary>
+            </summary>        
         </member>
         <member name="P:NexChip.SignMessage.Entities.Student.ClassId">
             <summary>

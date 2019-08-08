@@ -13,8 +13,7 @@ namespace NexChip.SignMessage.Entities
     {
         /// <summary>
         /// Id
-        /// </summary>
-        
+        /// </summary>        
         public int Tid { get; set; }
         /// <summary>
         /// 班级Id

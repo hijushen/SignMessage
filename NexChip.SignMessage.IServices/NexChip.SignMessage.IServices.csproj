@@ -4,4 +4,9 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NexChip.SignMessage.Entities\NexChip.SignMessage.Entities.csproj" />
+    <ProjectReference Include="..\NexChip.SignMessage.Model\NexChip.SignMessage.Model.csproj" />
+  </ItemGroup>
+
 </Project>

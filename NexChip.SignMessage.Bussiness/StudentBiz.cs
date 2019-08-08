@@ -1,4 +1,6 @@
 ﻿using NexChip.SignMessage.Entities;
+using NexChip.SignMessage.IServices;
+using NexChip.SignMessage.Model;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -8,48 +10,40 @@ namespace NexChip.SignMessage.Bussiness
 {
     public class StudentBiz
     {
-        //private SqlSugarClient db = BaseDB.GetClient();
-        public SimpleClient<Student> sdb = new SimpleClient<Student>(BaseDB.GetClient());
-
-        public TableModel<Student> GetPageList(int pageIndex, int pageSize)
-        {
-            PageModel p = new PageModel() { PageIndex = pageIndex, PageSize = pageSize };
-            Expression<Func<Student, bool>> ex = (it => 1 == 1);
-            List<Student> data = sdb.GetPageList(ex, p);
-            TableModel<Student> t = new TableModel<Student>();
-            t.Code = 0;
-            t.Count = p.PageCount;
-            t.Data = data;
-            t.Msg = "成功";
-            return t;
-        }
+        private IStudentService IService = new Services.StudentService();
 
         public Student GetById(long id)
         {
-            return sdb.GetById(id);
+            return IService.Get(id);
         }
 
-        private MessageModel<Student> WrapReturnMessage(bool success)
+        public TableModel<Student> GetPageList(int pageIndex, int pageSize)
         {
-            return new MessageModel<Student> {
-                Success = success,
-                Msg = success ? "操作成功" : "操作失败"
-            };
+            return IService.GetPageList(pageIndex, pageSize);
         }
 
         public MessageModel<Student> Add(Student entity)
         {
-            return WrapReturnMessage(sdb.Insert(entity));
+            if (IService.Add(entity))
+                return new MessageModel<Student> { Success = true, Msg = "操作成功" };
+            else
+                return new MessageModel<Student> { Success = false, Msg = "操作失败" };
         }
 
         public MessageModel<Student> Update(Student entity)
         {
-            return WrapReturnMessage(sdb.Update(entity));
+            if (IService.Update(entity))
+                return new MessageModel<Student> { Success = true, Msg = "操作成功" };
+            else
+                return new MessageModel<Student> { Success = false, Msg = "操作失败" };
         }
 
         public MessageModel<Student> Dels(dynamic[] ids)
         {
-            return WrapReturnMessage(sdb.DeleteByIds(ids));
+            if (IService.Dels(ids))
+                return new MessageModel<Student> { Success = true, Msg = "操作成功" };
+            else
+                return new MessageModel<Student> { Success = false, Msg = "操作失败" };
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NexChip.SignMessage.Utils
+namespace NexChip.SignMessage.Model
 {
     public class BaseDB
     {

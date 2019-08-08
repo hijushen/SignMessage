@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NexChip.SignMessage.Entities\NexChip.SignMessage.Entities.csproj" />
+    <PackageReference Include="sqlSugarCore" Version="5.0.0.9" />
   </ItemGroup>
 
 </Project>

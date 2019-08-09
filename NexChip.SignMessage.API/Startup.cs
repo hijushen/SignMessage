@@ -54,6 +54,14 @@ namespace NexChip.SignMessage.API
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
             });
 
+            services.AddApiVersioning(o =>
+            {
+                o.ReportApiVersions = true;//return versions in a response header
+                o.DefaultApiVersion = new ApiVersion(1, 0);//default version select 
+                o.AssumeDefaultVersionWhenUnspecified = false;//if not specifying an api version,show the default version
+            });
+
+
             #region Token认证
             services.AddSingleton<IMemoryCache>(factory =>
             {
@@ -73,6 +81,18 @@ namespace NexChip.SignMessage.API
             #region Swagger
             services.AddSwaggerGen(c =>
             {
+
+                c.DocInclusionPredicate((version, apiDescription) =>
+                {
+                    var values = apiDescription.RelativePath
+                        .Split('/')
+                        .Select(v => v.Replace("v{version}", version));
+
+                    apiDescription.RelativePath = string.Join("/", values);
+
+                    return true;
+                });
+
                 c.SwaggerDoc("v1", new Info
                 {
                     Version = "v1.1.0",

@@ -9,6 +9,7 @@ namespace NexChip.SignMessage.API.Controllers
     /// <summary>
     /// 控制器注释测试
     /// </summary>
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase

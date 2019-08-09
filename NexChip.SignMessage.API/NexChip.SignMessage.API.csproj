@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NexChip.SignMessage.Bussiness\NexChip.SignMessage.Bussiness.csproj" />
     <ProjectReference Include="..\NexChip.SignMessage.Entities\NexChip.SignMessage.Entities.csproj" />
+    <ProjectReference Include="..\NexChip.SignMessage.Token\NexChip.SignMessage.Token.csproj" />
   </ItemGroup>
 
 </Project>

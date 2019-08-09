@@ -4,25 +4,80 @@
         <name>NexChip.SignMessage.Entities</name>
     </assembly>
     <members>
-        <member name="T:NexChip.SignMessage.Entities.DateFormatDef">
-            <summary>
-            日期
-            </summary>
-        </member>
-        <member name="M:NexChip.SignMessage.Entities.DateFormatDef.#ctor">
+        <member name="T:Models.SignMessageRole">
             <summary>
             
             </summary>
         </member>
-        <member name="T:NexChip.SignMessage.Entities.DateTimeFormatDef">
+        <member name="P:Models.SignMessageRole.OID">
             <summary>
-            时间
-            </summary>
+            Desc:
+            Default:
+            Nullable:False
+            </summary>           
         </member>
-        <member name="M:NexChip.SignMessage.Entities.DateTimeFormatDef.#ctor">
+        <member name="P:Models.SignMessageRole.appname">
             <summary>
-            
-            </summary>
+            Desc:
+            Default:
+            Nullable:False
+            </summary>           
+        </member>
+        <member name="P:Models.SignMessageRole.reservedkey1">
+            <summary>
+            Desc:
+            Default:
+            Nullable:True
+            </summary>           
+        </member>
+        <member name="P:Models.SignMessageRole.reservedkey2">
+            <summary>
+            Desc:
+            Default:
+            Nullable:True
+            </summary>           
+        </member>
+        <member name="P:Models.SignMessageRole.rolestatus">
+            <summary>
+            Desc:
+            Default:1
+            Nullable:False
+            </summary>           
+        </member>
+        <member name="P:Models.SignMessageRole.invalidtime">
+            <summary>
+            Desc:
+            Default:dateadd(year,(10),getdate())
+            Nullable:False
+            </summary>           
+        </member>
+        <member name="P:Models.SignMessageRole.createtime">
+            <summary>
+            Desc:
+            Default:DateTime.Now
+            Nullable:False
+            </summary>           
+        </member>
+        <member name="P:Models.SignMessageRole.updatetime">
+            <summary>
+            Desc:
+            Default:DateTime.Now
+            Nullable:False
+            </summary>           
+        </member>
+        <member name="P:Models.SignMessageRole.creater">
+            <summary>
+            Desc:
+            Default:
+            Nullable:True
+            </summary>           
+        </member>
+        <member name="P:Models.SignMessageRole.updater">
+            <summary>
+            Desc:
+            Default:
+            Nullable:True
+            </summary>           
         </member>
         <member name="T:NexChip.SignMessage.Entities.Student">
             <summary>

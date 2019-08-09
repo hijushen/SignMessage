@@ -63,14 +63,14 @@ namespace NexChip.SignMessage.Entities
         /// 发送时间
         /// <example>2019-08-31 19:00:00</example>
         /// </summary>
-        [JsonConverter(typeof(CustomDateConverter))]
+        //[JsonConverter(typeof(CustomDateConverter))]
         public DateTime? createtime { get; set; }
 
         /// <summary>
         /// 发送时间
         /// <example>2019-08-31 19:00:00</example>
         /// </summary>
-        [JsonConverter(typeof(CustomDateConverter))]
+        //[JsonConverter(typeof(CustomDateConverter))]
         public DateTime? updatetime { get; set; }
     }
 }

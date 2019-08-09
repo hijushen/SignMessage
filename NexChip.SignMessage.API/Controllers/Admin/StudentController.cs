@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NexChip.SignMessage.Bussiness;
 using NexChip.SignMessage.Entities;
@@ -37,6 +38,7 @@ namespace NexChip.SignMessage.API.Controllers.Admin
         /// <param name="id">Id</param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [Authorize(Policy ="Admin")]
         public JsonResult GetStudentById(long id)
         {
             return Json(bll.GetById(id));

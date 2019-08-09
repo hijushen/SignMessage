@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Serialization;
+using NexChip.SignMessage.API.AuthHelper;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace NexChip.SignMessage.API
@@ -52,6 +54,21 @@ namespace NexChip.SignMessage.API
                 options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
             });
 
+            #region Token认证
+            services.AddSingleton<IMemoryCache>(factory =>
+            {
+                var cache = new MemoryCache(new MemoryCacheOptions());
+                return cache;
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("System", policy => policy.RequireClaim("SystemType").Build());
+                options.AddPolicy("Client", policy => policy.RequireClaim("ClientType").Build());
+                options.AddPolicy("Admin", policy => policy.RequireClaim("AdminType").Build());
+            });
+
+            #endregion
 
             #region Swagger
             services.AddSwaggerGen(c =>
@@ -97,7 +114,13 @@ namespace NexChip.SignMessage.API
                 app.UseDeveloperExceptionPage();
             }
 
+            #region Token
+            app.UseMiddleware<TokenAuth>();
+            #endregion
+
+
             app.UseMvc();
+
 
             #region Swagger
             app.UseSwagger();

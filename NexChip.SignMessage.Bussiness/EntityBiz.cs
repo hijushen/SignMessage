@@ -1,6 +1,8 @@
 ﻿
 using NexChip.SignMessage.Entities;
+using NexChip.SignMessage.IServices;
 using NexChip.SignMessage.Model;
+using NexChip.SignMessage.Services;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -13,20 +15,7 @@ namespace NexChip.SignMessage.Bussiness
     /// </summary>
     public class EntityBiz
     {
-        //public SqlSugarClient db = GetClient();
-        public SqlSugarClient Db => GetInstance();
-
-        private SqlSugarClient GetInstance()
-        {
-            var Db = new SqlSugarClient(new ConnectionConfig()
-            {
-                ConnectionString = BaseDBConfig.ConnectionString,
-                DbType = DbType.SqlServer,
-                IsAutoCloseConnection = true
-            });
-
-            return Db;
-        }
+        private IEntity iService = new EntityService();
         /// <summary>
         /// 生成实体类
         /// </summary>
@@ -47,10 +36,17 @@ namespace NexChip.SignMessage.Bussiness
                 string filePath = baseFileProvider + "NexChip.SignMessage.Entities";
                 try
                 {
-                    var s = Db.Ado.GetDataTable("select * from Student");
+
+                    if (iService.CreateEntity(entityName, filePath))
+                        return new MessageModel<string> { Success = true, Msg = "生成成功" };
+                    else
+                        return new MessageModel<string> { Success = false, Msg = "生成失败" };
+
+
+                    //var s = Db.Ado.GetDataTable("select * from Student");
                     //var s2 = Db.Queryable<Student>().ToSql();
                     //Db.DbFirst.IsCreateAttribute().Where(entityName).CreateClassFile(filePath);
-                    return new MessageModel<string> { Success = true, Msg = "生成成功" };
+                    //return new MessageModel<string> { Success = true, Msg = "生成成功" };
 
                 }
                 catch(Exception ex)

@@ -4,6 +4,29 @@
         <name>NexChip.SignMessage.API</name>
     </assembly>
     <members>
+        <member name="T:NexChip.SignMessage.API.AuthHelper.TokenAuth">
+            <summary>
+            Token验证授权中间件
+            </summary>
+        </member>
+        <member name="F:NexChip.SignMessage.API.AuthHelper.TokenAuth._next">
+            <summary>
+            http委托
+            </summary>
+        </member>
+        <member name="M:NexChip.SignMessage.API.AuthHelper.TokenAuth.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="next"></param>
+        </member>
+        <member name="M:NexChip.SignMessage.API.AuthHelper.TokenAuth.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            验证授权
+            </summary>
+            <param name="httpContext"></param>
+            <returns></returns>
+        </member>
         <member name="M:NexChip.SignMessage.API.Controllers.Admin.EntityController.CreateEntity(System.String)">
             <summary>
             生成实体类

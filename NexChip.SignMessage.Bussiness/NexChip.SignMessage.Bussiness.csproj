@@ -1,11 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NexChip.SignMessage.IServices\NexChip.SignMessage.IServices.csproj" />
     <ProjectReference Include="..\NexChip.SignMessage.Services\NexChip.SignMessage.Services.csproj" />
   </ItemGroup>
 

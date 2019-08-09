@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NexChip.SignMessage.Bussiness
+namespace NexChip.SignMessage.Services
 {
     public class BaseDB
     {
@@ -14,7 +14,6 @@ namespace NexChip.SignMessage.Bussiness
                 new ConnectionConfig()
                 {
                     ConnectionString = BaseDBConfig.ConnectionString,
-
                     DbType = DbType.SqlServer,
                     IsAutoCloseConnection = true
                 }

@@ -1,21 +1,22 @@
 ﻿using NexChip.SignMessage.Entities;
+using NexChip.SignMessage.Services;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace NexChip.SignMessage.Bussiness
 {
     public class SignMessgeBiz
     {
-        public SimpleClient<SignMessageModel> sdb = new SimpleClient<SignMessageModel>(BaseDB.GetClient());
+        private SignMessageRoleService Service = new SignMessageRoleService();
 
 
-        public SignMessageModel GetById(long id)
+        public DataTable getTest()
         {
-            return sdb.GetById(id);
+            return Service.TestList();
         }
-
         
     }
 }

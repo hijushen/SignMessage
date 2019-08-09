@@ -1,7 +1,7 @@
 ﻿
 using NexChip.SignMessage.Entities;
-using NexChip.SignMessage.IServices;
-using NexChip.SignMessage.Model;
+ 
+ 
 using NexChip.SignMessage.Services;
 using SqlSugar;
 using System;
@@ -15,7 +15,7 @@ namespace NexChip.SignMessage.Bussiness
     /// </summary>
     public class EntityBiz
     {
-        private IEntity iService = new EntityService();
+        private EntityService iService = new EntityService();
         /// <summary>
         /// 生成实体类
         /// </summary>

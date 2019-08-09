@@ -20,6 +20,7 @@ namespace NexChip.SignMessage.API.Controllers.Admin
     public class StudentController : Controller
     {
         private StudentBiz bll = new StudentBiz();
+        private SignMessgeBiz sbiz = new SignMessgeBiz();
         #region base
         /// <summary>
         /// 获取学生分页列表
@@ -68,6 +69,17 @@ namespace NexChip.SignMessage.API.Controllers.Admin
             if (entity == null)
                 return Json("参数为空");
             return Json(bll.Update(entity));
+        }
+
+        /// <summary>
+        /// TestSome
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("TestSome")]
+        public JsonResult TestSome()
+        {
+            return Json(sbiz.getTest());
         }
 
         ///// <summary>

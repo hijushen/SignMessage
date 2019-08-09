@@ -1,6 +1,5 @@
 ﻿using NexChip.SignMessage.Entities;
-using NexChip.SignMessage.IServices;
-using NexChip.SignMessage.Model;
+using NexChip.SignMessage.Services;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ namespace NexChip.SignMessage.Bussiness
 {
     public class StudentBiz
     {
-        private IStudentService IService = new Services.StudentService();
+        private StudentService IService = new Services.StudentService();
 
         public Student GetById(long id)
         {

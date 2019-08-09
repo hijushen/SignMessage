@@ -68,6 +68,12 @@
             <param name="entity"></param>
             <returns></returns>
         </member>
+        <member name="M:NexChip.SignMessage.API.Controllers.Admin.StudentController.TestSome">
+            <summary>
+            TestSome
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController">
             <summary>
             签核箱 消息接口

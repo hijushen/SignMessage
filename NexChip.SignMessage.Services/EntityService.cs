@@ -1,5 +1,5 @@
-﻿using NexChip.SignMessage.IServices;
-using NexChip.SignMessage.Model;
+﻿
+
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Text;
 
 namespace NexChip.SignMessage.Services
 {
-    public class EntityService: BaseDB, IEntity 
+    public class EntityService: BaseDB 
     {
         public SqlSugarClient db = GetClient();
         /// <summary>

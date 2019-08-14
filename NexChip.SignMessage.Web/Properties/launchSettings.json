@@ -1,7 +1,11 @@
-﻿{
+{
   "iisSettings": {
-    "windowsAuthentication": false, 
-    "anonymousAuthentication": true, 
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost:9001/",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:6857",
       "sslPort": 0
@@ -18,10 +22,14 @@
     "NexChip.SignMessage.Web": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "http://localhost:5001"
+    },
+    "IIS": {
+      "commandName": "IIS",
+      "ancmHostingModel": "InProcess"
     }
   }
 }

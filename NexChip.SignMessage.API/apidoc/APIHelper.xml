@@ -74,11 +74,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController">
-            <summary>
-            签核箱 消息接口
-            </summary>
-        </member>
+        <!-- 对于成员“T:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController”忽略有格式错误的 XML 注释 -->
         <member name="M:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController.PostNewSignMsg(NexChip.SignMessage.Entities.SignMessageModel)">
             <summary>
             新增签核箱消息
@@ -92,44 +88,12 @@
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="T:NexChip.SignMessage.API.Controllers.SignMessage.V2.SignMessageController">
-            <summary>
-            签核箱 消息接口
-            </summary>
-        </member>
-        <member name="M:NexChip.SignMessage.API.Controllers.SignMessage.V2.SignMessageController.PostNewSignMsg(NexChip.SignMessage.Entities.SignMessageModel)">
-            <summary>
-            新增签核箱消息
-            </summary>
-            <param name="value"></param>
-        </member>
-        <member name="M:NexChip.SignMessage.API.Controllers.SignMessage.V2.SignMessageController.PostUpdateMsg(NexChip.SignMessage.Entities.SignMessageModel)">
-            <summary>
-            更新签核箱消息
-            </summary>
-            <param name="value"></param>
-            <returns></returns>
-        </member>
         <member name="T:NexChip.SignMessage.API.Controllers.ValuesController">
             <summary>
             控制器注释测试
             </summary>
-            
         </member>
         <member name="M:NexChip.SignMessage.API.Controllers.ValuesController.Get(System.Int32)">
-            <summary>
-            测试程序
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="T:NexChip.SignMessage.API.Controllers.V2.ValuesController">
-            <summary>
-            控制器注释测试
-            </summary>
-            
-        </member>
-        <member name="M:NexChip.SignMessage.API.Controllers.V2.ValuesController.Get(System.Int32)">
             <summary>
             测试程序
             </summary>

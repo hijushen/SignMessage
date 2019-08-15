@@ -4,157 +4,157 @@
         <name>NexChip.SignMessage.Entities</name>
     </assembly>
     <members>
-        <member name="T:Models.SignMessageBox">
+        <member name="T:NexChip.SignMessage.Entities.SignMessageBox">
             <summary>
             
             </summary>
         </member>
-        <member name="P:Models.SignMessageBox.OID">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.OID">
             <summary>
             Desc:
             Default:
             Nullable:False
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.appname">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.appname">
             <summary>
             Desc:
             Default:
             Nullable:False
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.msgsourceid">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.msgsourceid">
             <summary>
             Desc:
             Default:
             Nullable:False
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.msgstatus">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.msgstatus">
             <summary>
             Desc:
             Default:
             Nullable:False
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.emergencylevel">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.emergencylevel">
             <summary>
             Desc:
             Default:
             Nullable:False
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.sendtime">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.sendtime">
             <summary>
             Desc:
             Default:
             Nullable:True
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.fromempid">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.fromempid">
             <summary>
             Desc:
             Default:
             Nullable:False
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.fromempname">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.fromempname">
             <summary>
             Desc:
             Default:
             Nullable:True
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.toempid">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.toempid">
             <summary>
             Desc:
             Default:
             Nullable:False
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.toempname">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.toempname">
             <summary>
             Desc:
             Default:
             Nullable:True
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.callbackurl">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.callbackurl">
             <summary>
             Desc:
             Default:
             Nullable:True
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.substance">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.substance">
             <summary>
             Desc:
             Default:
             Nullable:True
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.showmsg">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.showmsg">
             <summary>
             Desc:
             Default:
             Nullable:True
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.createtime">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.createtime">
             <summary>
             Desc:
             Default:DateTime.Now
             Nullable:False
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.updatetime">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.updatetime">
             <summary>
             Desc:
             Default:DateTime.Now
             Nullable:False
             </summary>           
         </member>
-        <member name="P:Models.SignMessageBox.remark">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.remark">
             <summary>
             Desc:
             Default:
             Nullable:True
             </summary>           
         </member>
-        <member name="T:Models.SignMessageInterface">
+        <member name="T:NexChip.SignMessage.Entities.SignMessageInterface">
             <summary>
             
             </summary>
         </member>
-        <member name="P:Models.SignMessageInterface.OID">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.OID">
             <summary>
             Desc:
             Default:
             Nullable:False
             </summary>           
         </member>
-        <member name="P:Models.SignMessageInterface.appname">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.appname">
             <summary>
             Desc:
             Default:
             Nullable:False
             </summary>           
         </member>
-        <member name="P:Models.SignMessageInterface.handleresult">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.handleresult">
             <summary>
             Desc:
             Default:0
             Nullable:False
             </summary>           
         </member>
-        <member name="P:Models.SignMessageInterface.sendtime">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.sendtime">
             <summary>
             Desc:
             Default:DateTime.Now
             Nullable:False
             </summary>           
         </member>
-        <member name="P:Models.SignMessageInterface.msgbody">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.msgbody">
             <summary>
             Desc:
             Default:

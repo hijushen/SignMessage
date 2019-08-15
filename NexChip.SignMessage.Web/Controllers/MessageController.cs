@@ -36,15 +36,6 @@ namespace NexChip.SignMessage.Web.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult MessageList()
-        {
-            //return null;
-            return Json(biz.MessageList());
-
-
-            //return Json();
-        }
 
         [HttpGet]
         public IActionResult GetGridJSON(

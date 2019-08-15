@@ -11,16 +11,21 @@ namespace NexChip.SignMessage.Bussiness
     public class SignMessgeBiz
     {
         private SignMessageRoleService Service = new SignMessageRoleService();
-
+        private TempService temp = new TempService();
 
         public DataTable getTest()
         {
             return Service.TestList();
         }
 
-        public object MessageList()
+        public void MockSignBoxDaa()
         {
-            //return Service.sdb.GetPageList<>
+            temp.MockMessages();
         }
+
+        //public object MessageList()
+        //{
+        //    //return Service.sdb.GetPageList<>
+        //}
     }
 }

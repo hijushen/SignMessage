@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using SqlSugar;
 
-namespace Models
+namespace NexChip.SignMessage.Entities
 {
     ///<summary>
     ///
@@ -11,10 +11,6 @@ namespace Models
     [SugarTable("SignMessageInterface")]
     public partial class SignMessageInterface
     {
-           public SignMessageInterface(){
-
-
-           }
            /// <summary>
            /// Desc:
            /// Default:

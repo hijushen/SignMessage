@@ -18,6 +18,7 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
     public class SignMessageController : Controller
     {
         private SignMessgeBiz bll = new SignMessgeBiz();
+        private TempBussiness tempBiz = new TempBussiness();
 
         /// <summary>
         /// 新增签核箱消息
@@ -28,7 +29,8 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
         public JsonResult PostNewSignMsg([FromBody]SignMessageModel value)
         {
             //return Json(bll.PostNewSignMsg(value));
-            return null;
+
+            return Json(tempBiz.MockMessageBox());
         }
 
         /// <summary>

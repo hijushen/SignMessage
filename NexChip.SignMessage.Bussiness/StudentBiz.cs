@@ -9,21 +9,21 @@ namespace NexChip.SignMessage.Bussiness
 {
     public class StudentBiz
     {
-        private StudentService IService = new Services.StudentService();
+        private StudentService Service = new Services.StudentService();
 
         public Student GetById(long id)
         {
-            return IService.Get(id);
+            return Service.Get(id);
         }
 
         public TableModel<Student> GetPageList(int pageIndex, int pageSize)
         {
-            return IService.GetPageList(pageIndex, pageSize);
+            return Service.GetPageList(pageIndex, pageSize);
         }
 
         public MessageModel<Student> Add(Student entity)
         {
-            if (IService.Add(entity))
+            if (Service.Add(entity))
                 return new MessageModel<Student> { Success = true, Msg = "操作成功" };
             else
                 return new MessageModel<Student> { Success = false, Msg = "操作失败" };
@@ -31,7 +31,7 @@ namespace NexChip.SignMessage.Bussiness
 
         public MessageModel<Student> Update(Student entity)
         {
-            if (IService.Update(entity))
+            if (Service.Update(entity))
                 return new MessageModel<Student> { Success = true, Msg = "操作成功" };
             else
                 return new MessageModel<Student> { Success = false, Msg = "操作失败" };
@@ -39,7 +39,7 @@ namespace NexChip.SignMessage.Bussiness
 
         public MessageModel<Student> Dels(dynamic[] ids)
         {
-            if (IService.Dels(ids))
+            if (Service.Dels(ids))
                 return new MessageModel<Student> { Success = true, Msg = "操作成功" };
             else
                 return new MessageModel<Student> { Success = false, Msg = "操作失败" };

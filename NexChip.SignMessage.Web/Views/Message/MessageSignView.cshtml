@@ -1,22 +1,376 @@
-﻿
+﻿<!DOCTYPE html>
+
 @{
     Layout = null;
 }
 
-<!DOCTYPE html>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="">
-<meta name="author" content="">
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="~/lib/html5shiv/html5shiv.js"></script>
+<script src="~/lib/respond.js/respond.js"></script>
+<![endif]-->
 
 <title>新版签核箱</title>
 
-<html>
+<html lang="zh-cn">
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    <link href="~/lib/bootstrap-table/bootstrap-table.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+
+    <style type="text/css">
+        .form-group {
+            margin: 5px 5px 5px 5px;
+        }
+
+            .form-group span {
+                margin-right: 5px;
+            }
+
+        #reportrange span {
+            color: darkgreen
+        }
+
+        .panel-title {
+            padding-left: 20px;
+        }
+
+        .panel {
+            border: 1px solid black;
+            padding: 10px;
+        }
+    </style>
     <title>MessageSign</title>
 </head>
 <body>
+
+    <!-- 过滤框 -->
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            @*<h4 class="panel-title">查询条件</h4>*@
+        </div>
+        <div class="panel-body">
+            <div class="form-inline" role="form">
+                <div class="form-group col-lg-2">
+                    <span>日期区间:</span>
+                    <div id="reportrange"
+                         style="font-size:13px; color:rgb(255,255,255); background:rgb(255,255,255); cursor: pointer; padding: 5px 10px; border: 1px solid rgb(157,157,157); width: 100% height:min-content;">
+                        <i class="fa fa-calendar"></i>&nbsp;
+                        <span></span> <i class="fa fa-caret-down"></i>
+                    </div>
+                </div>
+                <div class="form-group col-lg-2">
+                    <span>表单类型: </span>
+                    @*<label for="typeSelect">表单类型: </label>*@
+                    <select id="formSelect" class="selectpicker  form-control show-tick"
+                            data-live-search="true">
+                        <option data-subtext="默认">所有</option>
+                        <option>总务用品申请单(zwyp)</option>
+                        <option>资产转费用申请单(zczfy)</option>
+                        <option>资产异动申请(zcyd)</option>
+                        <option>资产出售单(zccs)</option>
+                        <option>资产报废申请单(zcbf)</option>
+                        <option>专案代码申请单(zadm)</option>
+                    </select>
+                </div>
+                <div class="form-group col-lg-2">
+                    <span>处理状况: </span>
+                    <select id="typeSelect" class="selectpicker  form-control">
+                        <option data-subtext="默认">未处理或未读过</option>
+                        <option>未处理</option>
+                        <option>已处理</option>
+                        <option>退件待处理</option>
+                        <option>通知</option>
+                        <option>申请</option>
+                        <option>暂存</option>
+                        <option>职代处理通知</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-lg-2">
+                    <button type="button" style="margin-left: 50px; width:90px" id="btn-query" class="btn btn-primary">查询</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- bootstrap-tablel指定的工具栏 -->
+    <div id="toolbar" class="btn-group">
+        <button id="btn-add" type="button" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+        </button>
+        <button id="btn-edit" type="button" class="btn btn-success">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
+        </button>
+        <button id="btn-delete" type="button" class="btn btn-danger">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+        </button>
+    </div>
+
+    <!--bootstrap-table表体-->
+    <table id="tb-tasks"></table>
 </body>
+
 </html>
+
+
+<script src="~/lib/html5shiv/html5shiv.js"></script>
+<script src="~/lib/respond.js/respond.js"></script>
+
+<script src="~/lib/jquery/jquery.min.js"></script>
+<script src="~/lib/popper.js/umd/popper.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+<script src="~/lib/bootstrap-table/bootstrap-table.js"></script>
+<script src="~/lib/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+
+<script src="~/lib/bootstrap-select/js/bootstrap-select.js"></script>
+
+<script src="~/lib/bootstrap-daterangepicker/moment.min.js"></script>
+<script src="~/lib/bootstrap-daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        debugger;
+
+        setDataPicker();     /// 初始化日期控件
+
+
+        //1.初始化Table
+        var oTable = new TableInit();
+        oTable.Init();
+
+        //2.初始化Button的点击事件
+        var oButtonInit = new ButtonInit();
+        oButtonInit.Init();
+
+    }); //jQuery 页面加载完
+
+    /// 初始化日期控件
+    function setDataPicker() {
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+        function cb(start, end) {
+            $('#reportrange span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+        }
+        function cb2(start, end) {
+            $('#reportrange2 span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+        }
+        $('#reportrange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            format: 'YYYY-MM-DD', //控件中from和to 显示的日期格式
+            locale: {
+                applyLabel: '确定',
+                cancelLabel: '取消',
+                fromLabel: '起始时间',
+                toLabel: '结束时间',
+                customRangeLabel: '自定义',
+                daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+                monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                    '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                firstDay: 1
+            }
+            , ranges: {
+                '今日': [moment(), moment()],
+                //'昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '过去7天': [moment().subtract(6, 'days'), moment()],
+                '一个月内': [moment().subtract(29, 'days'), moment()],
+                '本月': [moment().startOf('month'), moment().endOf('month')],
+                '上个月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, cb);
+        cb(start, end);
+    }
+
+
+
+    var $table = $('#tb-tasks');
+    var TableInit = function () {
+        var oTableInit = new Object();
+        //初始化Table
+        oTableInit.Init = function () {
+            $table.bootstrapTable({
+                url: '/Message/MessageList', //请求后台的URL（*）
+                method: 'get', //请求方式（*）
+                toolbar: '#toolbar', //工具按钮用哪个容器
+                striped: true, //是否显示行间隔色
+                cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                pagination: true, //是否显示分页（*）
+                sortable: true, //是否启用排序
+                sortOrder: "asc", //排序方式
+                queryParams: oTableInit.queryParams, //传递参数（*）
+                sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                pageNumber: 1, //初始化加载第一页，默认第一页
+                pageSize: 5, //每页的记录行数（*）
+                pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                search: false, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                strictSearch: true,
+                showColumns: true, //是否显示所有的列
+                showRefresh: true, //是否显示刷新按钮
+                minimumCountColumns: 2, //最少允许的列数
+                clickToSelect: true, //是否启用点击选中行
+                height: 500, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                uniqueId: "Id", //每一行的唯一标识，一般为主键列
+                showToggle: true, //是否显示详细视图和列表视图的切换按钮
+                cardView: false, //是否显示详细视图
+                detailView: false, //是否显示父子表
+                columns: [
+                    {
+                        radio: true
+                    }, {
+                        field: 'Title',
+                        title: '任务名称',
+                        sortable: true
+                    }, {
+                        field: 'Description',
+                        title: '任务描述'
+                    }, {
+                        field: 'AssignedPersonName',
+                        title: '任务分配'
+                    }, {
+                        field: 'State',
+                        title: '任务状态',
+                        formatter: showState
+                    }, {
+                        field: 'CreationTime',
+                        title: '创建日期',
+                        formatter: showDate
+                    }, {
+                        field: 'operate',
+                        title: '操作',
+                        align: 'center',
+                        valign: 'middle',
+                        clickToSelect: false,
+                        formatter: operateFormatter,
+                        events: operateEvents
+                    }
+                ]
+            });
+        };
+
+        //指定操作组
+        function operateFormatter(value, row, index) {
+            return [
+                '<a class="like" href="javascript:void(0)" title="Like">',
+                '<i class="glyphicon glyphicon-heart"></i>',
+                '</a>',
+                ' <a class="edit" href="javascript:void(0)" title="Edit">',
+                '<i class="glyphicon glyphicon-edit"></i>',
+                '</a>',
+                ' <a class="remove" href="javascript:void(0)" title="Remove">',
+                '<i class="glyphicon glyphicon-remove"></i>',
+                '</a>'
+            ].join('');
+        }
+
+        //指定table表体操作事件
+        window.operateEvents = {
+            'click .like': function (e, value, row, index) {
+                alert('You click like icon, row: ' + JSON.stringify(row));
+                console.log(value, row, index);
+            },
+            'click .edit': function (e, value, row, index) {
+                //alert('You click edit icon, row: ' + JSON.stringify(row));
+                //console.log(value, row, index);
+
+                editTask(row.Id);
+            },
+            'click .remove': function (e, value, row, index) {
+                //alert('You click remove icon, row: ' + JSON.stringify(row));
+                //console.log(value, row, index);
+
+                deleteTask(row.Id);
+            }
+        };
+
+        //指定bootstrap-table查询参数
+        oTableInit.queryParams = function (params) {
+            var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                limit: params.limit, //页面大小
+                offset: params.offset, //页码
+                sortfiled: params.sort, //排序字段
+                sortway: params.order, //升序降序
+                search: $("#txt-filter").val(), //自定义传参-任务名称
+                status: $("#txt-search-status").val() //自定义传参-任务状态
+            };
+            return temp;
+        };
+
+        //格式化显示json日期格式
+        function showDate(value, row, index) {
+            var birthdayMilliseconds = parseInt(value.replace(/\D/igm, ""));
+            var date = new Date(birthdayMilliseconds);
+            var formatDate = date.toLocaleString();
+            return formatDate;
+        }
+
+        //格式化显示任务状态
+        //有待改进-获取任务状态列表
+        function showState(value, row, index) {
+            var formatState;
+            if (value === 0) {
+                formatState = '<span class="pull-right label label-success">Open</span>';
+            }
+            if (value === 1) {
+                formatState = '<span class="pull-right label label-info">Completed</span>';
+            }
+
+            return formatState;
+        }
+
+        return oTableInit;
+    };
+
+
+    //bootstrap-table工具栏按钮事件初始化
+    var ButtonInit = function () {
+        var oInit = new Object();
+        var postdata = {};
+
+        oInit.Init = function () {
+            //初始化页面上面的按钮事件
+            $("#btn-add")
+                .click(function () {
+                    $("#add").modal("show");
+                });
+
+            $("#btn-edit")
+                .click(function () {
+                    var selectedRaido = $table.bootstrapTable('getSelections');
+                    if (selectedRaido.length === 0) {
+                        abp.notify.warn("请先选择要编辑的行！");
+                    } else {
+                        editTask(selectedRaido[0].Id);
+                    }
+                });
+
+            $("#btn-delete")
+                .click(function () {
+                    var selectedRaido = $table.bootstrapTable('getSelections');
+                    if (selectedRaido.length === 0) {
+                        abp.notify.warn("请先选择要删除的行！");
+                    } else {
+                        deleteTask(selectedRaido[0].Id);
+                    }
+                });
+
+            $("#btn-query")
+                .click(function () {
+                    $table.bootstrapTable('refresh');
+                });
+        };
+
+        return oInit;
+    };
+</script>

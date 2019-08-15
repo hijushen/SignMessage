@@ -4,11 +4,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using NexChip.SignMessage.Bussiness;
 
 namespace NexChip.SignMessage.Web.Controllers
 {
     public class MessageController : Controller
     {
+
+
+        private SignMessgeBiz biz = new SignMessgeBiz();
+
         public IActionResult Index()
         {
             return View();
@@ -31,6 +36,17 @@ namespace NexChip.SignMessage.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult MessageList()
+        {
+            //return null;
+            return Json(biz.MessageList());
+
+
+            //return Json();
+        }
+
+        [HttpGet]
         public IActionResult GetGridJSON(
             int page = 1,
             int rows = 10,

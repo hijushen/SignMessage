@@ -17,6 +17,10 @@ namespace NexChip.SignMessage.Bussiness
         {
             return Service.TestList();
         }
-        
+
+        public object MessageList()
+        {
+            //return Service.sdb.GetPageList<>
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using NexChip.SignMessage.Bussiness;
+using NexChip.SignMessage.Web.Models.Dtos;
 
 namespace NexChip.SignMessage.Web.Controllers
 {
@@ -37,9 +38,10 @@ namespace NexChip.SignMessage.Web.Controllers
         }
 
 
-        public IActionResult MessageList(int page=1,int rows=10,string sort="",string order="asc")
+        public IActionResult MessageList([FromBody] SignMessageBoxDto messages)
         {
-            return Json(biz.MessageList(page,rows,sort,order));
+            int start = messages.offset * messages.limit + 1;
+            return Json(biz.MessageList(start, messages.limit));
         }
 
 

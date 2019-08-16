@@ -5,7 +5,26 @@ using System.Threading.Tasks;
 
 namespace NexChip.SignMessage.Web.Models.Dtos
 {
-    public class SignMessageBoxDto
+    public class CommonListDto
+    {
+        /// <summary>
+        /// 页码
+        /// </summary>
+        public int offset { get; set; }
+
+        /// <summary>
+        /// 页大小
+        /// </summary>
+        public int limit { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string sortfiled { get; set; }
+
+        public string sortway { get; set; }
+    }
+
+    public class SignMessageBoxDto : CommonListDto
     {
         public string OID { get; set; }
        

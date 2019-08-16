@@ -10,20 +10,20 @@ namespace NexChip.SignMessage.Bussiness
     {
         private TempService Service = new TempService();
 
-        public MessageModel<SignMessageBox> MockMessageBox()
+        public BizResult<SignMessageBox> MockMessageBox()
         {
             try
             {
                 Service.MockMessages();
 
-                return new MessageModel<SignMessageBox>
+                return new BizResult<SignMessageBox>
                 {
                     Success = true
                 };
             }
             catch (Exception ex)
             {
-                return new MessageModel<SignMessageBox>
+                return new BizResult<SignMessageBox>
                 {
                     Success = false,
                     Msg=ex.Message

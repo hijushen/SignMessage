@@ -38,8 +38,9 @@ namespace NexChip.SignMessage.Services
                 });
             }
 
-            var s = db.Insertable<SignMessageBox>(mockData).ToSql();
+            //var s = db.Insertable<SignMessageBox>(mockData).ToSql();
            //插入
+           
            db.Insertable<SignMessageBox>(mockData).ExecuteCommand();
         }
     }

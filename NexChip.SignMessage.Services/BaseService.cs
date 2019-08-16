@@ -43,12 +43,26 @@ namespace NexChip.SignMessage.Services
         }
 
         #region CRUD
-        public TableModel<T> GetPageList(int pageIndex, int pageSize)
+        public BizListResult<T> GetPageList(int pageIndex, int pageSize, 
+            Expression<Func<T, object>> orderByExpression = null, 
+            int ordertype=0,
+            Expression<Func<T, bool>> whereExpression = null)
         {
+            OrderByType orderByType = OrderByType.Asc;
+            if (ordertype == 1)
+            {
+                orderByType = OrderByType.Desc;
+            }
+
+            if (whereExpression == null)
+            {
+                whereExpression = it => 1 == 1;
+            }
+
             PageModel p = new PageModel() { PageIndex = pageIndex, PageSize = pageSize };
-            Expression<Func<T, bool>> ex = (it => 1 == 1);
-            List<T> data = sdb.GetPageList(ex, p);
-            var t = new TableModel<T>
+          
+            List<T> data = sdb.GetPageList(whereExpression, p, orderByExpression, orderByType);
+            var t = new BizListResult<T>
             {
                 Code = 0,
                 Count = p.PageCount,

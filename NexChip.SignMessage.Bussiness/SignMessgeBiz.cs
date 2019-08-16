@@ -4,28 +4,43 @@ using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace NexChip.SignMessage.Bussiness
 {
     public class SignMessgeBiz
     {
-        private SignMessageRoleService Service = new SignMessageRoleService();
-        private TempService temp = new TempService();
+        private SignMessageBoxService service = new SignMessageBoxService();
+        private SignMessageRoleService msgRoleService = new SignMessageRoleService();
+        private TempService tempService = new TempService();
 
         public DataTable getTest()
         {
-            return Service.TestList();
+            return msgRoleService.TestList();
         }
 
         public void MockSignBoxDaa()
         {
-            temp.MockMessages();
+            tempService.MockMessages();
+        }
+
+        public BizListResult<SignMessageBox> MessageList(int start, int limit,string sort="", string order="")
+        {
+            int ordertype = 0;
+            if(order == "desc")
+            {
+                ordertype = 1;
+            }
+
+            Expression<Func<SignMessageBox, bool>> whereExpression = null;
+            Expression<Func<SignMessageBox, object>> orderByExpression = null;
+            return service.GetPageList(start, limit, orderByExpression,ordertype,whereExpression);
         }
 
         //public object MessageList()
         //{
-        //    //return Service.sdb.GetPageList<>
+        //    //return msgRoleService.sdb.GetPageList<>
         //}
     }
 }

@@ -22,7 +22,7 @@ namespace NexChip.SignMessage.Bussiness
         /// <param name="entityName"></param>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public MessageModel<string> CreateEntity(string entityName, string contentRootPath)
+        public BizResult<string> CreateEntity(string entityName, string contentRootPath)
         {
             try
             {
@@ -38,20 +38,20 @@ namespace NexChip.SignMessage.Bussiness
                 {
 
                     if (iService.CreateEntity(entityName, filePath))
-                        return new MessageModel<string> { Success = true, Msg = "生成成功" };
+                        return new BizResult<string> { Success = true, Msg = "生成成功" };
                     else
-                        return new MessageModel<string> { Success = false, Msg = "生成失败" };
+                        return new BizResult<string> { Success = false, Msg = "生成失败" };
 
 
                     //var s = Db.Ado.GetDataTable("select * from Student");
                     //var s2 = Db.Queryable<Student>().ToSql();
                     //Db.DbFirst.IsCreateAttribute().Where(entityName).CreateClassFile(filePath);
-                    //return new MessageModel<string> { Success = true, Msg = "生成成功" };
+                    //return new BizResult<string> { Success = true, Msg = "生成成功" };
 
                 }
                 catch(Exception ex)
                 {
-                    return new MessageModel<string> { Success = false, Msg = ex.Message };
+                    return new BizResult<string> { Success = false, Msg = ex.Message };
                 }
                 
                 //db.DbFirst.IsCreateAttribute().Where(entityName).CreateClassFile(filePath);
@@ -59,7 +59,7 @@ namespace NexChip.SignMessage.Bussiness
             }
             catch (Exception)
             {
-                return new MessageModel<string> { Success=false};
+                return new BizResult<string> { Success=false};
             }
         }
     }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NexChip.SignMessage.Services
 {
-    public class TableModel<T>
+    public class BizListResult<T>
     {
         /// <summary>
         /// 表格数据，支持分页

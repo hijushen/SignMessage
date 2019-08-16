@@ -37,6 +37,12 @@ namespace NexChip.SignMessage.Web.Controllers
         }
 
 
+        public IActionResult MessageList(int page=1,int rows=10,string sort="",string order="asc")
+        {
+            return Json(biz.MessageList(page,rows,sort,order));
+        }
+
+
         [HttpGet]
         public IActionResult GetGridJSON(
             int page = 1,

@@ -43,7 +43,7 @@ namespace NexChip.SignMessage.Services
         }
 
         #region CRUD
-        public BizListResult<T> GetPageList(int pageIndex, int pageSize, 
+        public BizListResult<T> GetPageList(int start, int pageSize, 
             Expression<Func<T, object>> orderByExpression = null, 
             int ordertype=0,
             Expression<Func<T, bool>> whereExpression = null)
@@ -59,14 +59,16 @@ namespace NexChip.SignMessage.Services
                 whereExpression = it => 1 == 1;
             }
 
+            double page = start / pageSize ;
+            int pageIndex = Math.Ceiling(page).ObjToInt() + 1;//Sql Sugar 页从1开始？
             PageModel p = new PageModel() { PageIndex = pageIndex, PageSize = pageSize };
           
             List<T> data = sdb.GetPageList(whereExpression, p, orderByExpression, orderByType);
             var t = new BizListResult<T>
             {
                 Code = 0,
-                Count = p.PageCount,
-                Data = data,
+                total = p.PageCount,
+                Rows = data,
                 Msg = "成功"
             };
             return t;

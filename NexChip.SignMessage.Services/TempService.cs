@@ -26,22 +26,22 @@ namespace NexChip.SignMessage.Services
                     emergencylevel=0,
                     sendtime=DateTime.Now,
                     fromempid="E00000",
-                    fromempname="模拟工号1",
-                    toempid="E00001",
-                    toempname="模拟工号2",
+                    fromempname="TEST00-N",
+                    toempid="TEST01",
+                    toempname="TEST01-N",
                     callbackurl="http://www.baidu.com",
-                    substance="模拟数据"+i,
-                    showmsg="标题，数据"+i,
+                    substance="MockData"+i,
+                    showmsg="Substance，Data"+i,
                     createtime=DateTime.Now,
                     updatetime=DateTime.Now,
-                    remark="测试数据"+i
+                    remark="MockData"+i
                 });
             }
 
-            //var s = db.Insertable<SignMessageBox>(mockData).ToSql();
-           //插入
-           
-           db.Insertable<SignMessageBox>(mockData).ExecuteCommand();
+            var s = db.Insertable<SignMessageBox>(mockData).ToSql();
+            //插入
+
+            db.Insertable<SignMessageBox>(mockData).ExecuteCommand();
         }
     }
 }

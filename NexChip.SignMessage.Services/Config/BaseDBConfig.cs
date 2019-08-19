@@ -5,6 +5,7 @@ namespace NexChip.SignMessage.Services
     {
         //public static string ConnectionString = "server=.;uid=sa;pwd=Admin;database=RayPI";
         public static string ConnectionString = @" 
-        Data Source = (localdb)\MSSQLLocalDB; database=SignMessage; Integrated Security = True;uid=sa;pwd=123456";    
-}
+        Data Source = (localdb)\.\IIS_DB;database=SignMessage; Integrated Security = True;uid=sa;pwd=123456";
+        // database=SignMessage; Integrated Security = True;uid=sa;pwd=123456
+    }
 }

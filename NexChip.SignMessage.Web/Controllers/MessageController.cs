@@ -37,11 +37,10 @@ namespace NexChip.SignMessage.Web.Controllers
             return View();
         }
 
-
-        public IActionResult MessageList([FromBody] SignMessageBoxDto messages)
+        [HttpGet]
+        public IActionResult MessageList([FromHeader]SignMessageBoxDto msg)
         {
-            int start = messages.offset * messages.limit + 1;
-            return Json(biz.MessageList(start, messages.limit));
+            return Json(biz.MessageList(msg.offset, msg.limit));
         }
 
 

@@ -34,7 +34,7 @@ namespace NexChip.SignMessage.Bussiness
             }
 
             Expression<Func<SignMessageBox, bool>> whereExpression = null;
-            Expression<Func<SignMessageBox, object>> orderByExpression = null;
+            Expression<Func<SignMessageBox, object>> orderByExpression = p => p.remark;
             return service.GetPageList(start, limit, orderByExpression,ordertype,whereExpression);
         }
 

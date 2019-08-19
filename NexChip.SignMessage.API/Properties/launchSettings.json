@@ -1,11 +1,10 @@
 {
   "iisSettings": {
     "windowsAuthentication": true,
-    "anonymousAuthentication": false,
+    "anonymousAuthentication": true,
     "iis": {
       "applicationUrl": "http://localhost:9000",
-      "sslPort": 0,
-      "launchUrl": "swagger"
+      "sslPort": 0
     },
     "iisExpress": {
       "applicationUrl": "http://localhost:6874",
@@ -33,7 +32,11 @@
     },
     "IIS": {
       "commandName": "IIS",
-      "workingDirectory": "D:\\workcode\\netcore\\NetCore-NexChip.SignMessage\\NexChip.SignMessage.API"
+      "workingDirectory": "D:\\workcode\\netcore\\NetCore-NexChip.SignMessage\\NexChip.SignMessage.API",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "ancmHostingModel": "InProcess"
     }
   }
 }

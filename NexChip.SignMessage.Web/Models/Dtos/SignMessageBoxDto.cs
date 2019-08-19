@@ -8,7 +8,7 @@ namespace NexChip.SignMessage.Web.Models.Dtos
     public class CommonListDto
     {
         /// <summary>
-        /// 页码
+        /// start 起始
         /// </summary>
         public int offset { get; set; }
 
@@ -26,6 +26,7 @@ namespace NexChip.SignMessage.Web.Models.Dtos
 
     public class SignMessageBoxDto : CommonListDto
     {
+
         public string OID { get; set; }
        
         public string appname { get; set; }

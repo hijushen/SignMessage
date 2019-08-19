@@ -15,6 +15,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
+      "launchUrl": "http://localhost:6857/Message/MessageSignView",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -29,6 +30,11 @@
     },
     "IIS": {
       "commandName": "IIS",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:9001/Message/MessageSignView",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
       "ancmHostingModel": "InProcess"
     }
   }

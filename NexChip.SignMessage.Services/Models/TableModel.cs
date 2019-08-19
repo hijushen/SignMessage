@@ -11,7 +11,7 @@ namespace NexChip.SignMessage.Services
         /// </summary>
         public int Code { get; set; }
         public string Msg { get; set; }
-        public int Count { get; set; }
-        public List<T> Data { get; set; }
+        public int total { get; set; }
+        public List<T> Rows { get; set; }
     }
 }

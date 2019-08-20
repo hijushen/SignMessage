@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NexChip.SignMessage.Bussiness;
 using NexChip.SignMessage.Entities;
+using NexChip.SignMessage.Token;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -39,7 +40,6 @@ namespace NexChip.SignMessage.API.Controllers.Admin
         /// <param name="id">Id</param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        [Authorize(Policy ="Admin")]
         public JsonResult GetStudentById(long id)
         {
             return Json(bll.GetById(id));
@@ -77,23 +77,26 @@ namespace NexChip.SignMessage.API.Controllers.Admin
         /// <returns></returns>
         [HttpPut]
         [Route("TestSome")]
+        [Authorize(Roles ="User,Admin")]
         public JsonResult TestSome()
         {
             return Json(sbiz.getTest());
         }
 
-        ///// <summary>
-        ///// 删除学生
-        ///// </summary>
-        ///// <param name="ids"></param>GetById
-        ///// <returns></returns>
-        //[HttpDelete]
-        //public JsonResult Dels(dynamic[] ids = null)
-        //{
-        //    if (ids.Length == 0)
-        //        return Json("参数为空");
-        //    return Json(bll.Dels(ids));
-        //}
+        [HttpGet]
+        [Route("GetJWTStr")]
+        public JsonResult GetJWTStr(string id="admin", string sub="Admin",string project="signmessage")
+        {
+            TokenModel tm = new TokenModel()
+            {
+                Uid = id,
+                Role = sub,
+                Project=project
+            };
+
+            string jswStr = JwtHelper.IssueJWT(tm);
+            return Json(jswStr);
+        }
         #endregion
     }
 }

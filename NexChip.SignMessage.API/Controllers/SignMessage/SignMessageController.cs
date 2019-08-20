@@ -13,6 +13,7 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
 {
     /// <summary>
     /// 签核箱 消息接口
+    /// </summary>
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class SignMessageController : Controller

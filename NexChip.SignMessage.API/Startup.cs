@@ -58,7 +58,7 @@ namespace NexChip.SignMessage.API
             {
                 o.ReportApiVersions = true;//return versions in a response header
                 o.DefaultApiVersion = new ApiVersion(1, 0);//default version select 
-                o.AssumeDefaultVersionWhenUnspecified = false;//if not specifying an api version,show the default version
+                o.AssumeDefaultVersionWhenUnspecified = true;//if not specifying an api version,show the default version
             });
 
 
@@ -101,6 +101,15 @@ namespace NexChip.SignMessage.API
                     TermsOfService = "None"
                     //,Contact = new Swashbuckle.AspNetCore.Swagger.Contact { Name = "", Email = "", Url = "" }
                 });
+
+                //c.SwaggerDoc("v2", new Info
+                //{
+                //    Version = "v2",
+                //    Title = "NexChip.SignMessage WebAPI",
+                //    Description = "签核箱消息管理API接口",
+                //    TermsOfService = "None"
+                //    //,Contact = new Swashbuckle.AspNetCore.Swagger.Contact { Name = "", Email = "", Url = "" }
+                //});
 
                 //添加读取注释服务
                 //var basePath = PlatformServices.Default.Application.ApplicationBasePath;
@@ -147,6 +156,7 @@ namespace NexChip.SignMessage.API
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiHelp V1");
+                //c.SwaggerEndpoint("/swagger/v2/swagger.json", "Manager V2");
             });
             #endregion
         }

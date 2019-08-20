@@ -15,6 +15,7 @@ namespace NexChip.SignMessage.Bussiness
         private SignMessageRoleService msgRoleService = new SignMessageRoleService();
         private TempService tempService = new TempService();
 
+
         public DataTable getTest()
         {
             return msgRoleService.TestList();
@@ -37,6 +38,7 @@ namespace NexChip.SignMessage.Bussiness
             Expression<Func<SignMessageBox, object>> orderByExpression = p => p.remark;
             return service.GetPageList(start, limit, orderByExpression,ordertype,whereExpression);
         }
+
 
         //public object MessageList()
         //{

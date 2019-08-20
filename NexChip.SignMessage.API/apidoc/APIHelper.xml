@@ -74,7 +74,11 @@
             </summary>
             <returns></returns>
         </member>
-        <!-- 对于成员“T:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController”忽略有格式错误的 XML 注释 -->
+        <member name="T:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController">
+            <summary>
+            签核箱 消息接口
+            </summary>
+        </member>
         <member name="M:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController.PostNewSignMsg(NexChip.SignMessage.Entities.SignMessageModel)">
             <summary>
             新增签核箱消息

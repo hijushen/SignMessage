@@ -26,6 +26,7 @@ namespace NexChip.SignMessage.API.Controllers.Admin
         /// <returns></returns>
         [HttpPost]
         [Route("CreateEntity")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public JsonResult CreateEntity(string entityName = null)
         {
             if (entityName == null)

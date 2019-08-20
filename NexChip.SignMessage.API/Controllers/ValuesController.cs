@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace NexChip.SignMessage.API.Controllers
@@ -10,7 +11,8 @@ namespace NexChip.SignMessage.API.Controllers
     /// 控制器注释测试
     /// </summary>
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
@@ -28,6 +30,7 @@ namespace NexChip.SignMessage.API.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [Authorize(Policy = "Admin")]
         public ActionResult<string> Get(int id)
         {
             return "value";

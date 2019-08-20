@@ -9,7 +9,7 @@ namespace NexChip.SignMessage.Token
         /// <summary>
         /// 用户Id
         /// </summary>
-        public long Uid { get; set; }
+        public string Uid { get; set; }
         /// <summary>
         /// 身份
         /// </summary>
@@ -18,9 +18,5 @@ namespace NexChip.SignMessage.Token
         /// 项目名称
         /// </summary>
         public string Project { get; set; }
-        /// <summary>
-        /// 令牌类型
-        /// </summary>
-        public string TokenType { get; set; }
     }
 }

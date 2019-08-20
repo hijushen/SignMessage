@@ -17,39 +17,23 @@ namespace NexChip.SignMessage.Token
         public static string IssueJWT(TokenModel tokenModel)
         {
             var dateTime = DateTime.UtcNow;
-            var claims = new Claim[]
+            var claims = new List<Claim>()
             {
-                new Claim(JwtRegisteredClaimNames.Jti,tokenModel.Uid.ToString()),//用户Id
+                new Claim(JwtRegisteredClaimNames.Jti,tokenModel.Uid),//用户Id
                 new Claim("Role", tokenModel.Role),//身份
                 new Claim("Project", tokenModel.Project),
                 new Claim(JwtRegisteredClaimNames.Iat,dateTime.ToString(),ClaimValueTypes.Integer64)
             };
+
             //秘钥
             var jwtConfig = new JwtAuthConfigModel();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.JWTSecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            //过期时间
-            double exp = 100000;
-            switch (tokenModel.TokenType)
-            {
-                //case "Web":
-                //    exp = jwtConfig.WebExp;
-                //    break;
-                //case "App":
-                //    exp = jwtConfig.AppExp;
-                //    break;
-                //case "MiniProgram":
-                //    exp = jwtConfig.MiniProgramExp;
-                //    break;
-                //case "Other":
-                //    exp = jwtConfig.OtherExp;
-                //    break;
-            }
 
             var jwt = new JwtSecurityToken(
                 issuer: "NexChip.SignMessage",
                 claims: claims, //声明集合
-                expires: dateTime.AddHours(exp),
+                expires: dateTime.AddYears(jwtConfig.expYear),
                 signingCredentials: creds);
 
             var jwtHandler = new JwtSecurityTokenHandler();
@@ -81,7 +65,7 @@ namespace NexChip.SignMessage.Token
             }
             var tm = new TokenModel
             {
-                Uid = long.Parse(jwtToken.Id),
+                Uid = jwtToken.Id,
                 Role = role.ToString(),
                 Project = project.ToString()
             };

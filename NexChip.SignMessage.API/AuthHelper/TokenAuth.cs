@@ -41,25 +41,28 @@ namespace NexChip.SignMessage.API.AuthHelper
             var tokenStr = headers["Authorization"];
             try
             {
-                string jwtStr = tokenStr.ToString().Substring("Bearer ".Length).Trim();
+                string jwtStr = tokenStr.ToString(); //.Substring("Bearer ".Length).Trim();
 
-                //验证缓存中是否存在该jwt字符串
+                /////验证缓存中是否存在该jwt字符串
                 //if (!TokenMemoryCache.Exists(jwtStr))
                 //{
                 //    return httpContext.Response.WriteAsync("非法请求");
                 //}
+                TokenModel tm = JwtHelper.SerializeJWT(jwtStr);
+                    //((TokenModel)TokenMemoryCache.Get(jwtStr));
 
 
-                TokenModel tm = ((TokenModel)TokenMemoryCache.Get(jwtStr));
                 //提取tokenModel中的Sub属性进行authorize认证
                 List<Claim> lc = new List<Claim>();
                 //Claim c = new Claim(tm.Sub + "Type", tm.Sub);
-                Claim c = new Claim("","");
+                Claim c = new Claim(ClaimTypes.Role, tm.Role);
 
                 lc.Add(c);
                 ClaimsIdentity identity = new ClaimsIdentity(lc);
                 ClaimsPrincipal principal = new ClaimsPrincipal(identity);
                 httpContext.User = principal;
+
+
                 return _next(httpContext);
             }
             catch (Exception)

@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NexChip.SignMessage.Bussine
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NexChip.SignMessage.Services", "NexChip.SignMessage.Services\NexChip.SignMessage.Services.csproj", "{4E83251F-0671-4B18-99B3-E66525534763}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexChip.SignMessage.Token", "NexChip.SignMessage.Token\NexChip.SignMessage.Token.csproj", "{31E470BA-8967-4606-8639-90200353EF5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NexChip.SignMessage.Token", "NexChip.SignMessage.Token\NexChip.SignMessage.Token.csproj", "{31E470BA-8967-4606-8639-90200353EF5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexChip.SignMessage.Utils", "NexChip.SignMessage.Utils\NexChip.SignMessage.Utils.csproj", "{91505DED-62FD-4518-92B8-BA4212E30B0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{31E470BA-8967-4606-8639-90200353EF5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31E470BA-8967-4606-8639-90200353EF5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31E470BA-8967-4606-8639-90200353EF5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91505DED-62FD-4518-92B8-BA4212E30B0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91505DED-62FD-4518-92B8-BA4212E30B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91505DED-62FD-4518-92B8-BA4212E30B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91505DED-62FD-4518-92B8-BA4212E30B0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

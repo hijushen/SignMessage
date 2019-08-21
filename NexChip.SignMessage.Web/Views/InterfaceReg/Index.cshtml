@@ -1,0 +1,279 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="~/lib/html5shiv/html5shiv.js"></script>
+    <script src="~/lib/respond.js/respond.js"></script>
+    <![endif]-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="~/lib/bootstrap/fonts/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-table/bootstrap-table.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+
+    <title>Index</title>
+
+    <style type="text/css">
+            .form-group {
+                margin: 5px 5px 5px 5px;
+            }
+
+            .form-group span {
+                margin-right: 5px;
+            }
+
+        #reportrange span {
+            color: darkgreen
+        }
+
+        .panel-title {
+            padding-left: 20px;
+        }
+
+        .panel {
+            border: 1px solid black;
+            padding: 10px;
+        }
+
+        
+    </style>
+
+</head>
+<body>
+
+    <form>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="input">注册表单</label>
+                <input type="text" class="form-control" id="inputName" placeholder="注册表单">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="input">注册名称</label>
+                <input type="text" class="form-control" id="inputName2" placeholder="注册名称">
+            </div>
+        </div>
+        <div class="form-inline">
+            <div>
+                <button type="button" style="margin-left: 50px; width:90px" id="btn-query" class="btn btn-primary">模拟</button>
+
+            </div>
+
+        </div>
+    </form>
+
+    <!--bootstrap-table表体-->
+    <table id="tb-tasks"></table>
+
+</body>
+</html>
+
+
+<script src="~/lib/jquery/jquery.min.js"></script>
+<script src="~/lib/popper.js/umd/popper.js"></script>
+<script src="~/lib/bootstrap/js/bootstrap.js"></script>
+
+<script src="~/lib/bootstrap-table/bootstrap-table.js"></script>
+<script src="~/lib/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+
+<script src="~/lib/bootstrap-select/js/bootstrap-select.js"></script>
+
+<script src="~/lib/bootstrap-daterangepicker/moment.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //1.初始化Table
+        var oTable = new TableInit();
+        oTable.Init();
+
+        //2.初始化Button的点击事件
+        var oButtonInit = new ButtonInit();
+        oButtonInit.Init();
+
+    }); //jQuery 页面加载完
+
+
+    var $table = $('#tb-tasks');
+    var TableInit = function () {
+        var oTableInit = new Object();
+        //初始化Table
+        oTableInit.Init = function () {
+            $table.bootstrapTable({
+                url: '/InterfaceReg/List', //请求后台的URL（*）
+                method: 'get', //请求方式（*）
+                toolbar: '#toolbar', //工具按钮用哪个容器
+                striped: true, //是否显示行间隔色
+                cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                pagination: true, //是否显示分页（*）
+                sortable: true, //是否启用排序
+                sortOrder: "asc", //排序方式
+                queryParams: oTableInit.queryParams, //传递参数（*）
+                sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                pageNumber: 1, //初始化加载第一页，默认第一页
+                pageSize: 5, //每页的记录行数（*）
+                pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                search: false, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                strictSearch: true,
+                showColumns: true, //是否显示所有的列
+                showRefresh: false, //是否显示刷新按钮
+                minimumCountColumns: 2, //最少允许的列数
+                clickToSelect: true, //是否启用点击选中行
+                height: 500, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                uniqueId: "OID", //每一行的唯一标识，一般为主键列
+                showToggle: true, //是否显示详细视图和列表视图的切换按钮
+                cardView: false, //是否显示详细视图
+                detailView: false, //是否显示父子表
+                columns: [
+                    {
+                        radio: true
+                    }
+                    ,
+                    {
+                        field: 'createtime',
+                        title: '收到日期',
+                        sortable: true
+                    }, {
+                        field: 'fromempname',
+                        title: '寄件者'
+                    }, {
+                        field: 'appname',
+                        title: '来源表单'
+                    }, {
+                        field: 'substance',
+                        title: '主旨',
+                        formatter: showState
+                    }, {
+                        field: 'operate',
+                        title: '操作',
+                        align: 'center',
+                        valign: 'middle',
+                        clickToSelect: false,
+                        formatter: tableH.operateFormatter,
+                        events: tableH.operateEvents
+                    }
+                ]
+            });
+        };
+
+        //指定bootstrap-table查询参数
+        oTableInit.queryParams = function (params) {
+            var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                limit: params.limit, //页面大小
+                offset: params.offset, //页码
+                sortfiled: params.sort, //排序字段
+                sortway: params.order, //升序降序
+                search: $("#txt-filter").val(), //自定义传参-任务名称
+                status: $("#txt-search-status").val() //自定义传参-任务状态
+            };
+            return temp;
+        };
+
+        //格式化显示json日期格式
+        function showDate(value, row, index) {
+            var birthdayMilliseconds = parseInt(value.replace(/\D/igm, ""));
+            var date = new Date(birthdayMilliseconds);
+            var formatDate = date.toLocaleString();
+            return formatDate;
+        }
+
+        //格式化显示任务状态
+        //有待改进-获取任务状态列表
+        function showState(value, row, index) {
+            var formatState;
+            if (value === 0) {
+                formatState = '<span class="pull-right label label-success">Open</span>';
+            }
+            if (value === 1) {
+                formatState = '<span class="pull-right label label-info">Completed</span>';
+            }
+
+            return formatState;
+        }
+
+        return oTableInit;
+    };
+
+    ///Bootstrap-table 相关操作列
+    var tableH = {
+        //指定操作列
+        operateFormatter: function (value, row, index) {
+            return [
+                '<a class="like" href="javascript:void(0)" title="Like">',
+                '<i class="fa fa-heart"></i>',
+                '</a>  ',
+                '<a class="remove" href="javascript:void(0)" title="Remove">',
+                '<i class="fa fa-trash"></i>',
+                '</a>'
+            ].join('')
+        }
+        ,
+        //指定table表体操作事件
+        operateEvents: {
+            'click .like': function (e, value, row, index) {
+                alert('You click like action, row: ' + JSON.stringify(row))
+            },
+            'click .remove': function (e, value, row, index) {
+                $table.bootstrapTable('remove', {
+                    field: 'id',
+                    values: [row.id]
+                })
+            }
+        }
+    };
+
+    //bootstrap-table工具栏按钮事件初始化
+    var ButtonInit = function () {
+        var oInit = new Object();
+        var postdata = {};
+
+        oInit.Init = function () {
+            //初始化页面上面的按钮事件
+            //$("#btn-add")
+            //    .click(function () {
+            //        $("#add").modal("show");
+            //    });
+
+            //$("#btn-edit")
+            //    .click(function () {
+            //        var selectedRaido = $table.bootstrapTable('getSelections');
+            //        if (selectedRaido.length === 0) {
+            //            abp.notify.warn("请先选择要编辑的行！");
+            //        } else {
+            //            editTask(selectedRaido[0].Id);
+            //        }
+            //    });
+
+            //$("#btn-delete")
+            //    .click(function () {
+            //        var selectedRaido = $table.bootstrapTable('getSelections');
+            //        if (selectedRaido.length === 0) {
+            //            abp.notify.warn("请先选择要删除的行！");
+            //        } else {
+            //            deleteTask(selectedRaido[0].Id);
+            //        }
+            //    });
+
+            $("#btn-query")
+                .click(function () {
+                    $table.bootstrapTable('refresh');
+                });
+        };
+
+        return oInit;
+    };
+
+</script>

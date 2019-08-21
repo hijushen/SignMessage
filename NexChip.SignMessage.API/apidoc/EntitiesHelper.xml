@@ -180,6 +180,13 @@
             Nullable:False
             </summary>           
         </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageRole.appnamechs">
+            <summary>
+            Desc:
+            Default:
+            Nullable:False
+            </summary>           
+        </member>
         <member name="P:NexChip.SignMessage.Entities.SignMessageRole.reservedkey1">
             <summary>
             Desc:

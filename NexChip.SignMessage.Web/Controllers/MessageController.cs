@@ -5,14 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using NexChip.SignMessage.Bussiness;
-using NexChip.SignMessage.Web.Models.Dtos;
+using NexChip.SignMessage.Bussiness.Models.Dtos;
 
 namespace NexChip.SignMessage.Web.Controllers
 {
     public class MessageController : Controller
     {
-
-
         private SignMessgeBiz biz = new SignMessgeBiz();
 
         public IActionResult Index()

@@ -23,7 +23,7 @@ namespace NexChip.SignMessage.Bussiness
 
         public BizResult<Student> Add(Student entity)
         {
-            if (Service.Add(entity))
+            if (Service.Insert(entity))
                 return new BizResult<Student> { Success = true, Msg = "操作成功" };
             else
                 return new BizResult<Student> { Success = false, Msg = "操作失败" };

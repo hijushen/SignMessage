@@ -60,7 +60,7 @@ namespace NexChip.SignMessage.Services
             }
 
             double page = start / pageSize ;
-            int pageIndex = Math.Ceiling(page).ObjToInt() + 1;//Sql Sugar 页从1开始？
+            int pageIndex = Math.Ceiling(page).ObjToInt() + 1;//Sql Sugar 页从1开始！
             PageModel p = new PageModel() { PageIndex = pageIndex, PageSize = pageSize };
           
             List<T> data = sdb.GetPageList(whereExpression, p, orderByExpression, orderByType);
@@ -79,9 +79,27 @@ namespace NexChip.SignMessage.Services
             return sdb.GetById<T>(id);
         }
 
-        public bool Add(T entity)
+        public BizResult<T> GetSingle(Expression<Func<T, bool>> whereExpression)
+        {
+            var res =  sdb.GetSingle<T>(whereExpression);
+            if (res == null) return null;
+
+            return new BizResult<T>
+            {
+                Data = res,
+                Msg = "成功",
+                Success = true
+            };
+        }
+
+        public bool Insert(T entity)
         {
             return sdb.Insert(entity);
+        }
+
+        public int InsertIgnoreNullColumn(T entiy)
+        {
+            return db.Insertable<T>(entiy).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
         }
 
         public bool Update(T entity)

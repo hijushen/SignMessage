@@ -1,0 +1,320 @@
+﻿
+@{
+    Layout = "_InterfaceLayout";
+}
+
+@section styles{
+
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">接口管理</h3>
+                @*<div class="pull-right box-tools">
+                    <button id="btnAdd" class="btn btn-primary" type="button" data-original-title="新增角色" data-toggle="tooltip" data-widget="">
+                        <i class="fa fa-plus-square"></i>&nbsp;&nbsp;新增
+                    </button>
+                    <button id="btnDelete" title="" class="btn btn-danger" type="button" data-original-title="删除角色" data-toggle="tooltip" data-widget="">
+                        <i class="fa fa-times"></i>&nbsp;&nbsp;删除
+                    </button>
+                </div>*@
+            </div>
+            <div class="box-body">
+                <table id="table"
+                       data-show-refresh="true"
+                       data-show-columns="true"
+                       data-search="true"
+                       data-query-params="queryParams"
+                       data-toolbar=".toolbar">
+                    <thead>
+                        <tr>
+                            <th data-field="name">Name</th>
+                            <th data-field="stargazers_count">Stars</th>
+                            <th data-field="forks_count">Forks</th>
+                            <th data-field="description">Description</th>
+                            <th data-field="action"
+                                data-align="center"
+                                data-formatter="actionFormatter"
+                                data-events="actionEvents">Action</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label>Stars</label>
+                    <input type="number" class="form-control" name="stargazers_count" placeholder="Stars">
+                </div>
+                <div class="form-group">
+                    <label>Forks</label>
+                    <input type="number" class="form-control" name="forks_count" placeholder="Forks">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" class="form-control" name="description" placeholder="Description">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary submit">Submit</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+@section scripts{
+    @*<script src="~/Views/Role/Index.js"></script>*@
+
+    <script type="text/javascript">
+
+        var $table = $('#table');
+        var TableInit = function () {
+            var oTableInit = new Object();
+            //初始化Table
+            oTableInit.Init = function () {
+                $table.bootstrapTable({
+                    url: '/InterfaceReg/List', //请求后台的URL（*）
+                    method: 'get', //请求方式（*）
+                    toolbar: '#toolbar', //工具按钮用哪个容器
+                    striped: true, //是否显示行间隔色
+                    cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                    pagination: true, //是否显示分页（*）
+                    sortable: true, //是否启用排序
+                    sortOrder: "asc", //排序方式
+                    queryParams: oTableInit.queryParams, //传递参数（*）
+                    sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+                    pageNumber: 1, //初始化加载第一页，默认第一页
+                    pageSize: 5, //每页的记录行数（*）
+                    pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                    search: false, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+                    strictSearch: true,
+                    showColumns: true, //是否显示所有的列
+                    showRefresh: false, //是否显示刷新按钮
+                    minimumCountColumns: 2, //最少允许的列数
+                    clickToSelect: true, //是否启用点击选中行
+                    height: 500, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                    uniqueId: "OID", //每一行的唯一标识，一般为主键列
+                    showToggle: true, //是否显示详细视图和列表视图的切换按钮
+                    cardView: false, //是否显示详细视图
+                    detailView: false, //是否显示父子表
+                    columns: [
+                        {
+                            radio: true
+                        }
+                        ,
+                        {
+                            field: 'createtime',
+                            title: '收到日期',
+                            sortable: true
+                        }, {
+                            field: 'fromempname',
+                            title: '寄件者'
+                        }, {
+                            field: 'appname',
+                            title: '来源表单'
+                        }, {
+                            field: 'substance',
+                            title: '主旨',
+                            formatter: showState
+                        }, {
+                            field: 'operate',
+                            title: '操作',
+                            align: 'center',
+                            valign: 'middle',
+                            clickToSelect: false,
+                            formatter: tableH.operateFormatter,
+                            events: tableH.operateEvents
+                        }
+                    ]
+                });
+            };
+
+            //指定bootstrap-table查询参数
+            oTableInit.queryParams = function (params) {
+                var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                    limit: params.limit, //页面大小
+                    offset: params.offset, //页码
+                    sortfiled: params.sort, //排序字段
+                    sortway: params.order, //升序降序
+                    search: $("#txt-filter").val(), //自定义传参-任务名称
+                    status: $("#txt-search-status").val() //自定义传参-任务状态
+                };
+                return temp;
+            };
+
+            //格式化显示json日期格式
+            function showDate(value, row, index) {
+                var birthdayMilliseconds = parseInt(value.replace(/\D/igm, ""));
+                var date = new Date(birthdayMilliseconds);
+                var formatDate = date.toLocaleString();
+                return formatDate;
+            }
+
+            //格式化显示任务状态
+            //有待改进-获取任务状态列表
+            function showState(value, row, index) {
+                var formatState;
+                if (value === 0) {
+                    formatState = '<span class="pull-right label label-success">Open</span>';
+                }
+                if (value === 1) {
+                    formatState = '<span class="pull-right label label-info">Completed</span>';
+                }
+
+                return formatState;
+            }
+
+            return oTableInit;
+        };
+
+        ///Bootstrap-table 相关操作列
+        var tableH = {
+            //指定操作列
+            operateFormatter: function (value, row, index) {
+                return [
+                    '<a class="like" href="javascript:void(0)" title="Like">',
+                    '<i class="fa fa-heart"></i>',
+                    '</a>  ',
+                    '<a class="remove" href="javascript:void(0)" title="Remove">',
+                    '<i class="fa fa-trash"></i>',
+                    '</a>'
+                ].join('')
+            }
+            ,
+            //指定table表体操作事件
+            operateEvents: {
+                'click .like': function (e, value, row, index) {
+                    alert('You click like action, row: ' + JSON.stringify(row))
+                },
+                'click .remove': function (e, value, row, index) {
+                    $table.bootstrapTable('remove', {
+                        field: 'id',
+                        values: [row.id]
+                    })
+                }
+            }
+        };
+    </script>
+
+    <script type="text/javascript">
+        var API_URL = '/InterfaceReg/List'
+        //var $table = $('#table').bootstrapTable({ url: API_URL })
+        //1.初始化Table
+        var oTable = new TableInit();
+        oTable.Init();
+
+
+
+        var $modal = $('#modal').modal({ show: false })
+        var $alert = $('.alert').hide()
+        function showModal(title, row_) {
+            var row = row_ || {
+                id: '',
+                name: '',
+                stargazers_count: 0,
+                forks_count: 0,
+                description: ''
+            } // default row value
+            $modal.data('id', row.id)
+            $modal.find('.modal-title').text(title)
+            for (var name in row) {
+                if (row[name]) {
+                    $modal.find('input[name="' + name + '"]').val(row[name])
+                }
+            }
+            $modal.modal('show')
+        }
+        function showAlert(title, type) {
+            $alert.attr('class', 'alert alert-' + type || 'success')
+                .html('<i class="glyphicon glyphicon-check"></i> ' + title).show()
+            setTimeout(function () {
+                $alert.hide()
+            }, 3000)
+        }
+
+        $(function () {
+            // create event
+            $('.create').click(function () {
+                showModal($(this).text())
+            })
+            $modal.find('.submit').click(function () {
+                var row = {}
+                $modal.find('input[name]').each(function () {
+                    row[$(this).attr('name')] = $(this).val()
+                })
+                $.ajax({
+                    url: API_URL + ($modal.data('id') || ''),
+                    type: $modal.data('id') ? 'put' : 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify(row),
+                    success: function () {
+                        $modal.modal('hide')
+                        $table.bootstrapTable('refresh')
+                        showAlert(($modal.data('id') ? 'Update' : 'Create') + ' item successful!', 'success')
+                    },
+                    error: function () {
+                        $modal.modal('hide')
+                        showAlert(($modal.data('id') ? 'Update' : 'Create') + ' item error!', 'danger')
+                    }
+                })
+            })
+        })
+        function queryParams(params) {
+            var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+                limit: params.limit, //页面大小
+                offset: params.offset, //页码
+                sortfiled: params.sort, //排序字段
+                sortway: params.order, //升序降序
+                search: $("#txt-filter").val(), //自定义传参-任务名称
+                status: $("#txt-search-status").val() //自定义传参-任务状态
+            };
+            return temp;
+        }
+
+        function actionFormatter(value) {
+            return [
+                '<a class="update" href="javascript:" title="Update Item"><i class="glyphicon glyphicon-edit"></i></a>',
+                '<a class="remove" href="javascript:" title="Delete Item"><i class="glyphicon glyphicon-remove-circle"></i></a>'
+            ].join('')
+        }
+        // update and delete events
+        window.actionEvents = {
+            'click .update': function (e, value, row) {
+                showModal($(this).attr('title'), row)
+            },
+            'click .remove': function (e, value, row) {
+                if (confirm('Are you sure to delete this item?')) {
+                    $.ajax({
+                        url: API_URL + row.id,
+                        type: 'delete',
+                        success: function () {
+                            $table.bootstrapTable('refresh')
+                            showAlert('Delete item successful!', 'success')
+                        },
+                        error: function () {
+                            showAlert('Delete item error!', 'danger')
+                        }
+                    })
+                }
+            }
+        }
+    </script>
+
+}

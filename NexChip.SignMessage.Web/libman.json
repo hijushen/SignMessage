@@ -34,12 +34,22 @@
       "provider": "cdnjs",
       "library": "jquery@3.2.1",
       "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jQuery@3.2.1",
+      "destination": "wwwroot/lib/jQuery/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "twitter-bootstrap@3.4.1",
+      "destination": "wwwroot/lib/bootstrap/"
     }
   ,
 {
   "provider": "cdnjs",
-  "library": "jQuery@3.2.1",
-  "destination": "wwwroot/lib/jQuery/"
+  "library": "admin-lte@2.4.17",
+  "destination": "wwwroot/lib/admin-lte/"
 }
 ]
 }

@@ -25,12 +25,20 @@ namespace NexChip.SignMessage.Entities
            /// </summary>           
            public string appname {get;set;}
 
-           /// <summary>
-           /// Desc:
-           /// Default:
-           /// Nullable:True
-           /// </summary>           
-           public string reservedkey1 {get;set;}
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:False
+        /// </summary>           
+        public string appnamechs { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string reservedkey1 {get;set;}
 
            /// <summary>
            /// Desc:

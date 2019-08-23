@@ -1,10 +1,12 @@
-﻿var selectedRole = 0;
+﻿
 $(function () {
-    $("#btnAdd").click(function () { add(); });
+    $("#btn-query").click(function () { query(); });
     //$("#btnDelete").click(function () { deleteMulti(); });
     $("#btnSave").click(function () { save(); });
     //$("#checkAll").click(function () { checkAll(this) });
     loadDataTable();
+
+
 
 
 });
@@ -13,7 +15,40 @@ function reloadTables() {
     exampleTable.ajax.reload(null, true);
 }
 
+/// 初始化日期控件
+function setDataPicker() {
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+    function cb(start, end) {
+        $('#reportrange span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+    }
 
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        format: 'YYYY-MM-DD', //控件中from和to 显示的日期格式
+        locale: {
+            applyLabel: '确定',
+            cancelLabel: '取消',
+            fromLabel: '起始时间',
+            toLabel: '结束时间',
+            customRangeLabel: '自定义',
+            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            firstDay: 1
+        }
+        , ranges: {
+            '今日': [moment(), moment()],
+            //'昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            '过去7天': [moment().subtract(6, 'days'), moment()],
+            '一个月内': [moment().subtract(29, 'days'), moment()],
+            '本月': [moment().startOf('month'), moment().endOf('month')],
+            '上个月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+    cb(start, end);
+}
 
 //提示信息
 var lang = {
@@ -75,12 +110,24 @@ function createEditToolColumn(item) {
 }
 
 
+
+//新增
+function add() {
+    $("#Id").val("");
+    $("#appname").val("");
+    $("#appnamechs").val("");
+    $("#reservedkey1").val("");
+    $("#Title").text("新增应用程序");
+    //弹出新增窗体
+    $("#editModal").modal("show");
+};
+
 //保存
 function save() {
     var postData = { "dto": { "OID": $("#Id").val(), "appname": $("#appname").val(), "appnamechs": $("#appnamechs").val(), "reservedkey1": $("#reservedkey1").val() } };
     $.ajax({
         type: "Post",
-        url: "/InterfaceReg/EditSave",
+        url: "/NewMessageSign/EditSave",
         data: postData,
         success: function (data) {
             if (data.success) {
@@ -96,7 +143,7 @@ function save() {
 function edit(id) {
     $.ajax({
         type: "Get",
-        url: "/InterfaceReg/GetS?OID=" + id + "&_t=" + new Date().getTime(),
+        url: "/NewMessageSign/GetS?OID=" + id + "&_t=" + new Date().getTime(),
         success: function (res) {
             var data = res.data || {};
             $("#Id").val(id);
@@ -122,7 +169,7 @@ function deleteSingle(id) {
         ids.push(id);
         $.ajax({
             type: "POST",
-            url: "/InterfaceReg/Delete",
+            url: "/NewMessageSign/Delete",
             data: { "OIDs": ids },
             success: function (data) {
                 if (data.success) {
@@ -167,34 +214,19 @@ function loadDataTable() {
         ],
         //对应列表表头字段
         columns: [{
-            "title": "OID", "data": "oid", "orderable": false, "visible": false
+            "title": "createtime", "data": "createtime", "orderable": false, "visible": false
         }, {
-            "title": "appname", "data": "appname"
+            "title": "fromempname", "data": "fromempname"
         }, {
-            "title": "appnamechs", "data": "appnamechs", "orderable": false,
+            "title": "appname", "data": "appname", "orderable": false,
         }, {
-            "title": "reservedkey1", "data": "reservedkey1", "orderable": false
-        }, {
-            "title": "reservedkey2",
-            "data": "reservedkey2",
-            "orderable": false,
-            "class": "reservedkey2",
-            "render": function (data, type, full, meta) {
-                return data;
-                //debugger;
-                //if (data.length > partshowtool.remarkShowLength) {
-                //    return partshowtool.getPartialRemarksHtml(data);//显示部分信息
-                //} else {
-                //    return data;//显示原始全部信息
-                //}
-            }
+            "title": "substance", "data": "substance", "orderable": false
         }, {
             "title": "操作",
             "data": null,
             "orderable": false,
             "render": function (data, type, full, meta) {
                 return createEditToolColumn(data)
-
             }
         }
         ],
@@ -219,7 +251,7 @@ function loadDataTable() {
 
             //ajax请求数据
             $.ajax({
-                url: "/InterfaceReg/DataTableList",
+                url: "/NewMessageSign/DataTableList",
                 type: "POST",
                 cache: false, //禁用缓存
                 data: data, //传入组装的参数
@@ -229,24 +261,11 @@ function loadDataTable() {
                 //    request.setRequestHeader("token", localStorage.token);
                 //},
                 success: function (result) {
-                    //console.log(result);
-                    //setTimeout仅为测试延迟效果
                     setTimeout(function () {
-                        //封装返回数据
-                        //var returnData = {};
-                        //returnData.draw = result.draw; //这里直接自行返回了draw计数器,应该由后台返回
-                        //returnData.recordsTotal = result.total; //返回数据全部记录
-                        //returnData.recordsFiltered = result.total; //后台不实现过滤功能，每次查询均视作全部结果
-                        //returnData.data = result.data; //返回的数据列表
-                        //console.log(returnData);
-                        //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
-                        //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
-
                         if ($('#example_processing').hide) {
                             $('#example_processing').hide();
                         }
                         callback(result);
-
                     }, 200);
                 }
             });
@@ -254,112 +273,6 @@ function loadDataTable() {
 
     });
 };
-
-
-//新增
-function add() {
-    $("#Id").val("");
-    $("#appname").val("");
-    $("#appnamechs").val("");
-    $("#reservedkey1").val("");
-    $("#Title").text("新增应用程序");
-    //弹出新增窗体
-    $("#editModal").modal("show");
-};
-//编辑
-function edit(id) {
-    $.ajax({
-        type: "Get",
-        url: "/InterfaceReg/GetS?OID=" + id + "&_t=" + new Date().getTime(),
-        success: function (res) {
-            var data = res.data || {};
-            $("#Id").val(id);
-            $("#appname").val(data.appname);
-            $("#appnamechs").val(data.appnamechs);
-            $("#reservedkey1").val(data.reservedkey1);
-
-            $("#Remarks").val(data.remarks);
-
-            $("#Title").text("编辑应用程序")
-            $("#editModal").modal("show");
-        }
-    })
-};
-//保存
-function save() {
-    var postData = { "dto": { "OID": $("#Id").val(), "appname": $("#appname").val(), "appnamechs": $("#appnamechs").val(), "reservedkey1": $("#reservedkey1").val() } };
-    $.ajax({
-        type: "Post",
-        url: "/InterfaceReg/EditSave",
-        data: postData,
-        success: function (data) {
-            if (data.success) {
-                reloadTables();
-                $("#editModal").modal("hide");
-            } else {
-                layer.tips(data.msg, "#btnSave");
-            };
-        }
-    });
-};
-//批量删除
-function deleteMulti() {
-    var ids = "";
-    $(".checkboxs").each(function () {
-        if ($(this).prop("checked") == true) {
-            ids += $(this).val() + ","
-        }
-    });
-    ids = ids.substring(0, ids.length - 1);
-    if (ids.length == 0) {
-        layer.alert("请选择要删除的记录。");
-        return;
-    };
-    //询问框
-    layer.confirm("您确认删除选定的记录吗？", {
-        btn: ["确定", "取消"]
-    }, function () {
-        var sendData = { "ids": ids };
-        $.ajax({
-            type: "Post",
-            url: "/Role/DeleteMuti",
-            data: sendData,
-            success: function (data) {
-                if (data.result == "Success") {
-                    reloadTables()
-                    layer.closeAll();
-                }
-                else {
-                    layer.alert("删除失败！");
-                }
-            }
-        });
-    });
-};
-//删除单条数据
-function deleteSingle(id) {
-    layer.confirm("您确认删除选定的记录吗？", {
-        btn: ["确定", "取消"]
-    }, function () {
-        var ids = [];
-        ids.push(id);
-        $.ajax({
-            type: "POST",
-            url: "/InterfaceReg/Delete",
-            data: { "OIDs": ids },
-            success: function (data) {
-                if (data.success) {
-                    reloadTables()
-                    layer.closeAll();
-                }
-                else {
-                    layer.alert("删除失败！");
-                }
-            }
-        })
-    });
-};
-
 
 //
 var format = {
@@ -371,8 +284,3 @@ var format = {
         }
     }
 };
-
-function getTotalPages(total, pagesize) {
-    if (total == 0) return 1;
-    return Math.ceil(parseFloat(total, 0) / parseFloat(pagesize, 0));
-}

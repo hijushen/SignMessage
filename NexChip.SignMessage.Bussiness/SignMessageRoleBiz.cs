@@ -191,7 +191,7 @@ namespace NexChip.SignMessage.Bussiness
             int limit = reqP1.length;
             int start = reqP1.start; 
 
-            if (string.IsNullOrEmpty(reqP1.order)) //排序方式为空， 倒序
+            if (string.IsNullOrEmpty(reqP1.orderString)) //排序方式为空， 倒序
             {
                 ordertype = 1;
             }

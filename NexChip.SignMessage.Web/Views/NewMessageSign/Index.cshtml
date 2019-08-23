@@ -1,0 +1,75 @@
+﻿
+@{
+    Layout = "_NewMessageSignLayout";
+    ViewData["Title"] = "App 签核消息中心";
+
+}
+
+@section styles  {
+    <style>
+
+    </style>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">App 签核消息中心</h3>
+
+                <div class="form-inline" role="form">
+                    <div class="form-group col-lg-2">
+                        <span>日期区间:</span>
+                        <div id="reportrange"
+                             style="font-size:13px; color:rgb(255,255,255); background:rgb(255,255,255); cursor: pointer; padding: 5px 10px; border: 1px solid rgb(157,157,157); width: 100% height:min-content;">
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down"></i>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-lg-2">
+                        <span>表单类型: </span>
+                        @*<label for="typeSelect">表单类型: </label>*@
+                        <select id="formSelect" class="selectpicker  form-control show-tick"
+                                data-live-search="true">
+                            <option data-subtext="默认">所有</option>
+                            <option>总务用品申请单(zwyp)</option>
+                            <option>资产转费用申请单(zczfy)</option>
+                            <option>资产异动申请(zcyd)</option>
+                            <option>资产出售单(zccs)</option>
+                            <option>资产报废申请单(zcbf)</option>
+                            <option>专案代码申请单(zadm)</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-2">
+                        <span>处理状况: </span>
+                        <select id="typeSelect" class="selectpicker  form-control">
+                            <option data-subtext="默认">未处理或未读过</option>
+                            <option>未处理</option>
+                            <option>已处理</option>
+                            <option>退件待处理</option>
+                            <option>通知</option>
+                            <option>申请</option>
+                            <option>暂存</option>
+                            <option>职代处理通知</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-lg-2">
+                        <button type="button" style="margin-left: 50px; width:90px" id="btn-query" class="btn btn-primary">查询</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="container" style="width:100%">
+                <table id="example" style="table-layout:fixed;" @*table-layout:fixed; word-wrap:break-word;*@
+                       class="display table-striped table-bordered table-hover table-condensed" cellspacing="0" width="100%"></table>
+            </div>
+        </div>
+    </div>
+
+
+    @section scripts{
+        <script src="~/Views/NewMessageSign/index.js"></script>
+    }
+

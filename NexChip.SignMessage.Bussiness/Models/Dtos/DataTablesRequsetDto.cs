@@ -12,9 +12,7 @@ namespace NexChip.SignMessage.Bussiness.Models.Dtos
         public int length { get; set; }
         public string search {get;set;}
 
-        public string order { get; set; }
-
-        public string columns { get; set; }
+        public string orderString { get; set; }
 
 
         public string extra_search { get; set; }

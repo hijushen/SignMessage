@@ -187,14 +187,19 @@ namespace NexChip.SignMessage.Bussiness
         /// <returns></returns>
         public BizListResultForDataTables<SignMessageRole> ListForDataTables(DataTablesRequsetDto reqP1)
         {
-            SignMessageRoleDto reqP = new SignMessageRoleDto()
+            int ordertype = 0;
+            int limit = reqP1.length;
+            int start = reqP1.start; 
+
+            if (string.IsNullOrEmpty(reqP1.order)) //排序方式为空， 倒序
             {
-                limit = reqP1.length,
-                offset = reqP1.start
-            };
+                ordertype = 1;
+            }
 
-            var res = this.List(reqP);
+            Expression<Func<SignMessageRole, bool>> whereExpression = null;
+            Expression<Func<SignMessageRole, object>> orderByExpression = p => p.createtime;
 
+            var res =  Service.GetPageList(start, limit, orderByExpression, ordertype, whereExpression);
             return new BizListResultForDataTables<SignMessageRole>
             {
                 data = res.Rows,

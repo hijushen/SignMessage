@@ -1,0 +1,75 @@
+﻿
+@{
+    Layout = "_InterfaceLayout";
+}
+
+@section styles{
+    <style type="text/css">
+        tr > th {
+            text-align:center;
+        }
+
+
+        table tr td.reserverkey2 {
+            width: 200px;
+            overflow-x: scroll;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">应用程序接口权限设定</h3>
+                <div class="pull-right box-tools">
+                    <button id="btnAdd" class="btn btn-primary" type="button" data-original-title="新增接口" data-toggle="tooltip" data-widget="">
+                        <i class="fa fa-plus-square"></i>&nbsp;&nbsp;新增
+                    </button>
+                    @*<button id="btnDelete" title="" class="btn btn-danger" type="button" data-original-title="删除接口" data-toggle="tooltip" data-widget="">
+                        <i class="fa fa-times"></i>&nbsp;&nbsp;删除
+                    </button>*@
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="table-scrollable" >
+                    <table class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="sample_2_info" style="table-layout: fixed;">
+                        <thead>
+                            <tr role="row">
+                                <th class="table-checkbox" style="width:40px;text-align:center;align-content:center"><input id="checkAll" class="group-checkable" type="checkbox"></th>
+                                <th tabindex="0" aria-label="">
+                                    AppName
+                                </th>
+                                <th tabindex="0" aria-label="">
+                                    名称
+                                </th>
+                                <th tabindex="0" aria-label="">
+                                    校验码
+                                </th>
+                                <th tabindex="0" aria-label="" >
+                                    AppId
+                                </th>
+                                <th tabindex="0" style="width: 230px;" aria-label="">
+                                    操作
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                    <div class="paging-toolbar">
+                        <ul id="grid_paging_part"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_Edit")
+
+@section scripts{
+    @*<script src="~/js/InterfaceReg/Index.js"></script>*@
+
+<script src="~/Views/InterfaceReg/Reg.js"></script>
+}
+

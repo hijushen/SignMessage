@@ -18,19 +18,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link href="~/lib/bootstrap/fonts/css/font-awesome.css" rel="stylesheet" />
+    @*<link href="~/lib/bootstrap/fonts/css/font-awesome.css" rel="stylesheet" />*@
     <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap-table/bootstrap-table.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />
+    @*<link href="~/lib/bootstrap-table/bootstrap-table.css" rel="stylesheet" />
+        <link href="~/lib/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+        <link href="~/lib/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet" />*@
+
+    <link href="~/lib/datatables/css/dataTables.bootstrap.min.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
 
     <title>Index</title>
 
     <style type="text/css">
-            .form-group {
-                margin: 5px 5px 5px 5px;
-            }
+        .form-group {
+            margin: 5px 5px 5px 5px;
+        }
 
             .form-group span {
                 margin-right: 5px;
@@ -49,35 +51,42 @@
             padding: 10px;
         }
 
-        
+
+        #example tr:nth-last-child(2) {
+            overflow-y: auto
+        }
     </style>
 
 </head>
 <body>
-
-    <form>
-        <div class="form-row">
-            <div class="form-group col-md-3">
-                <label for="input">注册表单</label>
-                <input type="text" class="form-control" id="inputName" placeholder="注册表单">
-            </div>
-            <div class="form-group col-md-3">
-                <label for="input">注册名称</label>
-                <input type="text" class="form-control" id="inputName2" placeholder="注册名称">
-            </div>
+    <div class="box-header with-border">
+        <h3 class="box-title">应用程序接口权限设定</h3>
+        <div class="pull-right box-tools">
+            <button id="btnAdd" class="btn btn-primary" type="button" data-original-title="新增接口" data-toggle="tooltip" data-widget="">
+                <i class="fa fa-plus-square"></i>&nbsp;&nbsp;测试
+            </button>
+            @*<button id="btnDelete" title="" class="btn btn-danger" type="button" data-original-title="删除接口" data-toggle="tooltip" data-widget="">
+                    <i class="fa fa-times"></i>&nbsp;&nbsp;删除
+                </button>*@
         </div>
-        <div class="form-inline">
-            <div>
-                <button type="button" style="margin-left: 50px; width:90px" id="btn-query" class="btn btn-primary">模拟</button>
-
-            </div>
-
-        </div>
-    </form>
+    </div>
 
     <!--bootstrap-table表体-->
-    <table id="tb-tasks"></table>
-
+    @*<table id="tb-tasks"></table>*@
+    <div class="container" style="width:100%">
+        <table id="example" style="table-layout:fixed; word-wrap:break-word;" @*table-layout:fixed; word-wrap:break-word;*@
+               class="display table-striped table-bordered table-hover table-condensed" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>OID</th>
+                    <th>AppName</th>
+                    <th>中文名</th>
+                    <th>预留字</th>
+                    <th>AppKey</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 </body>
 </html>
 
@@ -86,25 +95,17 @@
 <script src="~/lib/popper.js/umd/popper.js"></script>
 <script src="~/lib/bootstrap/js/bootstrap.js"></script>
 
-<script src="~/lib/bootstrap-table/bootstrap-table.js"></script>
-<script src="~/lib/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+<script src="~/lib/datatables/js/dataTables.bootstrap.min.js"></script>
 
-<script src="~/lib/bootstrap-select/js/bootstrap-select.js"></script>
+@*<script src="~/lib/bootstrap-table/bootstrap-table.js"></script>
+    <script src="~/lib/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
 
-<script src="~/lib/bootstrap-daterangepicker/moment.min.js"></script>
+    <script src="~/lib/bootstrap-select/js/bootstrap-select.js"></script>
+
+    <script src="~/lib/bootstrap-daterangepicker/moment.min.js"></script>*@
 
 <script type="text/javascript">
-
-    $(document).ready(function () {
-        //1.初始化Table
-        var oTable = new TableInit();
-        oTable.Init();
-
-        //2.初始化Button的点击事件
-        var oButtonInit = new ButtonInit();
-        oButtonInit.Init();
-
-    }); //jQuery 页面加载完
 
 
     var $table = $('#tb-tasks');
@@ -125,7 +126,7 @@
                 sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
                 pageNumber: 1, //初始化加载第一页，默认第一页
                 pageSize: 5, //每页的记录行数（*）
-                pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+                pageList: [5, 10, 25, 50, 100], //可供选择的每页的行数（*）
                 search: false, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
                 strictSearch: true,
                 showColumns: true, //是否显示所有的列
@@ -276,4 +277,212 @@
         return oInit;
     };
 
+</script>
+<script>
+    $(document).ready(function () {
+        //1.初始化Table
+        //var oTable = new TableInit();
+        //oTable.Init();
+
+        //loadDataTable();
+        loadDataTable();
+
+        //2.初始化Button的点击事件
+        var oButtonInit = new ButtonInit();
+        oButtonInit.Init();
+
+    }); //jQuery 页面加载完
+
+    //提示信息
+    var lang = {
+        "lengthMenu": "每页 _MENU_  项",
+        "processing": "处理中...",
+        "zeroRecords": "没有匹配结果",
+        "info": "当前显示第 _START_ 到 _END_ 项, 共 _TOTAL_ 项",
+        "infoEmpty": "暂无数据",
+        "infoFiltered": "(由 _MAX_ 项结果过滤)", //当使用搜索功能后，表格主要信息出追加的字符
+        "loadingRecords": "加载中...",
+        "processing": "加载中， 请稍后...",
+        "search": "搜索:",
+        "infoPostFix": "", //追加到所有其他主要信息字符串之后
+        "url": "",
+        "emptyTable": "表中数据为空",
+        "infoThousands": ",",
+        "paginate": {
+            "first": "首页",
+            "last": "末页",
+            "next": "下页",
+            "previous": "上页"
+        }
+    };
+
+    var partshowtool = {
+        //默认现实的字符串长度
+        remarkShowLength: 30
+        ,
+        changeShowRemarks: function (obj) {//obj是td
+            debugger;
+            var content = $(obj).attr("content");
+            if (content != null && content != '') {
+                if ($(obj).attr("isDetail") == 'true') {//当前显示的是详细备注，切换到显示部分
+                    //$(obj).removeAttr('isDetail');//remove也可以
+                    $(obj).attr('isDetail', false);
+                    $(obj).html(partshowtool.getPartialRemarksHtml(content));
+                } else {//当前显示的是部分备注信息，切换到显示全部
+                    $(obj).attr('isDetail', true);
+                    $(obj).html(partshowtool.getTotalRemarksHtml(content));
+                }
+            }
+        }
+        ,
+        //切换显示备注信息，显示部分或者全部
+        getPartialRemarksHtml: function (remarks) {
+            return remarks.substr(0, partshowtool.remarkShowLength) + '&nbsp;&nbsp;<a href="javascript:void(0);" ><b>...</b></a>';
+        }
+        ,
+        //全部备注信息
+        getTotalRemarksHtml: function (remarks) {
+            return remarks + '&nbsp;&nbsp;<a href="javascript:void(0);" >收起</a>';
+        }
+
+    }
+
+
+
+
+    //初始化表格
+    function loadDataTable() {
+
+        //$('<div class="loading">正在加载……</div>').appendTo('body');
+
+        $("#example").DataTable({
+            language: lang, //提示信息
+            stateSave: true, //状态保存，再次加载页面时还原表格状态
+            autoWidth: false, //禁用自动调整列宽
+            stripeClasses: ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
+            processing: true, //隐藏加载提示,自行处理
+            serverSide: true, //启用服务器端分页
+            searching: false, //禁用原生搜索
+            orderMulti: false, //启用多列排序
+            order: [], //取消默认排序查询,否则复选框一列会出现小箭头
+            deferRender: true, //延迟渲染可以提高Datatables的加载速度
+            lengthMenu: [
+                [10, 25, 50, 100, 300, -1],
+                [10, 25, 50, 100, 300, "所有"]
+            ], //每页多少项，第一个数组是表示的值，第二个数组用来显示
+            renderer: "bootstrap", //渲染样式：Bootstrap和jquery-ui
+            pagingType: "full_numbers", //分页样式：simple,simple_numbers,full,full_numbers
+            scrollY: 400, //表格的固定高
+            scrollCollapse: true, //开启滚动条
+            pageLength: 10, //首次加载的数据条数
+            columnDefs: [
+                {
+                    targets: 'nosort', //列的样式名
+                    orderable: false //包含上样式名‘nosort'的禁止排序
+                }
+            ],
+            //对应列表表头字段
+            columns: [{
+                "data": "oid", "orderable": false, "visible": false
+            }, {
+                "data": "appname"
+            }, {
+                "data": "appnamechs", "orderable": false,
+            }, {
+                "data": "reservedkey1", "orderable": false,
+            }, {
+                "orderable": false,
+                "data": "reservedkey2",
+                "render": function (data, type, full, meta) {
+                    return data;
+                    //debugger;
+                    //if (data.length > partshowtool.remarkShowLength) {
+                    //    return partshowtool.getPartialRemarksHtml(data);//显示部分信息
+                    //} else {
+                    //    return data;//显示原始全部信息
+                    //}
+                }
+            }
+            ],
+            "initComplete": function (settings, json) {
+                //$('div.loading').hide();
+            },
+            "createdRow": function (row, data, dataIndex) {
+                //debugger;
+                if (data.reservedkey2.length > partshowtool.remarkShowLength) {
+                    //只有超长，才有td点击事件
+                    //$(row).children('td').eq(4).attr('onclick', 'javascript:partshowtool.changeShowRemarks(this);');
+                    //$(row).children('td').eq(4).attr('content', data.reservedkey2);
+                    //$(row).children('td').eq(4).attr('isDetail', false);
+                }
+            },
+            ajax: function (data, callback, settings) {
+                //封装请求参数
+                var param = {};
+                param.length = data.length; //页面显示记录条数，在页面显示每页显示多少项的时候
+                param.start = data.start; //开始的记录序号
+                //param.page = (data.start / data.length) + 1; //当前页码
+
+                //ajax请求数据
+                $.ajax({
+                    url: "/InterfaceReg/DataTableList",
+                    type: "POST",
+                    cache: false, //禁用缓存
+                    data: data, //传入组装的参数
+                    dataType: "json",
+                    contentType: 'application/x-www-form-urlencoded;charset=utf-8',  //application/json
+                    //beforeSend: function (request) {
+                    //    request.setRequestHeader("token", localStorage.token);
+                    //},
+                    success: function (result) {
+                        //console.log(result);
+                        //setTimeout仅为测试延迟效果
+                        setTimeout(function () {
+                            //封装返回数据
+                            //var returnData = {};
+                            //returnData.draw = result.draw; //这里直接自行返回了draw计数器,应该由后台返回
+                            //returnData.recordsTotal = result.total; //返回数据全部记录
+                            //returnData.recordsFiltered = result.total; //后台不实现过滤功能，每次查询均视作全部结果
+                            //returnData.data = result.data; //返回的数据列表
+                            //console.log(returnData);
+                            //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                            //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+
+                            if ($('#example_processing').hide) {
+                                $('#example_processing').hide();
+                            }
+                            callback(result);
+
+                        }, 200);
+                    }
+                });
+            },
+
+        });
+    };
+
+
+
+    /////
+    //function loadDataTable() {
+    //    $('#tb-tasks').DataTable({
+    //        "processing": true,
+    //        "serverSide": true,
+    //        "ajax": {
+    //            url: "/InterfaceReg/DataTableList",
+    //            type: 'post',
+    //            "data": function (d) {
+    //                return $.extend({}, d, {
+    //                    "extra_search": 'extra'
+    //                });
+    //            }
+    //        },
+    //        "columns": [
+    //            { "data": "appname" },
+    //            { "data": "appnamechs" },
+    //            { "data": "reservedkey1" },
+    //            { "data": "reservedkey2" }
+    //        ]
+    //    });
+    //}
 </script>

@@ -5,10 +5,6 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Remove="wwwroot\js\InterfaceReg\Index.js" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -41,11 +37,6 @@
     <Content Update="wwwroot\lib\bootstrap\fonts\glyphicons-halflings-regular.woff2">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <None Include="wwwroot\js\InterfaceReg\Index.js" />
   </ItemGroup>
 
 

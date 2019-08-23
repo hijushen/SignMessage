@@ -10,6 +10,20 @@ namespace NexChip.SignMessage.Token
         /// 用户Id
         /// </summary>
         public string Uid { get; set; }
+
+
+
+        /// <summary>
+        /// 程序名
+        /// </summary>
+        public string AppName { get; set; }
+
+
+        /// <summary>
+        /// 程序中文名
+        /// </summary>
+        public string AppNameCHS { get; set; }
+
         /// <summary>
         /// 身份
         /// </summary>
@@ -18,5 +32,7 @@ namespace NexChip.SignMessage.Token
         /// 项目名称
         /// </summary>
         public string Project { get; set; }
+
+        public DateTime expireTime { get; set; }
     }
 }

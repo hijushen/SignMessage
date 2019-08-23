@@ -44,12 +44,15 @@
       "provider": "cdnjs",
       "library": "twitter-bootstrap@3.4.1",
       "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "admin-lte@2.4.17",
+      "destination": "wwwroot/lib/admin-lte/"
+    },
+    {
+      "library": "datatables@1.10.19",
+      "destination": "wwwroot/lib/datatables/"
     }
-  ,
-{
-  "provider": "cdnjs",
-  "library": "admin-lte@2.4.17",
-  "destination": "wwwroot/lib/admin-lte/"
-}
-]
+  ]
 }

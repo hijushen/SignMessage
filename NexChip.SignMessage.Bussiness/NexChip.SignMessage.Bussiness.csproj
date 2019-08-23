@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NexChip.SignMessage.Services\NexChip.SignMessage.Services.csproj" />
+    <ProjectReference Include="..\NexChip.SignMessage.Token\NexChip.SignMessage.Token.csproj" />
   </ItemGroup>
 
 </Project>

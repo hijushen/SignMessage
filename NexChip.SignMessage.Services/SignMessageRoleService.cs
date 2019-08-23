@@ -20,5 +20,35 @@ FROM    dbo.Student AS a
         }
 
 
+        public bool checkAppNameExist(SignMessageRole saveEntity)
+        {
+            if (string.IsNullOrEmpty(saveEntity.OID)) //新增的判断重名
+            {
+                int count = sdb.Count<SignMessageRole>(t => t.appname == saveEntity.appname);
+                if (count > 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else //更新判断重名
+            {
+                var existEntity = sdb.GetSingle<SignMessageRole>(t => t.OID == saveEntity.OID);
+
+                int count = sdb.Count<SignMessageRole>(t => (t.appname == saveEntity.appname) && (t.OID != existEntity.OID));
+                if (count > 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
     }
 }

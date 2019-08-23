@@ -1,7 +1,7 @@
 ﻿var selectedRole = 0;
 $(function () {
     $("#btnAdd").click(function () { add(); });
-    $("#btnDelete").click(function () { deleteMulti(); });
+    //$("#btnDelete").click(function () { deleteMulti(); });
     $("#btnSave").click(function () { save(); });
     $("#checkAll").click(function () { checkAll(this) });
     reloadTables();
@@ -24,7 +24,8 @@ function loadTables(startPage, pageSize) {
                 tr += "<td align='center'><input type='checkbox' class='checkboxs' value='" + item.oid + "'/></td>";
                 tr += "<td>" + (item.appname == null ? "" : item.appname) + "</td>";
                 tr += "<td>" + item.appnamechs + "</td>";
-                tr += "<td>" + format.status(item.rolestatus) + "</td>";
+                tr += "<td>" + item.reservedkey1 + "</td>";
+                tr += "<td class=\"reserverkey2\">" + item.reservedkey2 + "</td>";
                 tr += "<td><button class='btn btn-info btn-xs' href='javascript:;' onclick='edit(\"" + item.oid + "\")'><i class='fa fa-edit'></i> 编辑 </button> <button class='btn btn-danger btn-xs' href='javascript:;' onclick='deleteSingle(\"" + item.oid + "\")'><i class='fa fa-trash-o'></i> 删除 </button> </td>"
                 tr += "</tr>";
                 $("#tableBody").append(tr);
@@ -35,7 +36,7 @@ function loadTables(startPage, pageSize) {
                     bootstrapMajorVersion: 3,
                     currentPage: startPage, //当前页
                     numberOfPages: data.total, //总数
-                    totalPages: getTotalPages(data.total,pageSize), //data.pageCount, //总页数
+                    totalPages: getTotalPages(data.total, pageSize), //data.pageCount, //总页数
                     onPageChanged: function (event, oldPage, newPage) { //页面切换事件
                         loadTables(newPage, pageSize);
                     }
@@ -65,6 +66,7 @@ function checkAll(obj) {
 };
 //新增
 function add() {
+    $("#Id").val("");
     $("#appname").val("");
     $("#appnamechs").val("");
     $("#reservedkey1").val("");
@@ -79,7 +81,7 @@ function edit(id) {
         url: "/InterfaceReg/GetS?OID=" + id + "&_t=" + new Date().getTime(),
         success: function (res) {
             var data = res.data || {};
-
+            $("#Id").val(id);
             $("#appname").val(data.appname);
             $("#appnamechs").val(data.appnamechs);
             $("#reservedkey1").val(data.reservedkey1);
@@ -93,7 +95,7 @@ function edit(id) {
 };
 //保存
 function save() {
-    var postData = { "dto": { "appname": $("#appname").val(), "appnamechs": $("#appnamechs").val(), "reservedkey1": $("#reservedkey1").val() } };
+    var postData = { "dto": {"OID":$("#Id").val(), "appname": $("#appname").val(), "appnamechs": $("#appnamechs").val(), "reservedkey1": $("#reservedkey1").val() } };
     $.ajax({
         type: "Post",
         url: "/InterfaceReg/EditSave",
@@ -103,7 +105,7 @@ function save() {
                 reloadTables();
                 $("#editModal").modal("hide");
             } else {
-                layer.tips(data.Msg, "#btnSave");
+                layer.tips(data.msg, "#btnSave");
             };
         }
     });
@@ -132,7 +134,7 @@ function deleteMulti() {
             data: sendData,
             success: function (data) {
                 if (data.result == "Success") {
-                    loadTables(1, 10)
+                    reloadTables()
                     layer.closeAll();
                 }
                 else {
@@ -147,13 +149,15 @@ function deleteSingle(id) {
     layer.confirm("您确认删除选定的记录吗？", {
         btn: ["确定", "取消"]
     }, function () {
+        var ids = [];
+        ids.push(id);
         $.ajax({
             type: "POST",
-            url: "/Role/Delete",
-            data: { "OID": id },
+            url: "/InterfaceReg/Delete",
+            data: { "OIDs": ids },
             success: function (data) {
-                if (data.result == "Success") {
-                    loadTables(1, 10)
+                if (data.success) {
+                    reloadTables()
                     layer.closeAll();
                 }
                 else {
@@ -167,7 +171,7 @@ function deleteSingle(id) {
 
 //
 var format = {
-    status: function(value) {
+    status: function (value) {
         if (value) {
             return '有效'
         } else {
@@ -178,5 +182,5 @@ var format = {
 
 function getTotalPages(total, pagesize) {
     if (total == 0) return 1;
-    return Math.ceil(parseFloat(total,0) / parseFloat(pagesize,0));
+    return Math.ceil(parseFloat(total, 0) / parseFloat(pagesize, 0));
 }

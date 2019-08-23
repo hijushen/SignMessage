@@ -102,6 +102,11 @@ namespace NexChip.SignMessage.Services
             return db.Insertable<T>(entiy).IgnoreColumns(ignoreNullColumn: true).ExecuteCommand();
         }
 
+        public int UpdateOnlyColumn(T entity, Expression<Func<T, object>> filterColumn)
+        {
+            return db.Updateable<T>(entity).UpdateColumns(filterColumn).ExecuteCommand();
+        }
+
         public bool Update(T entity)
         {
             return sdb.Update(entity);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 
 namespace NexChip.SignMessage.Web
 {
@@ -47,6 +49,12 @@ namespace NexChip.SignMessage.Web
             }
 
             app.UseStaticFiles();
+            //可以访问Views下文件目录 2019-08-21
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Directory.GetCurrentDirectory())
+            });
+
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>

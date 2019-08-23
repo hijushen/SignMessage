@@ -1,6 +1,7 @@
 ﻿using NexChip.SignMessage.Bussiness.Models.Dtos;
 using NexChip.SignMessage.Entities;
 using NexChip.SignMessage.Services;
+using NexChip.SignMessage.Token;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -45,6 +46,68 @@ namespace NexChip.SignMessage.Bussiness
         }
 
         /// <summary>
+        /// 根据角色OID生成key
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        private string getJWTString(SignMessageRole saveEntity)
+        {
+            TokenModel tm = new TokenModel();
+            tm.Role = "Client";
+            tm.Project = "SignMessage";
+            tm.Uid = saveEntity.OID;
+
+            return JwtHelper.IssueJWT(tm);
+        }
+
+        public BizResult<SignMessageRole> Delete(string[] OIDs)
+        {
+            try
+            {
+                var res = Service.Dels(OIDs);
+                return new BizResult<SignMessageRole>()
+                {
+                    Success = res
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BizResult<SignMessageRole>()
+                {
+                    Success = false,
+                    Msg = ex.Message
+                };
+            }
+
+
+        }
+
+        private bool insertSignMessageRole(SignMessageRole saveEntity)
+        {
+            saveEntity.OID = Guid.NewGuid().ToString();
+            saveEntity.reservedkey2 = getJWTString(saveEntity);
+
+            saveEntity.creater = "admin";
+            saveEntity.createtime = DateTime.Now;
+            int i = Service.InsertIgnoreNullColumn(saveEntity);
+            return true;
+        }
+
+        /// <summary>
+        /// 更新特定列
+        /// </summary>
+        /// <param name="saveEntity"></param>
+        /// <returns></returns>
+        private bool updateSignMessageRole(SignMessageRole saveEntity)
+        {
+            saveEntity.updater = "admin";
+            saveEntity.updatetime = DateTime.Now;
+
+            int i = Service.UpdateOnlyColumn(saveEntity, it => new { it.updater, it.updatetime, it.appname, it.appnamechs, it.reservedkey1 });
+            return true;
+        }
+
+        /// <summary>
         /// 编辑保存
         /// </summary>
         /// <param name="dto"></param>
@@ -55,32 +118,34 @@ namespace NexChip.SignMessage.Bussiness
             {
                 Success = false
             };
-            
+
             if (dto == null) return res;
 
             try
             {
                 SignMessageRole saveEntity = new SignMessageRole()
                 {
+                    OID = dto.OID,
                     appname = dto.appname,
-                    reservedkey1 = dto.reservedkey1
+                    appnamechs = dto.appnamechs,
+                    reservedkey1 = dto.reservedkey1,
+                    rolestatus = (int)StatusEnum.Valid
                 };
+
+                res.Success = Service.checkAppNameExist(saveEntity);
+                if (!res.Success)
+                {
+                    res.Msg = "名称已存在，重新命名";
+                    return res;
+                }
 
                 if (string.IsNullOrEmpty(dto.OID))
                 {
-                    saveEntity.OID = Guid.NewGuid().ToString();
-                    saveEntity.creater = "admin";
-                    saveEntity.createtime = DateTime.Now;
-                    var saveRes = Service.InsertIgnoreNullColumn(saveEntity);
-
-                    res.Success = true;
+                    res.Success = insertSignMessageRole(saveEntity);
                 }
                 else
                 {
-                    saveEntity.updater = "admin";
-                    saveEntity.updatetime = DateTime.Now;
-
-                    res.Success = Service.Update(saveEntity);
+                    res.Success = updateSignMessageRole(saveEntity);
                 }
 
 
@@ -103,7 +168,7 @@ namespace NexChip.SignMessage.Bussiness
         {
             int ordertype = 0;
             int limit = reqP.limit;
-            int start = (reqP.offset - 1)*limit + 1; //前台使用了1开始的页码
+            int start = (reqP.offset - 1) * limit + 1; //前台使用了1开始的页码
             if (string.IsNullOrEmpty(reqP.sortway)) //排序方式为空， 倒序
             {
                 ordertype = 1;
@@ -114,6 +179,31 @@ namespace NexChip.SignMessage.Bussiness
 
             return Service.GetPageList(start, limit, orderByExpression, ordertype, whereExpression);
         }
+
+        /// <summary>
+        /// DataTable 
+        /// </summary>
+        /// <param name="reqP"></param>
+        /// <returns></returns>
+        public BizListResultForDataTables<SignMessageRole> ListForDataTables(DataTablesRequsetDto reqP1)
+        {
+            SignMessageRoleDto reqP = new SignMessageRoleDto()
+            {
+                limit = reqP1.length,
+                offset = reqP1.start
+            };
+
+            var res = this.List(reqP);
+
+            return new BizListResultForDataTables<SignMessageRole>
+            {
+                data = res.Rows,
+                draw = reqP1.draw + 1,
+                recordsFiltered = res.total,
+                recordsTotal = res.total
+            };
+        }
+
 
         public BizResult<SignMessageRole> GetS(string OID)
         {

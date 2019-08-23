@@ -22,6 +22,7 @@ namespace NexChip.SignMessage.Token
                 new Claim(JwtRegisteredClaimNames.Jti,tokenModel.Uid),//用户Id
                 new Claim("Role", tokenModel.Role),//身份
                 new Claim("Project", tokenModel.Project),
+
                 new Claim(JwtRegisteredClaimNames.Iat,dateTime.ToString(),ClaimValueTypes.Integer64)
             };
 

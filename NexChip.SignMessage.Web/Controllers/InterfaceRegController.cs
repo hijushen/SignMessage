@@ -42,6 +42,13 @@ namespace NexChip.SignMessage.Web.Controllers
             return Json(roleBiz.List(reqP));
         }
 
+        [HttpPost]
+        public JsonResult DataTableList(DataTablesRequsetDto reqP)
+        {
+            var res = roleBiz.ListForDataTables(reqP);
+            return Json(res);
+        }
+
         public JsonResult GetS(string OID)
         {
             return Json(roleBiz.GetS(OID));
@@ -56,6 +63,12 @@ namespace NexChip.SignMessage.Web.Controllers
         public JsonResult EditSave([FromForm]SignMessageRoleDto dto)
         {
             return Json(roleBiz.EditSave(dto));
+        }
+
+
+        public JsonResult Delete(string[] OIDs)
+        {
+            return Json(roleBiz.Delete(OIDs));
         }
     }
 

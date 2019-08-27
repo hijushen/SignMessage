@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 using NexChip.SignMessage.Bussiness;
@@ -16,6 +18,7 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
     /// </summary>
     [Produces("application/json")]
     [Route("api/[controller]")]
+    //[EnableCors("AllowSpecificOrigin")]
     public class SignMessageController : Controller
     {
         private SignMessgeBiz bll = new SignMessgeBiz();
@@ -27,6 +30,7 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
         /// <param name="value"></param>
         [HttpPost]
         [Route("NewSignMsg")]
+        [Authorize(Policy = "Client")]
         public JsonResult PostNewSignMsg([FromBody]SignMessageSendDto value)
         {
             var appOID = User.Identity.Name;
@@ -42,6 +46,7 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateSignMsg")]
+        [Authorize(Policy="Client")]      
         public JsonResult PostUpdateSignMsg([FromBody]SignMessageSendDto value)
         {
             var appOID = User.Identity.Name;

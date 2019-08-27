@@ -49,9 +49,9 @@ namespace NexChip.SignMessage.Web.Controllers
             return Json(boxBiz.Delete(OIDs));
         }
 
-        public JsonResult testSend(string OID)
+        public  JsonResult testSend(string OID)
         {
-            return Json(boxBiz.testSend(OID));
+            return Json( boxBiz.testSend(OID));
         }
     }
 }

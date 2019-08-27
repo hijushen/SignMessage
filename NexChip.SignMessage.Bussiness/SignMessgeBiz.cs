@@ -372,7 +372,7 @@ namespace NexChip.SignMessage.Bussiness
 
             if (roleEntity.rolestatus == 0)
             {
-                msg.handleerrormsg = "请联系平台，用户身份权限已失效！";
+                msg.handleerrormsg = "请联系平台，用户身份已失效！";
                 updateMsgInterfaceErrorHandle(msg);
                 return interfaceHandlerErrorReturn(msg.handleerrormsg);
             }

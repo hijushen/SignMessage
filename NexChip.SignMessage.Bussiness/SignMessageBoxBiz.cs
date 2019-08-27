@@ -52,7 +52,7 @@ namespace NexChip.SignMessage.Bussiness
             };
         }
 
-        public BizResult<SignMessageBoxDto> testSend(string OID)
+        public  BizResult<SignMessageBoxDto> testSend(string OID)
         {
             try
             {
@@ -68,19 +68,39 @@ namespace NexChip.SignMessage.Bussiness
                     };
                 }
 
-
-                var response = HttpClinetHelper.PostAsyncJson(SettingConfig.PostUrl + "/SignMessage/UpdateSignMessage",
-                    signBox.SerializeModel()).ConfigureAwait(true).GetAwaiter().GetResult();
-
-
-                var returnD = response.DeserializeModel<SignMessageBoxDto>();
-
-
-                return new BizResult<SignMessageBoxDto>
+                var postUrl = "/SignMessage/UpdateSignMessage";
+                var postData = new SignMessageSendDto
                 {
-                    Success = true,
-                    Data = returnD
+                    appname = "23",
+                    sendtime = DateTime.Now,
+                    msgbody = new SignMessageSendBodyDto
+                    {
+                        sourceid = signBox.OID,
+                        callbackurl = "http://www.baidu.com",
+                        fromid = signBox.fromempid,
+                        toids = signBox.toempid,
+                        fromname = signBox.fromempname,
+                        tonames = signBox.toempname,
+                        handletype = 1,
+                        emergencylevel = 1
+                        ,msgsourceid = signBox.msgsourceid
+                    }
                 };
+
+                var response = RestSharpHttp.PostJson(postUrl, postData.SerializeModel());
+
+                //var response = HttpClinetHelper.PostAsyncJson(postUrl, postData.SerializeModel())
+                //    .ConfigureAwait(false).GetAwaiter().GetResult();
+
+
+                var returnD = response.DeserializeModel<BizResult<SignMessageBoxDto>>();
+
+                return returnD;
+                //return new BizResult<SignMessageBoxDto>
+                //{
+                //    Success = true,
+                //    Data = returnD
+                //};
             }
             catch(Exception ex)
             {

@@ -61,6 +61,25 @@ namespace NexChip.SignMessage.API
                 o.AssumeDefaultVersionWhenUnspecified = true;//if not specifying an api version,show the default version
             });
 
+            #region CORS
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowAnyOrigin", policy =>
+                {
+                    policy.AllowAnyOrigin()//允许任何源
+                    .AllowAnyMethod()//允许任何方式
+                    .AllowAnyHeader()//允许任何头
+                    .AllowCredentials();//允许cookie
+                });
+                c.AddPolicy("AllowSpecificOrigin", policy =>
+                {
+                    policy.WithOrigins("http://localhost:5001")
+                    .WithMethods("GET", "POST", "PUT", "DELETE")
+                    .WithHeaders("authorization");
+                });
+            });
+            #endregion
+
 
             #region Token认证
             services.AddSingleton<IMemoryCache>(factory =>
@@ -126,7 +145,7 @@ namespace NexChip.SignMessage.API
                 c.AddSecurityRequirement(security);//添加一个必须的全局安全信息，和AddSecurityDefinition方法指定的方案名称要一致，这里是Bearer。
                 c.AddSecurityDefinition("Bearer", new ApiKeyScheme
                 {
-                    Description = "JWT授权(数据将在请求头中进行传输) 参数结构: \"Authorization: Bearer {token}\"",
+                    Description = "JWT授权(数据将在请求头中进行传输) 参数结构: \"Authorization: {token}\"",
                     Name = "Authorization",//jwt默认的参数名称
                     In = "header",//jwt默认存放Authorization信息的位置(请求头中)
                     Type = "apiKey"

@@ -12,7 +12,7 @@ namespace NexChip.SignMessage.Web.Controllers
 {
     public class NewMessageSignController : Controller
     {
-        public SignMessageBoxBiz boxBiz;
+        public SignMessageBoxBiz boxBiz = new SignMessageBoxBiz();
 
         // GET: /<controller>/
         public IActionResult Index()
@@ -47,6 +47,11 @@ namespace NexChip.SignMessage.Web.Controllers
         public JsonResult Delete(string[] OIDs)
         {
             return Json(boxBiz.Delete(OIDs));
+        }
+
+        public JsonResult testSend(string OID)
+        {
+            return Json(boxBiz.testSend(OID));
         }
     }
 }

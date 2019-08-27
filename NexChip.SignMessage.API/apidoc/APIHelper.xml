@@ -79,13 +79,13 @@
             签核箱 消息接口
             </summary>
         </member>
-        <member name="M:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController.PostNewSignMsg(NexChip.SignMessage.Entities.SignMessageModel)">
+        <member name="M:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController.PostNewSignMsg(NexChip.SignMessage.Bussiness.SignMessageSendDto)">
             <summary>
             新增签核箱消息
             </summary>
             <param name="value"></param>
         </member>
-        <member name="M:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController.PostUpdateMsg(NexChip.SignMessage.Entities.SignMessageModel)">
+        <member name="M:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController.PostUpdateSignMsg(NexChip.SignMessage.Bussiness.SignMessageSendDto)">
             <summary>
             更新签核箱消息
             </summary>

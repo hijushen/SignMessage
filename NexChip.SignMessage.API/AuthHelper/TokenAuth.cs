@@ -56,8 +56,10 @@ namespace NexChip.SignMessage.API.AuthHelper
                 List<Claim> lc = new List<Claim>();
                 //Claim c = new Claim(tm.Sub + "Type", tm.Sub);
                 Claim c = new Claim(ClaimTypes.Role, tm.Role);
-
+                Claim c2 = new Claim(ClaimTypes.Name, tm.Uid);
                 lc.Add(c);
+                lc.Add(c2);
+
                 ClaimsIdentity identity = new ClaimsIdentity(lc);
                 ClaimsPrincipal principal = new ClaimsPrincipal(identity);
                 httpContext.User = principal;

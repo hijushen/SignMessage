@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace NexChip.SignMessage.Entities
+namespace NexChip.SignMessage.Bussiness
 {
     /// <summary>
     /// 签核箱消息内容实体
     /// </summary>
-    public class SignMessageMessageBodyViewModel
+    public class SignMessageSendBodyDto
     {
         /// <summary>
         /// 原系统id
@@ -72,5 +72,10 @@ namespace NexChip.SignMessage.Entities
         /// </summary>
         //[JsonConverter(typeof(CustomDateConverter))]
         public DateTime? updatetime { get; set; }
+
+        /// <summary>
+        /// 发送消息原系统id
+        /// </summary>
+        public string msgsourceid { get; set; }
     }
 }

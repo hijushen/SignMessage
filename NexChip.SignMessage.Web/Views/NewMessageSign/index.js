@@ -1,18 +1,20 @@
 ﻿
 $(function () {
-    $("#btn-query").click(function () { query(); });
+    $("#btn-query").click(function () { reloadTables(); });
     //$("#btnDelete").click(function () { deleteMulti(); });
     $("#btnSave").click(function () { save(); });
     //$("#checkAll").click(function () { checkAll(this) });
     loadDataTable();
-
+    setDataPicker();
 
 
 
 });
 
 function reloadTables() {
-    exampleTable.ajax.reload(null, true);
+    if (exampleTable) {
+        exampleTable.ajax.reload(null, true);
+    }
 }
 
 /// 初始化日期控件
@@ -106,7 +108,11 @@ var partshowtool = {
 
 //
 function createEditToolColumn(item) {
-    return "<button class='btn btn-info btn-xs' href='javascript:;' onclick='edit(\"" + item.oid + "\")'><i class='fa fa-edit'></i> 编辑 </button> <button class='btn btn-danger btn-xs' href='javascript:;' onclick='deleteSingle(\"" + item.oid + "\")'><i class='fa fa-trash-o'></i> 删除 </button> "
+    return "<button class='btn btn-info btn-xs' href='javascript:;' onclick='edit(\"" + item.oid
+        + "\")'><i class='fa fa-edit'></i> 编辑 </button> <button class='btn btn-danger btn-xs' href='javascript:;' onclick='deleteSingle(\"" + item.oid
+        + "\")'><i class='fa fa-trash-o'></i> 删除 </button> "
+        + "<button class='btn btn-info btn-xs' href='javascript:;' onclick='testsend(\"" + item.oid
+        +"\")'<i class='fa fa-edit'></i>测试发送</button>"
 }
 
 
@@ -139,6 +145,9 @@ function save() {
         }
     });
 };
+
+
+
 //编辑
 function edit(id) {
     $.ajax({
@@ -158,6 +167,25 @@ function edit(id) {
         }
     })
 };
+
+///测试发送
+function testsend(id) {
+    $.ajax({
+        type: "POST",
+        url: "/NewMessageSign/testSend",
+        data: { "OID": id },
+        success: function (data) {
+            if (data.success) {
+                //reloadTables()
+                //layer.closeAll();
+                layer.alert("测试成功！");
+            }
+            else {
+                layer.alert("测试失败！");
+            }
+        }
+    });
+}
 
 
 //删除单条数据
@@ -235,12 +263,12 @@ function loadDataTable() {
         },
         "createdRow": function (row, data, dataIndex) {
             //debugger;
-            if (data.reservedkey2.length > partshowtool.remarkShowLength) {
-                //只有超长，才有td点击事件
-                //$(row).children('td').eq(4).attr('onclick', 'javascript:partshowtool.changeShowRemarks(this);');
-                //$(row).children('td').eq(4).attr('content', data.reservedkey2);
-                //$(row).children('td').eq(4).attr('isDetail', false);
-            }
+            //if (data.reservedkey2.length > partshowtool.remarkShowLength) {
+            //只有超长，才有td点击事件
+            //$(row).children('td').eq(4).attr('onclick', 'javascript:partshowtool.changeShowRemarks(this);');
+            //$(row).children('td').eq(4).attr('content', data.reservedkey2);
+            //$(row).children('td').eq(4).attr('isDetail', false);
+            //}
         },
         ajax: function (data, callback, settings) {
             //封装请求参数
@@ -269,7 +297,7 @@ function loadDataTable() {
                     }, 200);
                 }
             });
-        },
+        }
 
     });
 };

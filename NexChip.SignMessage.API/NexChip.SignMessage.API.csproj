@@ -25,4 +25,10 @@
     <ProjectReference Include="..\NexChip.SignMessage.Token\NexChip.SignMessage.Token.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

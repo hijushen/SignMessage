@@ -7,18 +7,39 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NexChip.SignMessage.Entities
+namespace NexChip.SignMessage.Bussiness
 {
     /// <summary>
     /// 签核箱 消息接口实体
     /// </summary>
-    public class SignMessageModel
+    public class SignMessageSendDto
     {
+        /// <summary>
+        /// 接口表主键
+        /// </summary>
+        public string interfaceOID { get; set; }
+
         /// <summary>
         /// 发送来源平台名称
         /// <example>某个名称</example>
         /// </summary>
         public string appname { get; set; }
+
+
+
+        /// <summary>
+        /// 
+        /// <example></example>
+        /// </summary>
+        public int handleresult { get; set; }
+
+
+
+        /// <summary>
+        /// 
+        /// <example></example>
+        /// </summary>
+        public string handleerrormsg { get; set; }
 
         /// <summary>
         /// 发送时间
@@ -30,7 +51,7 @@ namespace NexChip.SignMessage.Entities
         /// <summary>
         /// 签核箱消息内容主体
         /// </summary>
-        public SignMessageMessageBodyViewModel msgbody { get; set; }
+        public SignMessageSendBodyDto msgbody { get; set; }
     }
 
 }

@@ -1,6 +1,6 @@
 {
   "iisSettings": {
-    "windowsAuthentication": true,
+    "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
       "applicationUrl": "http://localhost:9000",
@@ -34,7 +34,6 @@
       "commandName": "IIS",
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "workingDirectory": "D:\\workcode\\netcore\\NetCore-NexChip.SignMessage\\NexChip.SignMessage.API",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

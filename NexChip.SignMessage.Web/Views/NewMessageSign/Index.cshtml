@@ -7,6 +7,10 @@
 
 @section styles  {
     <style>
+        #reportrange span {
+           color:green;
+        } 
+
 
     </style>
 }
@@ -18,15 +22,15 @@
                 <h3 class="box-title">App 签核消息中心</h3>
 
                 <div class="form-inline" role="form">
-                    <div class="form-group col-lg-2">
+
+                    <div class="form-group col-lg-2" style="margin-top:10px;">
                         <span>日期区间:</span>
                         <div id="reportrange"
-                             style="font-size:13px; color:rgb(255,255,255); background:rgb(255,255,255); cursor: pointer; padding: 5px 10px; border: 1px solid rgb(157,157,157); width: 100% height:min-content;">
+                             style="display:inline; font-size:13px; color:rgb(255,255,255); background:rgb(255,255,255); cursor: pointer; padding: 5px 10px; border: 1px solid rgb(157,157,157); width: 100% height:min-content;">
                             <i class="fa fa-calendar"></i>&nbsp;
                             <span></span> <i class="fa fa-caret-down"></i>
                         </div>
                     </div>
-
                     <div class="form-group col-lg-2">
                         <span>表单类型: </span>
                         @*<label for="typeSelect">表单类型: </label>*@
@@ -58,6 +62,7 @@
                     <div class="form-group col-lg-2">
                         <button type="button" style="margin-left: 50px; width:90px" id="btn-query" class="btn btn-primary">查询</button>
                     </div>
+
                 </div>
 
             </div>

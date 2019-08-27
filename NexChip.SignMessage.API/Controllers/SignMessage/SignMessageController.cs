@@ -27,11 +27,12 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
         /// <param name="value"></param>
         [HttpPost]
         [Route("NewSignMsg")]
-        public JsonResult PostNewSignMsg([FromBody]SignMessageModel value)
+        public JsonResult PostNewSignMsg([FromBody]SignMessageSendDto value)
         {
-            //return Json(bll.PostNewSignMsg(value));
+            var appOID = User.Identity.Name;
+            return Json(bll.PostNewSignMsg(value, appOID));
 
-            return Json(tempBiz.MockMessageBox());
+            //return Json(tempBiz.MockMessageBox());
         }
 
         /// <summary>
@@ -41,10 +42,12 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateSignMsg")]
-        public JsonResult PostUpdateMsg([FromBody]SignMessageModel value)
+        public JsonResult PostUpdateSignMsg([FromBody]SignMessageSendDto value)
         {
-            //return Json(bll.PostUpdateMsg(value));
-            return null;
+            var appOID = User.Identity.Name;
+
+            return Json(bll.PostUpdateSignMsg(value, appOID));
+            ///return null;
         }
     }
 }

@@ -33,12 +33,17 @@ namespace NexChip.SignMessage.Entities
            /// </summary>           
            public int handleresult {get;set;}
 
+        /// <summary>
+        /// 处理错误提示
+        /// </summary>
+            public string handleerrormsg { get; set; }
+
            /// <summary>
            /// Desc:
            /// Default:DateTime.Now
            /// Nullable:False
            /// </summary>           
-           public DateTime sendtime {get;set;}
+        public DateTime sendtime {get;set;}
 
            /// <summary>
            /// Desc:

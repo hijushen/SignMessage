@@ -1,6 +1,7 @@
 ﻿using NexChip.SignMessage.Bussiness.Models.Dtos;
 using NexChip.SignMessage.Entities;
 using NexChip.SignMessage.Services;
+using NexChip.SignMessage.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -49,6 +50,46 @@ namespace NexChip.SignMessage.Bussiness
                 recordsFiltered = res.total,
                 recordsTotal = res.total
             };
+        }
+
+        public BizResult<SignMessageBoxDto> testSend(string OID)
+        {
+            try
+            {
+                SignMessageBoxDto dto = new SignMessageBoxDto();
+
+                var signBox = Service.sdb.GetSingle<SignMessageBox>(t => t.OID == OID);
+                if(signBox == null)
+                {
+                    return new BizResult<SignMessageBoxDto>
+                    {
+                        Success = false,
+                        Msg = "未找到，请重试"
+                    };
+                }
+
+
+                var response = HttpClinetHelper.PostAsyncJson(SettingConfig.PostUrl + "/SignMessage/UpdateSignMessage",
+                    signBox.SerializeModel()).ConfigureAwait(true).GetAwaiter().GetResult();
+
+
+                var returnD = response.DeserializeModel<SignMessageBoxDto>();
+
+
+                return new BizResult<SignMessageBoxDto>
+                {
+                    Success = true,
+                    Data = returnD
+                };
+            }
+            catch(Exception ex)
+            {
+                return new BizResult<SignMessageBoxDto>
+                {
+                    Success = false,
+                    Msg = ex.Message
+                };
+            }
         }
     }
 }

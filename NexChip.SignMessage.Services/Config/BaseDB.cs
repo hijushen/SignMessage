@@ -1,4 +1,5 @@
-﻿using SqlSugar;
+﻿using NexChip.SignMessage.Utils;
+using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace NexChip.SignMessage.Services
             );
             db.Aop.OnLogExecuting = (sql, pars) =>
             {
+                LogHelper.Info("fdfd");
                 Console.WriteLine(sql + "\r\n" + db.Utilities.SerializeObject(pars.ToDictionary(it => it.ParameterName, it => it.Value)));
                 Console.WriteLine();
             };

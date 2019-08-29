@@ -2,6 +2,7 @@
 using NexChip.SignMessage.Entities;
 using NexChip.SignMessage.Services;
 using NexChip.SignMessage.Utils;
+using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -28,21 +29,24 @@ namespace NexChip.SignMessage.Bussiness
             throw new NotImplementedException();
         }
 
-        public BizListResultForDataTables<SignMessageBox> ListForDataTables(DataTablesRequsetDto reqP)
+        public BizListResultForDataTables<SignMessageBox> ListForDataTables(DataTablesRequsetDto reqP, string userName)
         {
-            int ordertype = 0;
+
             int limit = reqP.length;
             int start = reqP.start;
+            double page = start / limit;
+            int pageIndex = Math.Ceiling(page).ObjToInt() + 1;//Sql Sugar 页从1开始！
 
-            if (string.IsNullOrEmpty(reqP.orderString)) //排序方式为空， 倒序
-            {
-                ordertype = 1;
-            }
 
-            Expression<Func<SignMessageBox, bool>> whereExpression = null;
-            Expression<Func<SignMessageBox, object>> orderByExpression = p => p.createtime;
+            var timeSpan = reqP.timespan.Split("-");
 
-            var res = Service.GetPageList(start, limit, orderByExpression, ordertype, whereExpression);
+            //零点日期
+            var startD = new DateTime(timeSpan[0].ObjToInt(), timeSpan[1].ObjToInt(), timeSpan[2].ObjToInt());
+            var endD = new DateTime(timeSpan[3].ObjToInt(), timeSpan[4].ObjToInt(), timeSpan[5].ObjToInt());
+
+
+            userName = "TEST01-N";
+            var res = Service.GetPageList(pageIndex, limit, userName, startD, endD, reqP.formtype, reqP.handlestatus);
             return new BizListResultForDataTables<SignMessageBox>
             {
                 data = res.Rows,
@@ -50,16 +54,28 @@ namespace NexChip.SignMessage.Bussiness
                 recordsFiltered = res.total,
                 recordsTotal = res.total
             };
+
+            //Expression<Func<SignMessageBox, object>> orderByExpression = p => p.createtime;
+            //Expression<Func<SignMessageBox, bool>> whereExpression = buildWhereExpreesion(reqP, userName);
+
+            //var res = Service.GetPageList(start, limit);
+            //return new BizListResultForDataTables<SignMessageBox>
+            //{
+            //    data = res.Rows,
+            //    draw = reqP.draw + 1,
+            //    recordsFiltered = res.total,
+            //    recordsTotal = res.total
+            //};
         }
 
-        public  BizResult<SignMessageBoxDto> testSend(string OID)
+        public BizResult<SignMessageBoxDto> testSend(string OID)
         {
             try
             {
                 SignMessageBoxDto dto = new SignMessageBoxDto();
 
                 var signBox = Service.sdb.GetSingle<SignMessageBox>(t => t.OID == OID);
-                if(signBox == null)
+                if (signBox == null)
                 {
                     return new BizResult<SignMessageBoxDto>
                     {
@@ -83,7 +99,8 @@ namespace NexChip.SignMessage.Bussiness
                         tonames = signBox.toempname,
                         handletype = 1,
                         emergencylevel = 1
-                        ,msgsourceid = signBox.msgsourceid
+                        ,
+                        msgsourceid = signBox.msgsourceid
                     }
                 };
 
@@ -102,7 +119,7 @@ namespace NexChip.SignMessage.Bussiness
                 //    Data = returnD
                 //};
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new BizResult<SignMessageBoxDto>
                 {

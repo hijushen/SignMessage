@@ -299,6 +299,7 @@
     }());
   }
 
+
   if (!Object.keys) {
     Object.keys = function (
       o, // object
@@ -315,8 +316,12 @@
       // return result
       return r;
     };
-  }
+    }
 
+    //Object.prototype.hasOwnProperty.call(element, "property")
+    //this.constructor.prototype.hasOwnProperty('selectedIndex');
+
+    HTMLSelectElement.prototype.hasOwnProperty = Object.prototype.hasOwnProperty;
   if (HTMLSelectElement && !HTMLSelectElement.prototype.hasOwnProperty('selectedOptions')) {
     Object.defineProperty(HTMLSelectElement.prototype, 'selectedOptions', {
       get: function () {
@@ -3135,5 +3140,19 @@
 })(jQuery);
 
 
+    Object.keys = Object.keys || function (
+        o, // object
+        k, // key
+        r  // result array
+    ) {
+        // initialize object and result
+        r = [];
+        // iterate over object keys
+        for (k in o)
+            // fill result array with non-prototypical keys
+            r.hasOwnProperty.call(o, k) && r.push(k);
+        // return result
+        return r
+    }
 }));
 //# sourceMappingURL=bootstrap-select.js.map

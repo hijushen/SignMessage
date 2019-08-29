@@ -11,16 +11,62 @@ $(function () {
 
 });
 
+Date.prototype.Format = function (fmt) { //author: meizz
+
+    var o = {
+        "M+": this.getMonth() + 1,
+        //月份
+
+        "d+": this.getDate(),
+        //日
+
+        "h+": this.getHours(),
+        //小时
+
+        "m+": this.getMinutes(),
+        //分
+
+        "s+": this.getSeconds(),
+        //秒
+
+        "q+": Math.floor((this.getMonth() + 3) / 3),
+        //季度
+
+        "S": this.getMilliseconds() //毫秒
+
+    };
+    if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    }
+    for (var k in o) {
+        if (new RegExp("(" + k + ")").test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        }
+    }
+    return fmt;
+}
+
 function reloadTables() {
     if (exampleTable) {
         exampleTable.ajax.reload(null, true);
     }
 }
 
-/// 初始化日期控件
-function setDataPicker() {
+function getDefaultDateSpanStr() {
+
     var start = moment().subtract(29, 'days');
     var end = moment();
+
+    return start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD');
+}
+
+
+/// 初始化日期控件
+function setDataPicker() {
+
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+
     function cb(start, end) {
         $('#reportrange span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
     }
@@ -49,7 +95,9 @@ function setDataPicker() {
             '上个月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         }
     }, cb);
-    cb(start, end);
+
+    //cb(start, end);
+    $('#reportrange span').html(getDefaultDateSpanStr());
 }
 
 //提示信息
@@ -109,10 +157,10 @@ var partshowtool = {
 //
 function createEditToolColumn(item) {
     return "<button class='btn btn-info btn-xs' href='javascript:;' onclick='edit(\"" + item.oid
-        + "\")'><i class='fa fa-edit'></i> 编辑 </button> <button class='btn btn-danger btn-xs' href='javascript:;' onclick='deleteSingle(\"" + item.oid
+        + "\")'><i class='fa fa-edit'></i> 详细 </button> <button class='btn btn-danger btn-xs' href='javascript:;' onclick='deleteSingle(\"" + item.oid
         + "\")'><i class='fa fa-trash-o'></i> 删除 </button> "
         + "<button class='btn btn-info btn-xs' href='javascript:;' onclick='testsend(\"" + item.oid
-        +"\")'<i class='fa fa-edit'></i>测试发送</button>"
+        + "\")'<i class='fa fa-edit'></i>测试发送</button>"
 }
 
 
@@ -150,22 +198,28 @@ function save() {
 
 //编辑
 function edit(id) {
-    $.ajax({
-        type: "Get",
-        url: "/NewMessageSign/GetS?OID=" + id + "&_t=" + new Date().getTime(),
-        success: function (res) {
-            var data = res.data || {};
-            $("#Id").val(id);
-            $("#appname").val(data.appname);
-            $("#appnamechs").val(data.appnamechs);
-            $("#reservedkey1").val(data.reservedkey1);
 
-            $("#Remarks").val(data.remarks);
 
-            $("#Title").text("编辑应用程序")
-            $("#editModal").modal("show");
-        }
-    })
+
+
+    $("#editModal").modal("show");
+
+    //$.ajax({
+    //    type: "Get",
+    //    url: "/NewMessageSign/GetS?OID=" + id + "&_t=" + new Date().getTime(),
+    //    success: function (res) {
+    //        var data = res.data || {};
+    //        $("#Id").val(id);
+    //        $("#appname").val(data.appname);
+    //        $("#appnamechs").val(data.appnamechs);
+    //        $("#reservedkey1").val(data.reservedkey1);
+
+    //        $("#Remarks").val(data.remarks);
+
+    //        $("#Title").text("编辑应用程序")
+    //        $("#editModal").modal("show");
+    //    }
+    //})
 };
 
 ///测试发送
@@ -212,6 +266,8 @@ function deleteSingle(id) {
     });
 };
 
+//数据源数据
+datatableSource = {};
 //初始化表格
 function loadDataTable() {
     exampleTable = $("#example").DataTable({
@@ -241,23 +297,35 @@ function loadDataTable() {
             }
         ],
         //对应列表表头字段
-        columns: [{
-            "title": "createtime", "data": "createtime", "orderable": false, "visible": false
-        }, {
-            "title": "fromempname", "data": "fromempname"
-        }, {
-            "title": "appname", "data": "appname", "orderable": false,
-        }, {
-            "title": "substance", "data": "substance", "orderable": false
-        }, {
-            "title": "操作",
-            "data": null,
-            "orderable": false,
-            "render": function (data, type, full, meta) {
-                return createEditToolColumn(data)
+        columns: [
+            {
+                "title": "收到日期", width:"10%","data": "createtime", "orderable": false,"text-align":"center",
+                render: function (data, type, row, meta) {
+                    return (new Date(data)).Format("yyyy-MM-dd");
+                    //debugger;
+                }
+            }, {
+                "title": "寄件人", width: "10%", "data": "fromempname", "orderable": false
+            }, {
+                "title": "AppName", width: "15%", "data": "appname", "orderable": false,
+            }, {
+                "title": "主旨", "data": "substance", "orderable": false
+            }, {
+                "title": "操作", width: "15%",
+                "data": null,
+                "orderable": false,
+                "render": function (data, type, full, meta) {
+                    return createEditToolColumn(data)
+                }
             }
-        }
         ],
+        "fnRowCallback": function (row, data, index) {
+            // debugger;
+            if (!data.msgstatus) {
+                $(row).addClass('highlight');
+            }
+        },
+
         "initComplete": function (settings, json) {
             //$('div.loading').hide();
         },
@@ -275,6 +343,10 @@ function loadDataTable() {
             var param = {};
             param.length = data.length; //页面显示记录条数，在页面显示每页显示多少项的时候
             param.start = data.start; //开始的记录序号
+            param.timespan = $('#reportrange span').html() || getDefaultDateSpanStr(); //日期区间(初次加载为默认）)
+            param.formtype = $('#formTypeSelect').val(); //表单类型
+            param.handlestatus = '初始';//$('#handleStatusSelect').val(); //处理状况
+
             //param.page = (data.start / data.length) + 1; //当前页码
 
             //ajax请求数据
@@ -282,13 +354,14 @@ function loadDataTable() {
                 url: "/NewMessageSign/DataTableList",
                 type: "POST",
                 cache: false, //禁用缓存
-                data: data, //传入组装的参数
+                data: param, //传入组装的参数
                 dataType: "json",
                 contentType: 'application/x-www-form-urlencoded;charset=utf-8',  //application/json
                 //beforeSend: function (request) {
                 //    request.setRequestHeader("token", localStorage.token);
                 //},
                 success: function (result) {
+                    datatableSource = result;
                     setTimeout(function () {
                         if ($('#example_processing').hide) {
                             $('#example_processing').hide();
@@ -300,7 +373,22 @@ function loadDataTable() {
         }
 
     });
+
+    $('#example tbody').on('click', 'tr', function () {
+        rowClickHandler($(this));
+    });
 };
+
+function rowClickHandler(row) {
+
+    ///单选行加样式
+    exampleTable.$('tr.selected').removeClass('selected');
+    row.addClass('selected');
+    row.removeClass('highlight');
+
+    var rowData = exampleTable.row('.selected').data();
+
+}
 
 //
 var format = {

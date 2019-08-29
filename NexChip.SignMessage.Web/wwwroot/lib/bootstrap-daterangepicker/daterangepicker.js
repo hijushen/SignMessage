@@ -7,11 +7,13 @@
 */
 // Following the UMD template https://github.com/umdjs/umd/blob/master/templates/returnExportsGlobal.js
 (function (root, factory) {
+
+    debugger;
     if (typeof define === 'function' && define.amd) {
         // AMD. Make globaly available as well
         define(['moment', 'jquery'], function (moment, jquery) {
-            if (!jquery.fn) jquery.fn = {}; // webpack server rendering
-            if (typeof moment !== 'function' && moment.default) moment = moment.default
+            if (!jquery.fn) { jquery.fn = {}; } // webpack server rendering
+            if (typeof(moment) !== 'function' ) { }
             return factory(moment, jquery);
         });
     } else if (typeof module === 'object' && module.exports) {

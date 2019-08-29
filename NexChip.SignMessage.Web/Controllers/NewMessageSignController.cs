@@ -23,7 +23,8 @@ namespace NexChip.SignMessage.Web.Controllers
         [HttpPost]
         public JsonResult DataTableList(DataTablesRequsetDto reqP)
         {
-            var res = boxBiz.ListForDataTables(reqP);
+            var userName = User.Identity.Name;
+            var res = boxBiz.ListForDataTables(reqP, userName);
             return Json(res);
         }
 

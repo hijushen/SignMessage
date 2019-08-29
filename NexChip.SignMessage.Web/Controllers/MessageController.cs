@@ -26,6 +26,7 @@ namespace NexChip.SignMessage.Web.Controllers
 
         public IActionResult Index2()
         {
+            //return Content("<script>alert('请先登录');</script>");
             return View();
         }
 

@@ -37,6 +37,11 @@
             Nullable:False
             </summary>           
         </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.msghandlestatus">
+            <summary>
+            消息处理状态
+            </summary>
+        </member>
         <member name="P:NexChip.SignMessage.Entities.SignMessageBox.emergencylevel">
             <summary>
             Desc:

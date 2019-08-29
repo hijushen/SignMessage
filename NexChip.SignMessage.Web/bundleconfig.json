@@ -1,0 +1,36 @@
+[
+  {
+    "outputFileName": "wwwroot/css/table.min.css",
+    "inputFiles": [
+      "wwwroot/css/site.css",
+      "wwwroot/lib/bootstrap/css/bootstrap.css",
+      "wwwroot/lib/bootstrap/fonts/css/font-awesome.css",
+      "wwwroot/lib/admin-lte/css/AdminLTE.css",
+      "wwwroot/lib/admin-lte/css/skins/skin-blue.css",
+      "wwwroot/lib/bootstrap-select/css/bootstrap-select.css",
+      "wwwroot/lib/bootstrap-daterangepicker/daterangepicker.css",
+      "wwwroot/lib/datatables/css/dataTables.bootstrap.min.css",
+      "wwwroot/lib/layer/skin/layer.css"
+
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/table.min.js",
+    "inputFiles": [
+      "wwwroot/js/site.js",
+      "wwwroot/lib/popper.js/umd/popper.js",
+      "wwwroot/lib/bootstrap/js/bootstrap.js",
+      "wwwroot/lib/bootstrap-daterangepicker/moment.min.js",
+      "wwwroot/lib/bootstrap-select/js/bootstrap-select.js",
+      "wwwroot/lib/bootstrap-daterangepicker/daterangepicker.js",
+      "wwwroot/lib/datatables/js/jquery.dataTables.min.js",
+      "wwwroot/lib/datatables/js/dataTables.bootstrap.min.js",
+      "wwwroot/lib/layer/layer.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  }
+]

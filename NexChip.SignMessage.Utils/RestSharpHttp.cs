@@ -24,7 +24,7 @@ namespace NexChip.SignMessage.Utils
         public static string  PostJson(string url, string json)
         {
 
-            var request = new RestRequest("/SignMessage/UpdateSignMsg", Method.POST);
+            var request = new RestRequest(url, Method.POST);
             request.Timeout = 1000 * 15;
             // easily add HTTP Headers
             request.AddHeader("Authorization", string.Format("{0}", SettingConfig.ApiTokenString));

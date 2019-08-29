@@ -40,6 +40,11 @@ namespace NexChip.SignMessage.Entities
            /// </summary>           
            public int msgstatus {get;set;}
 
+        /// <summary>
+        /// 消息处理状态
+        /// </summary>
+           public string msghandlestatus { get; set; }
+
            /// <summary>
            /// Desc:
            /// Default:

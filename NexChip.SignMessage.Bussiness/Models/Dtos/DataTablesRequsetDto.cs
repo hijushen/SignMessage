@@ -14,7 +14,19 @@ namespace NexChip.SignMessage.Bussiness.Models.Dtos
 
         public string orderString { get; set; }
 
+        /// <summary>
+        /// 日期区间
+        /// </summary>
+        public string timespan { get; set; }
 
-        public string extra_search { get; set; }
+        /// <summary>
+        /// 表单类型
+        /// </summary>
+        public string formtype { get; set; }
+
+        /// <summary>
+        /// 处理状况
+        /// </summary>
+        public string handlestatus { get; set; }
     }
 }

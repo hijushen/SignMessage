@@ -37,11 +37,6 @@
     },
     {
       "provider": "cdnjs",
-      "library": "jQuery@3.2.1",
-      "destination": "wwwroot/lib/jQuery/"
-    },
-    {
-      "provider": "cdnjs",
       "library": "twitter-bootstrap@3.4.1",
       "destination": "wwwroot/lib/bootstrap/"
     },
@@ -53,6 +48,10 @@
     {
       "library": "datatables@1.10.19",
       "destination": "wwwroot/lib/datatables/"
+    },
+    {
+      "library": "select2@3.5.3",
+      "destination": "wwwroot/lib/select2/"
     }
   ]
 }

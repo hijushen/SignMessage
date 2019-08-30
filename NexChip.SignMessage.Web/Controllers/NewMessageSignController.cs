@@ -14,12 +14,13 @@ namespace NexChip.SignMessage.Web.Controllers
     {
         public SignMessageBoxBiz boxBiz = new SignMessageBoxBiz();
 
-        // GET: /<controller>/
+        ///GET: /<controller>/
         public IActionResult Index()
         {
+            return null;
             return View();
         }
-               
+
         [HttpPost]
         public JsonResult DataTableList(DataTablesRequsetDto reqP)
         {
@@ -36,8 +37,8 @@ namespace NexChip.SignMessage.Web.Controllers
         /// <summary>
         /// 编辑保存
         /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
+        /// <param name = "dto" ></ param >
+        /// < returns ></ returns >
         [HttpPost]
         public JsonResult EditSave([FromForm]SignMessageRoleDto dto)
         {
@@ -50,9 +51,9 @@ namespace NexChip.SignMessage.Web.Controllers
             return Json(boxBiz.Delete(OIDs));
         }
 
-        public  JsonResult testSend(string OID)
+        public JsonResult testSend(string OID)
         {
-            return Json( boxBiz.testSend(OID));
+            return Json(boxBiz.testSend(OID));
         }
     }
 }

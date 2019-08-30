@@ -6,13 +6,25 @@ $(function () {
     //$("#checkAll").click(function () { checkAll(this) });
     loadDataTable();
     setDataPicker();
+    setSelect();
 
 
 
 });
+function setSelect() {
+    $("#formTypeSelect").select2({
+        width: "200px",
+        language: "zh-CN"
+    });
 
-Date.prototype.Format = function (fmt) { //author: meizz
+    $("#handleStatusSelect").select2({
+        width: "80px",
+        language: "zh-CN",
+        minimumResultsForSearch: Infinity
+    });
+}
 
+Date.prototype.Format = function (fmt) {
     var o = {
         "M+": this.getMonth() + 1,
         //月份
@@ -100,6 +112,166 @@ function setDataPicker() {
     $('#reportrange span').html(getDefaultDateSpanStr());
 }
 
+
+//初始化表格
+function loadDataTable() {
+    exampleTable = $("#example").DataTable({
+        language: lang, //提示信息
+        stateSave: true, //状态保存，再次加载页面时还原表格状态
+        autoWidth: false, //禁用自动调整列宽
+        stripeClasses: ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
+        processing: true, //隐藏加载提示,自行处理
+        serverSide: true, //启用服务器端分页
+        searching: false, //禁用原生搜索
+        orderMulti: false, //启用多列排序
+        order: [], //取消默认排序查询,否则复选框一列会出现小箭头
+        deferRender: true, //延迟渲染可以提高Datatables的加载速度
+        lengthMenu: [
+            [10, 25, 50, 100, 300, -1],
+            [10, 25, 50, 100, 300, "所有"]
+        ], //每页多少项，第一个数组是表示的值，第二个数组用来显示
+        renderer: "bootstrap", //渲染样式：Bootstrap和jquery-ui
+        pagingType: "full_numbers", //分页样式：simple,simple_numbers,full,full_numbers
+        //scrollY: 800, //表格的固定高
+        scrollCollapse: true, //开启滚动条
+        pageLength: 10, //首次加载的数据条数
+        columnDefs: [
+            {
+                targets: 'nosort', //列的样式名
+                orderable: false //包含上样式名‘nosort'的禁止排序
+            }
+        ],
+        //对应列表表头字段
+        columns: [
+            {
+                "title": "收到日期", width: "10%", "data": "createtime", "orderable": false, "text-align": "center",
+                render: function (data, type, row, meta) {
+                    return (new Date(data)).Format("yyyy-MM-dd");
+                    //debugger;
+                }
+            }, {
+                "title": "寄件人", width: "10%", "data": "fromempname", "orderable": false
+            }, {
+                "title": "AppName", width: "15%", "data": "appname", "orderable": false,
+            }, {
+                "title": "主旨", "data": "substance", "orderable": false
+            }, {
+                "title": "操作", width: "15%",
+                "data": null,
+                "orderable": false,
+                "render": function (data, type, full, meta) {
+                    return createEditToolColumn(data)
+                }
+            }
+        ],
+        "fnRowCallback": function (row, data, index) {
+            // debugger;
+            if (!data.msgstatus) {
+                $(row).addClass('highlight');
+            }
+        },
+
+        "initComplete": function (settings, json) {
+            //$('div.loading').hide();
+        },
+        "createdRow": function (row, data, dataIndex) {
+            //debugger;
+            //if (data.reservedkey2.length > partshowtool.remarkShowLength) {
+            //只有超长，才有td点击事件
+            //$(row).children('td').eq(4).attr('onclick', 'javascript:partshowtool.changeShowRemarks(this);');
+            //$(row).children('td').eq(4).attr('content', data.reservedkey2);
+            //$(row).children('td').eq(4).attr('isDetail', false);
+            //}
+        },
+        ajax: function (data, callback, settings) {
+            //封装请求参数
+            var param = {};
+            param.length = data.length; //页面显示记录条数，在页面显示每页显示多少项的时候
+            param.start = data.start; //开始的记录序号
+            param.timespan = $('#reportrange span').html() || getDefaultDateSpanStr(); //日期区间(初次加载为默认）)
+            param.formtype = $('#formTypeSelect').val(); //表单类型
+            param.handlestatus = $('#handleStatusSelect').val(); //处理状况
+
+            //param.page = (data.start / data.length) + 1; //当前页码
+
+            //ajax请求数据
+            $.ajax({
+                url: "/MessageSign/DataTableList",
+                type: "POST",
+                cache: false, //禁用缓存
+                data: param, //传入组装的参数
+                dataType: "json",
+                contentType: 'application/x-www-form-urlencoded;charset=utf-8',  //application/json
+                //beforeSend: function (request) {
+                //    request.setRequestHeader("token", localStorage.token);
+                //},
+                success: function (result) {
+                    setTimeout(function () {
+                        if ($('#example_processing').hide) {
+                            $('#example_processing').hide();
+                        }
+                        callback(result);
+                    }, 200);
+                }
+            });
+        }
+
+    });
+
+    $('#example tbody').on('click', 'tr', function () {
+        rowClickHandler($(this));
+        var data = exampleTable.row(this).data();
+
+        window.open(data.callbackurl, '_blank');
+
+
+        ///更新已读状态
+        $.ajax({
+            type: "POST",
+            url: "/MessageSign/updateRead",
+            data: { "oid": data.oid },
+            success: function (data) {
+                if (data.success) {
+                    reloadTables()
+                    layer.closeAll();
+                }
+                else {
+                    layer.alert("删除失败！");
+                }
+            }
+        });
+
+        //    .map(function (item, index) {
+        //    var r = {}; r['col' + index] = item; return r;
+        //})
+
+        console.log(data);
+    });
+};
+
+//样式变更.
+function rowClickHandler(row) {
+
+    ///单选行加样式
+    exampleTable.$('tr.selected').removeClass('selected');
+    row.addClass('selected');
+    row.removeClass('highlight');
+
+    var rowData = exampleTable.row('.selected').data();
+
+}
+
+//
+var format = {
+    status: function (value) {
+        if (value) {
+            return '有效'
+        } else {
+            return '无效'
+        }
+    }
+};
+
 //提示信息
 var lang = {
     "lengthMenu": "每页 _MENU_  项",
@@ -181,7 +353,7 @@ function save() {
     var postData = { "dto": { "OID": $("#Id").val(), "appname": $("#appname").val(), "appnamechs": $("#appnamechs").val(), "reservedkey1": $("#reservedkey1").val() } };
     $.ajax({
         type: "Post",
-        url: "/NewMessageSign/EditSave",
+        url: "/MessageSign/EditSave",
         data: postData,
         success: function (data) {
             if (data.success) {
@@ -199,14 +371,39 @@ function save() {
 //编辑
 function edit(id) {
 
+    Array.prototype.findObj = function (callback) {
+        for (var i = 0, length = this.length; i < length; i++) {
+            var item = this[i];
+            if (callback(item)) {
+                return item;
+            }
+        }
+        return null;
+    };
 
+    var sourceArray = exampleTable.data();
+    var arrayD = [];
+    for (var i = 0; i < sourceArray.length; i++) {
+        arrayD.push(sourceArray[i]);
+    }
+    var findItem = arrayD.findObj(function (item) {
+        return item.oid == id;
+    });
+    console.log(findItem);
 
+    if (findItem) {
+        $("#detail-substance").val(findItem.substance);
+        $("#detail-showmsg").val(findItem.showmsg);
+        $("#detail-createtime").val(findItem.createtime);
+        $("#detail-updatetime").val(findItem.updatetime);
+
+    }
 
     $("#editModal").modal("show");
 
     //$.ajax({
     //    type: "Get",
-    //    url: "/NewMessageSign/GetS?OID=" + id + "&_t=" + new Date().getTime(),
+    //    url: "/MessageSign/GetS?OID=" + id + "&_t=" + new Date().getTime(),
     //    success: function (res) {
     //        var data = res.data || {};
     //        $("#Id").val(id);
@@ -226,7 +423,7 @@ function edit(id) {
 function testsend(id) {
     $.ajax({
         type: "POST",
-        url: "/NewMessageSign/testSend",
+        url: "/MessageSign/testSend",
         data: { "OID": id },
         success: function (data) {
             if (data.success) {
@@ -251,7 +448,7 @@ function deleteSingle(id) {
         ids.push(id);
         $.ajax({
             type: "POST",
-            url: "/NewMessageSign/Delete",
+            url: "/MessageSign/Delete",
             data: { "OIDs": ids },
             success: function (data) {
                 if (data.success) {
@@ -264,139 +461,4 @@ function deleteSingle(id) {
             }
         })
     });
-};
-
-//数据源数据
-datatableSource = {};
-//初始化表格
-function loadDataTable() {
-    exampleTable = $("#example").DataTable({
-        language: lang, //提示信息
-        stateSave: true, //状态保存，再次加载页面时还原表格状态
-        autoWidth: false, //禁用自动调整列宽
-        stripeClasses: ["odd", "even"], //为奇偶行加上样式，兼容不支持CSS伪类的场合
-        processing: true, //隐藏加载提示,自行处理
-        serverSide: true, //启用服务器端分页
-        searching: false, //禁用原生搜索
-        orderMulti: false, //启用多列排序
-        order: [], //取消默认排序查询,否则复选框一列会出现小箭头
-        deferRender: true, //延迟渲染可以提高Datatables的加载速度
-        lengthMenu: [
-            [10, 25, 50, 100, 300, -1],
-            [10, 25, 50, 100, 300, "所有"]
-        ], //每页多少项，第一个数组是表示的值，第二个数组用来显示
-        renderer: "bootstrap", //渲染样式：Bootstrap和jquery-ui
-        pagingType: "full_numbers", //分页样式：simple,simple_numbers,full,full_numbers
-        //scrollY: 800, //表格的固定高
-        scrollCollapse: true, //开启滚动条
-        pageLength: 10, //首次加载的数据条数
-        columnDefs: [
-            {
-                targets: 'nosort', //列的样式名
-                orderable: false //包含上样式名‘nosort'的禁止排序
-            }
-        ],
-        //对应列表表头字段
-        columns: [
-            {
-                "title": "收到日期", width:"10%","data": "createtime", "orderable": false,"text-align":"center",
-                render: function (data, type, row, meta) {
-                    return (new Date(data)).Format("yyyy-MM-dd");
-                    //debugger;
-                }
-            }, {
-                "title": "寄件人", width: "10%", "data": "fromempname", "orderable": false
-            }, {
-                "title": "AppName", width: "15%", "data": "appname", "orderable": false,
-            }, {
-                "title": "主旨", "data": "substance", "orderable": false
-            }, {
-                "title": "操作", width: "15%",
-                "data": null,
-                "orderable": false,
-                "render": function (data, type, full, meta) {
-                    return createEditToolColumn(data)
-                }
-            }
-        ],
-        "fnRowCallback": function (row, data, index) {
-            // debugger;
-            if (!data.msgstatus) {
-                $(row).addClass('highlight');
-            }
-        },
-
-        "initComplete": function (settings, json) {
-            //$('div.loading').hide();
-        },
-        "createdRow": function (row, data, dataIndex) {
-            //debugger;
-            //if (data.reservedkey2.length > partshowtool.remarkShowLength) {
-            //只有超长，才有td点击事件
-            //$(row).children('td').eq(4).attr('onclick', 'javascript:partshowtool.changeShowRemarks(this);');
-            //$(row).children('td').eq(4).attr('content', data.reservedkey2);
-            //$(row).children('td').eq(4).attr('isDetail', false);
-            //}
-        },
-        ajax: function (data, callback, settings) {
-            //封装请求参数
-            var param = {};
-            param.length = data.length; //页面显示记录条数，在页面显示每页显示多少项的时候
-            param.start = data.start; //开始的记录序号
-            param.timespan = $('#reportrange span').html() || getDefaultDateSpanStr(); //日期区间(初次加载为默认）)
-            param.formtype = $('#formTypeSelect').val(); //表单类型
-            param.handlestatus = '初始';//$('#handleStatusSelect').val(); //处理状况
-
-            //param.page = (data.start / data.length) + 1; //当前页码
-
-            //ajax请求数据
-            $.ajax({
-                url: "/NewMessageSign/DataTableList",
-                type: "POST",
-                cache: false, //禁用缓存
-                data: param, //传入组装的参数
-                dataType: "json",
-                contentType: 'application/x-www-form-urlencoded;charset=utf-8',  //application/json
-                //beforeSend: function (request) {
-                //    request.setRequestHeader("token", localStorage.token);
-                //},
-                success: function (result) {
-                    datatableSource = result;
-                    setTimeout(function () {
-                        if ($('#example_processing').hide) {
-                            $('#example_processing').hide();
-                        }
-                        callback(result);
-                    }, 200);
-                }
-            });
-        }
-
-    });
-
-    $('#example tbody').on('click', 'tr', function () {
-        rowClickHandler($(this));
-    });
-};
-
-function rowClickHandler(row) {
-
-    ///单选行加样式
-    exampleTable.$('tr.selected').removeClass('selected');
-    row.addClass('selected');
-    row.removeClass('highlight');
-
-    var rowData = exampleTable.row('.selected').data();
-
-}
-
-//
-var format = {
-    status: function (value) {
-        if (value) {
-            return '有效'
-        } else {
-            return '无效'
-        }
-    }
 };

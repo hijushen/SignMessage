@@ -1,5 +1,5 @@
-﻿<div id="editModal" tabindex="-1" class="modal fade in" aria-hidden="true" style="width:500px; height:600px">
-    <div class="modal-dialog">
+﻿<div id="editModal" tabindex="-1" class="modal fade in" aria-hidden="true">
+    <div class="modal-dialog" style="width:500px;">
         <div class="box box-info">
             <div class="box-header with-border">
                 <h5 class="box-title" id="Title"></h5>
@@ -12,33 +12,33 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label " for="">主旨</label>
                         <div class="col-sm-10">
-                            <input class="form-control disabled " id="substance" type="text" placeholder="" readonly>
+                            <input class="form-control disabled " id="detail-substance" type="text" placeholder="" readonly>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="">内容</label>
                         <div class="col-sm-10">
-                            <textarea id="showmsg" class="form-control" rows="3" readonly></textarea>
+                            <textarea id="detail-showmsg" class="form-control" rows="3" readonly></textarea>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="">接收时间</label>
                         <div class="col-sm-10">
-                            <input class="form-control disabled " id="createtime" type="text" placeholder="" readonly>
+                            <input class="form-control disabled " id="detail-createtime" type="text" placeholder="" readonly>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="">更新时间</label>
                         <div class="col-sm-10">
-                            <input class="form-control disabled " id="updatetime" type="text" placeholder="" readonly>
+                            <input class="form-control disabled " id="detail-updatetime" type="text" placeholder="" readonly>
                         </div>
                     </div>
                 </div>
                 <div class="box-footer">
-                    <div class="pull-right box-tools">
-                        <button id="btnSave" class="btn btn-primary" type="button">保存</button>
+                    <div class="center-block box-tools">
+                        <button id="btnSave" class="btn btn-primary" type="button">签核</button>
                         <button class="btn btn-default" type="button" data-dismiss="modal">取消</button>
                     </div>
                 </div>

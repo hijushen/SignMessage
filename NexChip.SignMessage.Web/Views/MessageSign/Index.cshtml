@@ -4,28 +4,30 @@
     ViewData["Title"] = "App 签核消息中心";
 
     ViewBag.formTypes = new List<string>()
-    {
-        "总务用品申请单(zwyp)",
-        "总务用品申请单(zwyp)",
-        "资产异动申请(zcyd)",
-        "资产出售单(zccs)",
-        "资产报废申请单(zcbf)",
-        "专案代码申请单(zadm)"
-    };
+{
+"所有",
+"总务用品申请单(zwyp)",
+"总务用品申请单(zwyp)",
+"资产异动申请(zcyd)",
+"资产出售单(zccs)",
+"资产报废申请单(zcbf)",
+"专案代码申请单(zadm)"
+};
 
 
     ViewBag.handleStatus = new List<string>()
-    {
-        "初始",
-        "办结"
-        //"未处理",
-        //"已处理",
-        //"退件待处理",
-        //"通知",
-        //"申请",
-        //"暂存",
-        //"职代处理通知"
-    };
+{
+"所有",
+"未读",
+"已读"
+//"未处理",
+//"已处理",
+//"退件待处理",
+//"通知",
+//"申请",
+//"暂存",
+//"职代处理通知"
+};
 }
 
 @section styles  {
@@ -35,6 +37,14 @@
         }
 
         .filter-option-inner-inner {
+            color: green;
+        }
+
+        #select2-formTypeSelect-container {
+            color: green;
+        }
+
+        #select2-handleStatusSelect-container {
             color: green;
         }
 
@@ -71,63 +81,75 @@
                 -moz-box-sizing: content-box;
                 box-sizing: content-box;
             }
+
+        /* 下拉框高度*/
+        .select2-container--default .select2-results > .select2-results__options {
+            max-height: 350px;
+        }
+
+        .queryzone table tr td {
+            padding:5px;
+        }
+
+        .center-block {
+            text-align:center;
+        }
     </style>
 
 }
 
 <div class="easyui-layout" data-options="fit:true">
-    <div data-options="region:'north',title:'North Title',split:true" style="height:150px;"
-         title="查询区域">
-        <div style="padding:10px 10px 10px 20px">
-            <form id="ff" method="post">
-                <table cellpadding="5">
-                    <tr>
-                        <td>日期区间:</td>
-                        <td>
-                            <div id="reportrange"
-                                 style="display:inline; font-size:13px; color:rgb(255,255,255); background:rgb(255,255,255); cursor: pointer; padding: 5px 10px; border: 1px solid rgb(157,157,157); width: 100% height:min-content;">
-                                <i class="fa fa-calendar"></i>&nbsp;
-                                <span></span> <i class="fa fa-caret-down"></i>
-                            </div>
-                        </td>
 
-                        <td>表单类型:</td>
-                        <td>
-                            <select id="formTypeSelect" class="selectpicker  form-control show-tick"
-                                    data-live-search="true">
-                                <option data-subtext="默认">所有</option>
-                                @foreach (var x in ViewBag.formTypes)
-                                {
-                                    <option>@x</option>
-                                }
-                                @*<option>总务用品申请单(zwyp)</option>
-                                    <option>资产转费用申请单(zczfy)</option>
-                                    <option>资产异动申请(zcyd)</option>
-                                    <option>资产出售单(zccs)</option>
-                                    <option>资产报废申请单(zcbf)</option>
-                                    <option>专案代码申请单(zadm)</option>*@
-                            </select>
-                        </td>
-                        <td>处理状况:</td>
-                        <td>
-                            <select id="handleStatusSelect" class="easyui-combobox" name="dept" style="width:200px;">
-                                <option value="全部">全部</option>
-                                @foreach (var y in ViewBag.handleStatus)
-                                {
-                                    <option value="@y">@y</option>
-                                }
-                            </select>
-                        </td>
-                        <td>
-                            <button type="button" style="margin-left: 50px; width:90px" id="btn-query" class="btn btn-primary">查询</button>
-                        </td>
-                    </tr>
-                </table>
-            </form>
+    <div data-options="region:'north',title:'North Title',split:false,collapse:false" style="height:100px;border:1px solid black;overflow:hidden"
+         title="查询区域">
+        <div style="padding:5px 10px 5px 10px" class="queryzone">
+
+            <table id="queryZone">
+                <tr>
+                    <td>
+                        <span>日期区间： </span>
+                    </td>
+                    <td>
+                        <div id="reportrange"
+                             style="display:inline; font-size:13px; color:rgb(255,255,255); background:rgb(255,255,255); cursor: pointer; padding: 5px 10px; border: 1px solid rgb(157,157,157); width: 100% height:min-content;">
+                            <i class="fa fa-calendar"></i>&nbsp;
+                            <span></span> <i class="fa fa-caret-down"></i>
+                        </div>
+                    </td>
+                    <td>
+                        <span>表单类型： </span>
+                    </td>
+                    <td>
+                        <select id="formTypeSelect">
+                            @foreach (var x in ViewBag.formTypes)
+                            {
+                                <option>@x</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <sapn>处理状况： </sapn>
+                    </td>
+                    <td>
+                        <select id="handleStatusSelect">
+                            @foreach (var y in ViewBag.handleStatus)
+                            {
+                                <option>@y</option>
+                            }
+                        </select>
+                    </td>
+
+                    <td>
+                        <button type="button" style="margin-left: 50px; width:80px" id="btn-query" class="btn btn-primary">查询</button>
+                    </td>
+                </tr>
+            </table>
+
+
         </div>
     </div>
-    <div data-options="region:'center',title:'center title'" title="内容" style="padding:5px; overflow-x:hidden">
-        <table id="example" style="table-layout:fixed;" @*table-layout:fixed; word-wrap:break-word;*@
+    <div data-options="region:'center',title:'center title'" style="padding:5px; overflow-x:hidden" title="">
+        <table id="example" style="" @*table-layout:fixed; word-wrap:break-word;*@
                class="display table-striped table-bordered table-hover table-condensed" cellspacing="0" width="95%"></table>
     </div>
 
@@ -136,7 +158,7 @@
 
 @Html.Partial("_Detail")
 @section scripts{
-    <script src="~/Views/NewMessageSign/index.js?v=@DateTime.Now.Ticks"></script>
+    <script src="~/Views/MessageSign/index.js?v=@DateTime.Now.Ticks"></script>
     <script>
 
     </script>

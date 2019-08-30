@@ -88,11 +88,11 @@
         }
 
         .queryzone table tr td {
-            padding:5px;
+            padding: 5px;
         }
 
         .center-block {
-            text-align:center;
+            text-align: center;
         }
     </style>
 
@@ -158,9 +158,6 @@
 
 @Html.Partial("_Detail")
 @section scripts{
-    <script src="~/Views/MessageSign/index.js?v=@DateTime.Now.Ticks"></script>
-    <script>
-
-    </script>
+    <script defer="defer" src="~/Views/MessageSign/index.js"></script>
 }
 

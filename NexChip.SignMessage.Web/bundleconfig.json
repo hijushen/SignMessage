@@ -17,15 +17,18 @@
   {
     "outputFileName": "wwwroot/js/table.min.js",
     "inputFiles": [
+      "wwwroot/js/jquery1.9.1.js",
       "wwwroot/js/site.js",
       "wwwroot/lib/popper.js/umd/popper.js",
       "wwwroot/lib/bootstrap/js/bootstrap.js",
       "wwwroot/lib/bootstrap-daterangepicker/moment.min.js",
-      "wwwroot/lib/bootstrap-select/js/bootstrap-select.js",
       "wwwroot/lib/bootstrap-daterangepicker/daterangepicker.js",
       "wwwroot/lib/datatables/js/jquery.dataTables.min.js",
       "wwwroot/lib/datatables/js/dataTables.bootstrap.min.js",
-      "wwwroot/lib/layer/layer.js"
+      "wwwroot/lib/layer/layer.js",
+      "wwwroot/lib/easyui/jquery.easyui.min.js",
+      "wwwroot/lib/easyui/locale/easyui-lang-zh_CN.js",
+      "wwwroot/lib/select2/select2.js"
     ],
     "minify": {
       "enabled": true,

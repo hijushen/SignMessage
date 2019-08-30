@@ -5,6 +5,12 @@
  * Licensed under MIT (https://github.com/snapappointments/bootstrap-select/blob/master/LICENSE)
  */
 
+(function () {
+    String.prototype.trim = function () {
+        return this.replace(/(^\s*)|(\s*$)/g, ""); //’˝‘Ú∆•≈‰ø’∏Ò  
+    }
+})();
+
 (function (root, factory) {
   if (root === undefined && window !== undefined) root = window;
   if (typeof define === 'function' && define.amd) {

@@ -28,7 +28,7 @@
       "wwwroot/lib/layer/layer.js",
       "wwwroot/lib/easyui/jquery.easyui.min.js",
       "wwwroot/lib/easyui/locale/easyui-lang-zh_CN.js",
-      "wwwroot/lib/select2/select2.js"
+      "wwwroot/lib/select2/select2.js"      
     ],
     "minify": {
       "enabled": true,

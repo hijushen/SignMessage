@@ -5,12 +5,13 @@ $(function () {
     $("#btnSave").click(function () { save(); });
     //$("#checkAll").click(function () { checkAll(this) });
     loadDataTable();
+
     setDataPicker();
     setSelect();
-
-
-
+    setModalCenter();
 });
+
+///设置select控件样式（select2组件）
 function setSelect() {
     $("#formTypeSelect").select2({
         width: "200px",
@@ -22,6 +23,18 @@ function setSelect() {
         language: "zh-CN",
         minimumResultsForSearch: Infinity
     });
+}
+
+///设置弹窗居中
+function setModalCenter() {
+    var $modal = $('#editModal');
+    // 测试 bootstrap 居中
+    $modal.on('shown.bs.modal', function () {
+        var $this = $(this);
+        var $modal_dialog = $this.find('.modal-dialog');
+        var m_top = ($(window).height() - $modal_dialog.height()) / 2;
+        $modal_dialog.css({ 'margin': m_top + 'px auto' });
+    })
 }
 
 Date.prototype.Format = function (fmt) {
@@ -218,48 +231,52 @@ function loadDataTable() {
 
     });
 
-    $('#example tbody').on('click', 'tr', function () {
-        rowClickHandler($(this));
-        var data = exampleTable.row(this).data();
+    $('#example tbody').on('click', 'td', function () {
+        var table = exampleTable;
+        var idx = table.cell(this).index().column;
+        var title = table.column(idx).header();
 
-        window.open(data.callbackurl, '_blank');
 
+        if ($(title).html() === '操作') {
+            return;
+        } else { //行点击事件
+            var data = table.row($(this).index().row).data();
+            rowClickHandler(table.row($(this).index().row));
+            window.open(data.callbackurl, '_blank');
 
-        ///更新已读状态
-        $.ajax({
-            type: "POST",
-            url: "/MessageSign/updateRead",
-            data: { "oid": data.oid },
-            success: function (data) {
-                if (data.success) {
-                    reloadTables()
-                    layer.closeAll();
+            ///更新已读状态
+            $.ajax({
+                type: "POST",
+                url: "/MessageSign/UpdateRead",
+                data: { "OID": data.oid },
+                success: function (data) {
+                    if (data.success) {
+                       
+                    }
+                    else {
+                        layer.alert(data.msg);
+                    }
                 }
-                else {
-                    layer.alert("删除失败！");
-                }
-            }
-        });
-
-        //    .map(function (item, index) {
-        //    var r = {}; r['col' + index] = item; return r;
-        //})
-
-        console.log(data);
+            });
+        } //行点击事件结束
     });
 };
 
 //样式变更.
 function rowClickHandler(row) {
-
     ///单选行加样式
-    exampleTable.$('tr.selected').removeClass('selected');
-    row.addClass('selected');
+    //exampleTable.$('tr.selected').removeClass('selected');
+    //row.addClass('selected');
+    //row.removeClass('highlight');
+
+    //$(row).removeClass('selected');
+    //$(row).addClass('selected');
+    //$(row).removeClass('highlight');
+
+    var row = exampleTable.$('tr.selected');
+    row.removeClass('selected');
     row.removeClass('highlight');
-
-    var rowData = exampleTable.row('.selected').data();
-
-}
+};
 
 //
 var format = {
@@ -326,13 +343,16 @@ var partshowtool = {
 
 }
 
-//
+///操作列
 function createEditToolColumn(item) {
     return "<button class='btn btn-info btn-xs' href='javascript:;' onclick='edit(\"" + item.oid
-        + "\")'><i class='fa fa-edit'></i> 详细 </button> <button class='btn btn-danger btn-xs' href='javascript:;' onclick='deleteSingle(\"" + item.oid
-        + "\")'><i class='fa fa-trash-o'></i> 删除 </button> "
-        + "<button class='btn btn-info btn-xs' href='javascript:;' onclick='testsend(\"" + item.oid
-        + "\")'<i class='fa fa-edit'></i>测试发送</button>"
+        + "\")'><i class='fa fa-edit'></i> 详细 </button>"
+        //+ " <button class='btn btn-danger btn-xs' href='javascript:;' onclick='deleteSingle(\"" + item.oid
+        //+ "\")'><i class='fa fa-trash-o'></i> 删除 </button> "
+        + "<button class='btn btn-success btn-xs' href='javascript:;' onclick='testsend(\"" + item.oid
+        + "\",1)'<i class='fa fa-edit'></i>测试发送-更新</button>"
+        + "<button class='btn btn-warning btn-xs' href='javascript:;' onclick='testsend(\"" + item.oid
+        + "\",2)'<i class='fa fa-edit'></i>测试发送-新增</button>"
 }
 
 
@@ -370,7 +390,6 @@ function save() {
 
 //编辑
 function edit(id) {
-
     Array.prototype.findObj = function (callback) {
         for (var i = 0, length = this.length; i < length; i++) {
             var item = this[i];
@@ -389,7 +408,6 @@ function edit(id) {
     var findItem = arrayD.findObj(function (item) {
         return item.oid == id;
     });
-    console.log(findItem);
 
     if (findItem) {
         $("#detail-substance").val(findItem.substance);
@@ -420,11 +438,11 @@ function edit(id) {
 };
 
 ///测试发送
-function testsend(id) {
+function testsend(id,type) {
     $.ajax({
         type: "POST",
         url: "/MessageSign/testSend",
-        data: { "OID": id },
+        data: { "OID": id,"type":type },
         success: function (data) {
             if (data.success) {
                 //reloadTables()

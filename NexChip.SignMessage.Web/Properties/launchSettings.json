@@ -33,7 +33,7 @@
       "launchBrowser": true,
       "launchUrl": "http://localhost:9001/Message/MessageSignView",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "ancmHostingModel": "InProcess"
     }

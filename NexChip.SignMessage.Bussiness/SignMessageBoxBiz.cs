@@ -1,4 +1,5 @@
-﻿using NexChip.SignMessage.Bussiness.Models.Dtos;
+﻿
+using NexChip.SignMessage.Bussiness.Models.Dtos;
 using NexChip.SignMessage.Entities;
 using NexChip.SignMessage.Services;
 using NexChip.SignMessage.Utils;
@@ -27,6 +28,33 @@ namespace NexChip.SignMessage.Bussiness
         public object Get(string oID)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 更新消息只读状态
+        /// </summary>
+        /// <param name="oID"></param>
+        /// <returns></returns>
+        public BizResult<SignMessageBox> UpdateRead(string oID)
+        {
+            try
+            {
+                int i = Service.UpdateOnlyColumn(new SignMessageBox { OID = oID, msgstatus = 1, updatetime = DateTime.Now }, it => new { it.msgstatus, it.updatetime });
+                return new BizResult<SignMessageBox>
+                {
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex.Message, ex);
+                return new BizResult<SignMessageBox>
+                {
+                    Success = false,
+                    Msg = ex.Message
+                };
+            }
+            
         }
 
         public BizListResultForDataTables<SignMessageBox> ListForDataTables(DataTablesRequsetDto reqP, string userName)
@@ -68,7 +96,12 @@ namespace NexChip.SignMessage.Bussiness
             //};
         }
 
-        public BizResult<SignMessageBoxDto> testSend(string OID)
+        /// <summary>
+        /// 消息测试-更新
+        /// </summary>
+        /// <param name="OID"></param>
+        /// <returns></returns>
+        public BizResult<SignMessageBoxDto> testSendUpdate(string OID)
         {
             try
             {
@@ -97,8 +130,8 @@ namespace NexChip.SignMessage.Bussiness
                         toids = signBox.toempid,
                         fromname = signBox.fromempname,
                         tonames = signBox.toempname,
-                        handletype = 1,
-                        emergencylevel = 1
+                        handletype = (int)HandleTypeEnum.Completed,
+                        emergencylevel = (int)EmergencyLevelEnum.Normal
                         ,
                         msgsourceid = signBox.msgsourceid
                     }

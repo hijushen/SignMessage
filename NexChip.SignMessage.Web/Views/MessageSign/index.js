@@ -233,15 +233,16 @@ function loadDataTable() {
 
     $('#example tbody').on('click', 'td', function () {
         var table = exampleTable;
-        var idx = table.cell(this).index().column;
-        var title = table.column(idx).header();
+        var idx = table.cell(this).index(); //行序对象 idx.column 列序号 idx.row 行序号
+
+        var title = table.column(idx.column).header();
 
 
         if ($(title).html() === '操作') {
             return;
         } else { //行点击事件
-            var data = table.row($(this).index().row).data();
-            rowClickHandler(table.row($(this).index().row));
+            var data = table.row(idx.row).data();
+            rowClickHandler(table.row(idx.row));
             window.open(data.callbackurl, '_blank');
 
             ///更新已读状态
@@ -269,13 +270,13 @@ function rowClickHandler(row) {
     //row.addClass('selected');
     //row.removeClass('highlight');
 
-    //$(row).removeClass('selected');
-    //$(row).addClass('selected');
-    //$(row).removeClass('highlight');
+    $(row.node()).removeClass('selected');
+    //$(row.node()).addClass('selected');
+    $(row.node()).removeClass('highlight');
 
-    var row = exampleTable.$('tr.selected');
-    row.removeClass('selected');
-    row.removeClass('highlight');
+    //var row = exampleTable.$('tr.selected');
+    //row.removeClass('selected');
+    //row.removeClass('highlight');
 };
 
 //

@@ -145,6 +145,13 @@
             Nullable:False
             </summary>           
         </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.sendtime">
+            <summary>
+            Desc:
+            Default:DateTime.Now
+            Nullable:False
+            </summary>           
+        </member>
         <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.handleresult">
             <summary>
             Desc:
@@ -157,12 +164,20 @@
             处理错误提示
             </summary>
         </member>
-        <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.sendtime">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.handlemsgoid">
             <summary>
-            Desc:
-            Default:DateTime.Now
-            Nullable:False
-            </summary>           
+            处理完消息OID
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.createtime">
+            <summary>
+            处理时间
+            </summary>
+        </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.updatetime">
+            <summary>
+            处理时间
+            </summary>
         </member>
         <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.msgbody">
             <summary>

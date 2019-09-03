@@ -26,31 +26,49 @@ namespace NexChip.SignMessage.Entities
            /// </summary>           
            public string appname {get;set;}
 
-           /// <summary>
-           /// Desc:
-           /// Default:0
-           /// Nullable:False
-           /// </summary>           
-           public int handleresult {get;set;}
+
+        /// <summary>
+        /// Desc:
+        /// Default:DateTime.Now
+        /// Nullable:False
+        /// </summary>           
+        public DateTime sendtime { get; set; }
+
+
+        /// <summary>
+        /// Desc:
+        /// Default:0
+        /// Nullable:False
+        /// </summary>           
+        public int? handleresult {get;set;}
 
         /// <summary>
         /// 处理错误提示
         /// </summary>
-            public string handleerrormsg { get; set; }
+          public string handleerrormsg { get; set; }
 
-           /// <summary>
-           /// Desc:
-           /// Default:DateTime.Now
-           /// Nullable:False
-           /// </summary>           
-        public DateTime sendtime {get;set;}
+        /// <summary>
+        /// 处理完消息OID
+        /// </summary>
+        public string handlemsgoid { get; set; }
 
-           /// <summary>
-           /// Desc:
-           /// Default:
-           /// Nullable:True
-           /// </summary>           
-           public string msgbody {get;set;}
+        /// <summary>
+        /// 处理时间
+        /// </summary>
+        public DateTime? createtime { get; set; }
+
+
+        /// <summary>
+        /// 处理时间
+        /// </summary>
+        public DateTime? updatetime { get; set; }
+
+        /// <summary>
+        /// Desc:
+        /// Default:
+        /// Nullable:True
+        /// </summary>           
+        public string msgbody {get;set;}
 
     }
 }

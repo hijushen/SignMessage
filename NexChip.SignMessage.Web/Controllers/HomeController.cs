@@ -10,7 +10,7 @@ namespace NexChip.SignMessage.Web.Controllers
     {
         public IActionResult Index()
         {
-            return RedirectToRoute(new {controller="MessageSign",action="Index"});
+            return RedirectToRoute(new {controller="Message",action="Index2"});
             //return View();
         }
 

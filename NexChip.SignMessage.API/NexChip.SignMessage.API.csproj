@@ -31,4 +31,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Log4Net.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

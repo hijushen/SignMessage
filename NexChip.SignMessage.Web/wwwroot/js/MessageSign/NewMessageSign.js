@@ -299,7 +299,7 @@ function loadDataTable() {
         //对应列表表头字段
         columns: [
             {
-                "title": "收到日期", width:"10%","data": "createtime", "orderable": false,"text-align":"center",
+                "title": "收到日期", width: "10%", "data": "createtime", "orderable": false, "text-align": "center",
                 render: function (data, type, row, meta) {
                     return (new Date(data)).Format("yyyy-MM-dd");
                     //debugger;

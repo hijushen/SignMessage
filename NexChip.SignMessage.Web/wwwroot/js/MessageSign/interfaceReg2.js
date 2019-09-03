@@ -95,7 +95,7 @@ function edit(id) {
 };
 //保存
 function save() {
-    var postData = { "dto": {"OID":$("#Id").val(), "appname": $("#appname").val(), "appnamechs": $("#appnamechs").val(), "reservedkey1": $("#reservedkey1").val() } };
+    var postData = { "dto": { "OID": $("#Id").val(), "appname": $("#appname").val(), "appnamechs": $("#appnamechs").val(), "reservedkey1": $("#reservedkey1").val() } };
     $.ajax({
         type: "Post",
         url: "/InterfaceReg/EditSave",

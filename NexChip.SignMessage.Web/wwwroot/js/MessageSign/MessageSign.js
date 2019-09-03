@@ -252,7 +252,7 @@ function loadDataTable() {
                 data: { "OID": data.oid },
                 success: function (data) {
                     if (data.success) {
-                       
+
                     }
                     else {
                         layer.alert(data.msg);
@@ -439,11 +439,11 @@ function edit(id) {
 };
 
 ///测试发送
-function testsend(id,type) {
+function testsend(id, type) {
     $.ajax({
         type: "POST",
         url: "/MessageSign/testSend",
-        data: { "OID": id,"type":type },
+        data: { "OID": id, "type": type },
         success: function (data) {
             if (data.success) {
                 //reloadTables()

@@ -525,13 +525,13 @@
     }
 
     function initTab() {
-        var localUrl = "http://localhost/PSC-COM2/ListTodoTask_CHS/TodoTaskSearch_New.aspx";
-        //var testUrl = "http://JHQSPMT01.CHN.NEXCHIP/PSC-COM2/ListTodoTask_CHS/TodoTaskSearch_New.aspx"
+        //var localUrl = "http://localhost/PSC-COM2/ListTodoTask_CHS/TodoTaskSearch_New.aspx";
+        var testUrl = "http://JHQSPMT01.CHN.NEXCHIP/PSC-COM2/ListTodoTask_CHS/TodoTaskSearch_New.aspx"
 
 
         var newSignMessage = '@Url.Action("Index", "MessageSign")';
         //addTab("测试Brog签核箱", testUrl, "iframetestBorG");
-        addTab("BroG 签核箱", localUrl, "iframelocalBorG");
+        addTab("BroG 签核箱", testUrl, "iframelocalBorG");
         addTab('App 签核消息中心<span id="newmessage" class="m-badge">New</span>', newSignMessage, "iframeNewSignMessage");
         setTimeout(function () {
 

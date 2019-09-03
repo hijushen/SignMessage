@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using NexChip.SignMessage.Bussiness;
 using NexChip.SignMessage.Entities;
+using NexChip.SignMessage.Utils;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,7 +19,7 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
     /// </summary>
     [Produces("application/json")]
     [Route("api/[controller]")]
-    //[EnableCors("AllowSpecificOrigin")]
+    //[EnableCors("AllowAnyOrigin")]
     public class SignMessageController : Controller
     {
         private SignMessgeBiz bll = new SignMessgeBiz();
@@ -49,6 +50,8 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
         [Authorize(Policy="Client")]      
         public JsonResult PostUpdateSignMsg([FromBody]SignMessageSendDto value)
         {
+
+            LogHelper.Debug(Request.ToString());
             var appOID = User.Identity.Name;
 
             return Json(bll.PostUpdateSignMsg(value, appOID));

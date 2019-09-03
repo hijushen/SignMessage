@@ -209,7 +209,7 @@ function loadDataTable() {
 
             //ajax请求数据
             $.ajax({
-                url: "/MessageSign/DataTableList",
+                url: "MessageSign/DataTableList",
                 type: "POST",
                 cache: false, //禁用缓存
                 data: param, //传入组装的参数
@@ -248,7 +248,7 @@ function loadDataTable() {
             ///更新已读状态
             $.ajax({
                 type: "POST",
-                url: "/MessageSign/UpdateRead",
+                url: "MessageSign/UpdateRead",
                 data: { "OID": data.oid },
                 success: function (data) {
                     if (data.success) {
@@ -374,7 +374,7 @@ function save() {
     var postData = { "dto": { "OID": $("#Id").val(), "appname": $("#appname").val(), "appnamechs": $("#appnamechs").val(), "reservedkey1": $("#reservedkey1").val() } };
     $.ajax({
         type: "Post",
-        url: "/MessageSign/EditSave",
+        url: "MessageSign/EditSave",
         data: postData,
         success: function (data) {
             if (data.success) {
@@ -422,7 +422,7 @@ function edit(id) {
 
     //$.ajax({
     //    type: "Get",
-    //    url: "/MessageSign/GetS?OID=" + id + "&_t=" + new Date().getTime(),
+    //    url: "MessageSign/GetS?OID=" + id + "&_t=" + new Date().getTime(),
     //    success: function (res) {
     //        var data = res.data || {};
     //        $("#Id").val(id);
@@ -442,7 +442,7 @@ function edit(id) {
 function testsend(id, type) {
     $.ajax({
         type: "POST",
-        url: "/MessageSign/testSend",
+        url: "MessageSign/testSend",
         data: { "OID": id, "type": type },
         success: function (data) {
             if (data.success) {
@@ -467,7 +467,7 @@ function deleteSingle(id) {
         ids.push(id);
         $.ajax({
             type: "POST",
-            url: "/MessageSign/Delete",
+            url: "MessageSign/Delete",
             data: { "OIDs": ids },
             success: function (data) {
                 if (data.success) {

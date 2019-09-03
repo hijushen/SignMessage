@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NexChip.SignMessage.Bussiness;
 using NexChip.SignMessage.Bussiness.Models.Dtos;
+using NexChip.SignMessage.Utils;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -53,7 +54,7 @@ namespace NexChip.SignMessage.Web.Controllers
 
         public JsonResult testSend(string OID, int type)
         {
-            if(type == 1)
+            if (type == 1)
             {
                 return Json(boxBiz.testSendUpdate(OID));
             } 

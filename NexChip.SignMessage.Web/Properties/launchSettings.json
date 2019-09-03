@@ -3,7 +3,7 @@
     "windowsAuthentication": true,
     "anonymousAuthentication": false,
     "iis": {
-      "applicationUrl": "http://localhost:9001/",
+      "applicationUrl": "http://e10101j00682.chn.nexchip:9001",
       "sslPort": 0
     },
     "iisExpress": {
@@ -31,7 +31,7 @@
     "IIS": {
       "commandName": "IIS",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:9001/Message/MessageSignView",
+      "launchUrl": "http://e10101j00682.chn.nexchip:9001",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

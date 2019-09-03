@@ -55,7 +55,7 @@ namespace NexChip.SignMessage.API.AuthHelper
                 //提取tokenModel中的Sub属性进行authorize认证
                 List<Claim> lc = new List<Claim>();
                 //Claim c = new Claim(tm.Sub + "Type", tm.Sub);
-                Claim c = new Claim(ClaimTypes.Role, tm.Role);
+                Claim c = new Claim(tm.Role+"Type", tm.Role);
                 Claim c2 = new Claim(ClaimTypes.Name, tm.Uid);
                 lc.Add(c);
                 lc.Add(c2);

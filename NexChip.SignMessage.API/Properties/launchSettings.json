@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "http://localhost:9000",
+      "applicationUrl": "http://e10101j00682.chn.nexchip:9000",
       "sslPort": 0
     },
     "iisExpress": {

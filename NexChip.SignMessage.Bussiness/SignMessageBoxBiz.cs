@@ -117,7 +117,8 @@ namespace NexChip.SignMessage.Bussiness
                     };
                 }
 
-                var postUrl = "/SignMessage/UpdateSignMessage";
+                var postUrl = "/SignMessage/UpdateSignMsg";
+                //var getUrl = "/v1/Values";
                 var postData = new SignMessageSendDto
                 {
                     appname = "23",

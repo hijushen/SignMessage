@@ -18,6 +18,7 @@ namespace NexChip.SignMessage.API.Controllers.Admin
     /// </summary>
     [Produces("application/json")]
     [Route("api/admin/[controller]")]
+    [ApiExplorerSettings(IgnoreApi =true)]
     public class StudentController : Controller
     {
         private StudentBiz bll = new StudentBiz();

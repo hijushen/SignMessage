@@ -7,6 +7,8 @@ namespace NexChip.SignMessage.Bussiness.Models.Dtos
 {
     public class DataTablesRequsetDto
     {
+        public string logonid { get; set; }
+
         public int draw { get; set; }
         public int start { get; set; }
         public int length { get; set; }

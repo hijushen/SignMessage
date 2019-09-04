@@ -174,7 +174,7 @@ namespace NexChip.SignMessage.API
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiHelp V1");
+                c.SwaggerEndpoint("../swagger/v1/swagger.json", "ApiHelp V1");
                 //c.SwaggerEndpoint("/swagger/v2/swagger.json", "Manager V2");
             });
             #endregion

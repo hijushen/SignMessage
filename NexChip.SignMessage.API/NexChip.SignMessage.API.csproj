@@ -32,6 +32,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="apidoc\APIHelper.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="apidoc\EntitiesHelper.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Log4Net.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

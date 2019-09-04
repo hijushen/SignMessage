@@ -18,15 +18,23 @@ namespace NexChip.SignMessage.Web.Controllers
         public SignMessageBoxBiz boxBiz = new SignMessageBoxBiz();
 
         // GET: /<controller>/
-        public IActionResult Index()
+        /// </summary>
+        /// <param name="logonid">sanzhang</param>
+        /// <param name="id">E01000</param>
+        /// <param name="SHAEncry"></param>
+        /// <returns></returns>
+        public IActionResult Index(string logonid, string eid, string SHAEncry)
         {
+            ViewBag.logonid = logonid;
+            ViewBag.id = eid;
+            ViewBag.SHAEncry = SHAEncry;
             return View();
         }
 
         [HttpPost]
         public JsonResult DataTableList(DataTablesRequsetDto reqP)
         {
-            var userName = User.Identity.Name;
+            var userName = reqP.logonid ?? User.Identity.Name;
             var res = boxBiz.ListForDataTables(reqP, userName);
             return Json(res);
         }

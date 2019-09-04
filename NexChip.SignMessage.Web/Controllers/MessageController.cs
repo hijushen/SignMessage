@@ -24,8 +24,18 @@ namespace NexChip.SignMessage.Web.Controllers
             return View();
         }
 
-        public IActionResult Index2()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="logonid">sanzhang</param>
+        /// <param name="id">E01000</param>
+        /// <param name="SHAEncry"></param>
+        /// <returns></returns>
+        public IActionResult Index2(string logonid,string id, string SHAEncry)
         {
+            ViewBag.logonid = logonid;
+            ViewBag.id = id;
+            ViewBag.SHAEncry = SHAEncry;
             //return Content("<script>alert('请先登录');</script>");
             return View();
         }

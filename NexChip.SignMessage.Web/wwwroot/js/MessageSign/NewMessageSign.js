@@ -6,9 +6,6 @@ $(function () {
     //$("#checkAll").click(function () { checkAll(this) });
     loadDataTable();
     setDataPicker();
-
-
-
 });
 
 Date.prototype.Format = function (fmt) { //author: meizz

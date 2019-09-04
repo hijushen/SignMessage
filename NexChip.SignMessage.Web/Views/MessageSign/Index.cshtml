@@ -280,7 +280,8 @@
                     '过去7天': [moment().subtract(6, 'days'), moment()],
                     '一个月内': [moment().subtract(29, 'days'), moment()],
                     '本月': [moment().startOf('month'), moment().endOf('month')],
-                    '上个月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    '上个月': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                    '半年内':[moment().subtract(180,'days'),moment()]
                 }
             }, cb);
 

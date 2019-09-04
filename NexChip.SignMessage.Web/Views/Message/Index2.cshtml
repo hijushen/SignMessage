@@ -328,24 +328,20 @@
         currTab.panel('refresh');
     }
 
-    function tabSelect() {
+    function tabSelectEvent() {
         ///tab切换
         $('#tabs').tabs({
             onSelect: function (title) {
-
                 updataTabContent();
-
                 //alert(title);
                 if (title == '测试Brog签核箱') {
                     setTimeout(setFrameStyle, 1000);
-
-                    setFrameStyle();
+                    //setFrameStyle();
                 } else {
                 }
 
             }
         });
-
     };
 
     //绑定右键菜单事件
@@ -454,8 +450,8 @@
 
         //tabCloseEven();
 
-        //tab 切换
-        tabSelect();
+        //tab 切换事件
+        tabSelectEvent();
 
         ///绑定console 对象
         window.console = window.console || (function () {
@@ -464,12 +460,12 @@
             return c;
         })();
 
-        $('.cs-navi-tab').click(function () {
-            var $this = $(this);
-            var href = $this.attr('src');
-            var title = $this.text();
-            addTab(title, href,title);
-        });
+        //$('.cs-navi-tab').click(function () {
+        //    var $this = $(this);
+        //    var href = $this.attr('src');
+        //    var title = $this.text();
+        //    addTab(title, href,title);
+        //});
 
         var themes = {
             'gray': '@Url.Content("~/lib/easyui/themes/gray/easyui.css")',
@@ -539,7 +535,7 @@
         var testLocalUrl = "http://e10101j00682.chn.nexchip/PSC-COM2/ListTodoTask_CHS/TodoTaskSearch_New.aspx"
 
         if ('@ViewBag.id'.length > 3) {
-            console.log(buildQueryStr([ 'id', '@ViewBag.id' ], [ 'logonid', '@ViewBag.logonid' ], [ 'SHAEncry', '@ViewBag.SHAEncry' ]));
+            //console.log(buildQueryStr([ 'id', '@ViewBag.id' ], [ 'logonid', '@ViewBag.logonid' ], [ 'SHAEncry', '@ViewBag.SHAEncry' ]));
             testLocalUrl += buildQueryStr([ 'id', '@ViewBag.id' ], [ 'logonid', '@ViewBag.logonid' ], [ 'SHAEncry', '@ViewBag.SHAEncry' ]);
         }
 
@@ -547,9 +543,9 @@
                              new { eid = @ViewBag.id, logonid = @ViewBag.logonid, SHAEncry= @ViewBag.SHAEncry })';
         //addTab("测试Brog签核箱", testUrl, "iframetestBorG");
         addTab("BroG 签核箱", testLocalUrl, "iframelocalBorG");
-        addTab('App 签核消息中心<span id="newmessage" class="m-badge">New</span>', newSignMessage, "iframeNewSignMessage");
+        addTab('非BroG 应用系统代办<span id="newmessage" class="m-badge">New</span>', newSignMessage, "iframeNewSignMessage");
         setTimeout(function () {
-
+            $('#tabs').tabs('select', 0);
         },200)
     }
 

@@ -67,9 +67,11 @@ namespace NexChip.SignMessage.API
                 c.AddPolicy("AllowAnyOrigin", policy =>
                 {
                     policy.AllowAnyOrigin()//允许任何源
+                                           // policy.SetIsOriginAllowed(origin => true)
                     .AllowAnyMethod()//允许任何方式
                     .AllowAnyHeader()//允许任何头
-                    .AllowCredentials();//允许cookie
+                    ;
+                    //.AllowCredentials();//允许cookie
                 });
                 c.AddPolicy("AllowSpecificOrigin", policy =>
                 {
@@ -156,11 +158,14 @@ namespace NexChip.SignMessage.API
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
+        {           
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+
+            app.UseCors("AllowAnyOrigin");
 
             #region Token
             app.UseMiddleware<TokenAuth>();

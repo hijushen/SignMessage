@@ -138,15 +138,26 @@ namespace NexChip.SignMessage.Bussiness
                     }
                 };
 
+                //var response = new CallAPI().PostCall(postUrl, postData.SerializeModel()).Content;
                 var response = RestSharpHttp.PostJson(postUrl, postData.SerializeModel());
 
                 //var response = HttpClinetHelper.PostAsyncJson(postUrl, postData.SerializeModel())
                 //    .ConfigureAwait(false).GetAwaiter().GetResult();
 
-
-                var returnD = response.DeserializeModel<BizResult<SignMessageBoxDto>>();
-
-                return returnD;
+                if (response == "")
+                {
+                    return new BizResult<SignMessageBoxDto>
+                    {
+                        Success = false,
+                        Msg = "网络请求内容为空"
+                    };
+                }
+                else
+                {
+                    var returnD = response.DeserializeModel<BizResult<SignMessageBoxDto>>();
+                    return returnD;
+                }
+                
                 //return new BizResult<SignMessageBoxDto>
                 //{
                 //    Success = true,

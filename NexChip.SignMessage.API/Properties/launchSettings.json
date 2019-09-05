@@ -28,7 +28,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:5000"
+      "applicationUrl": "http://e10101j00682.chn.nexchip:5000"
     },
     "IIS": {
       "commandName": "IIS",

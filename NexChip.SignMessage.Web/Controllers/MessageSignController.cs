@@ -28,6 +28,10 @@ namespace NexChip.SignMessage.Web.Controllers
             ViewBag.logonid = logonid;
             ViewBag.id = eid;
             ViewBag.SHAEncry = SHAEncry;
+
+
+            ViewBag.WebAPIBaseUrl = Utils.SettingConfig.PostUrl;
+            ViewBag.WebAPICallAuth = Utils.SettingConfig.ApiTokenString;
             return View();
         }
 

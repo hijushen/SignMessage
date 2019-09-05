@@ -19,7 +19,6 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
     /// </summary>
     [Produces("application/json")]
     [Route("api/[controller]")]
-    //[EnableCors("AllowAnyOrigin")]
     public class SignMessageController : Controller
     {
         private SignMessgeBiz bll = new SignMessgeBiz();
@@ -55,7 +54,7 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
             var appOID = User.Identity.Name;
 
             return Json(bll.PostUpdateSignMsg(value, appOID));
-            ///return null;
         }
+
     }
 }

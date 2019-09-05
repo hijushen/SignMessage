@@ -363,11 +363,13 @@
                 ajax: function (data, callback, settings) {
                     //封装请求参数
                     var param = {};
+                    param.draw = data.draw;
                     param.length = data.length; //页面显示记录条数，在页面显示每页显示多少项的时候
                     param.start = data.start; //开始的记录序号
                     param.timespan = $('#reportrange span').html() || getDefaultDateSpanStr(); //日期区间(初次加载为默认）)
                     param.formtype = $('#formTypeSelect').val(); //表单类型
-                    param.handlestatus = $('#handleStatusSelect').val(); //处理状况
+                    param.handlestatus = $('#handleStatusSelect').val(); //消息状态
+                    param.logonid = "@ViewBag.logonid" || null;
 
                     //param.page = (data.start / data.length) + 1; //当前页码
 
@@ -383,12 +385,15 @@
                         //    request.setRequestHeader("token", localStorage.token);
                         //},
                         success: function (result) {
-                            setTimeout(function () {
-                                if ($('#example_processing').hide) {
-                                    $('#example_processing').hide();
-                                }
-                                callback(result);
-                            }, 200);
+
+                            if ($('#example_processing').hide) {
+                                $('#example_processing').hide();
+                            }
+                            callback(result);
+
+                            //setTimeout(function () {
+                               
+                            //}, 200);
                         }
                     });
                 }
@@ -515,9 +520,10 @@
                 //+ " <button class='btn btn-danger btn-xs' href='javascript:;' onclick='deleteSingle(\"" + item.oid
                 //+ "\")'><i class='fa fa-trash-o'></i> 删除 </button> "
                 + "<button class='btn btn-success btn-xs' href='javascript:;' onclick='testsend(\"" + item.oid
-                + "\",1)'<i class='fa fa-edit'></i>测试发送-更新</button>"
+                + "\",1)'<i class='fa fa-edit'></i>测试-更新</button>"
                 + "<button class='btn btn-warning btn-xs' href='javascript:;' onclick='testsend(\"" + item.oid
-                + "\",2)'<i class='fa fa-edit'></i>测试发送-新增</button>"
+                + "\",2)'<i class='fa fa-edit'></i>测试-新增</button>"
+                + "<button class='btn btn-success btn-xs' href='javascript:;' onclick='testsendAjax(this)'<i class='fa fa-edit'></i>AJAX更新</button>"
         }
 
 
@@ -602,7 +608,7 @@
             //})
         };
 
-        ///测试发送
+        ///控制器测试发送Ajax
         function testsend(id, type) {
             $.ajax({
                 type: "POST",
@@ -620,6 +626,48 @@
                 }
             });
         }
+
+        ///Ajax 方式请求WebAPI
+        function testsendAjax(self,type) {
+            var rowData = exampleTable.row(exampleTable.cell(self.parentNode).index().row).data(); //当前行的值
+
+            var value = {
+                'appname': rowData.appname,
+                'sendtime': moment().format('YYYY-MM-DDTHH:SS:DD'),
+                'msgbody': rowData
+            };
+
+            var postData = JSON.stringify(value);
+
+            $.ajax({
+                    type: "POST",
+                    contentType: "application/json;charset=utf-8",
+                    url: "@ViewBag.WebAPIBaseUrl" + "/SignMessage/UpdateSignMsg",
+                    data: postData,
+                    crossDomain: true,
+                    dataType: "json",
+                    //xhrFields: {
+                    //    withCredentials:true
+                    //},
+
+                    beforeSend: function (XMLHttpRequest) {
+                        XMLHttpRequest.setRequestHeader("Authorization", "@ViewBag.WebAPICallAuth");
+                        //XMLHttpRequest.setRequestHeader("Access-Control-Allow-Origin", "*");
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            //reloadTables()
+                            //layer.closeAll();
+                            layer.alert("测试成功！");
+                        }
+                        else {
+                            layer.alert("测试失败！" + data.msg || '');
+                        }
+                    }
+                });
+        }
+
+
 
 
         //删除单条数据

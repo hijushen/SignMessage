@@ -16,7 +16,7 @@ namespace NexChip.SignMessage.Utils
         {
             //建立 HttpClient http://localhost:5000/api/   
             client = new HttpClient();
-            client.BaseAddress = new Uri(SettingConfig.PostUrl);
+            client.BaseAddress = new Uri(DNSHelper.getRemoteIPUrlPortPath(SettingConfig.PostUrl));
             // 指定 authorization header 
             client.DefaultRequestHeaders.Add("Authorization", string.Format("{0}", SettingConfig.ApiTokenString));
         }
@@ -39,8 +39,7 @@ namespace NexChip.SignMessage.Utils
 
         #region 推荐的模拟POST请求,需要.net4.5,并引用System.Net.Http.dll;
         public static string Post(string Url, string json)
-        {
-            var mclient = new HttpClient();
+        {            var mclient = new HttpClient();
 
             mclient.MaxResponseContentBufferSize = 2560000;
             mclient.DefaultRequestHeaders.Add("Authorization", string.Format("{0}", SettingConfig.ApiTokenString));

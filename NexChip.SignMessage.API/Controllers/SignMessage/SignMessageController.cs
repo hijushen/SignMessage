@@ -50,7 +50,7 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
         public JsonResult PostUpdateSignMsg([FromBody]SignMessageSendDto value)
         {
 
-            LogHelper.Debug(Request.ToString());
+            //LogHelper.Debug(Request.ToString());
             var appOID = User.Identity.Name;
 
             return Json(bll.PostUpdateSignMsg(value, appOID));

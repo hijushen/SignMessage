@@ -4,6 +4,8 @@ using System.Text;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using System.IO;
+using System.Net;
 
 namespace NexChip.SignMessage.Utils
 {
@@ -12,8 +14,9 @@ namespace NexChip.SignMessage.Utils
         public static readonly HttpClient client;
         static HttpClinetHelper()
         {
-            //建立 HttpClient http://localhost:5000/api/   BaseAddress = new Uri(SettingConfig.PostUrl)
+            //建立 HttpClient http://localhost:5000/api/   
             client = new HttpClient();
+            client.BaseAddress = new Uri(SettingConfig.PostUrl);
             // 指定 authorization header 
             client.DefaultRequestHeaders.Add("Authorization", string.Format("{0}", SettingConfig.ApiTokenString));
         }
@@ -33,6 +36,64 @@ namespace NexChip.SignMessage.Utils
             string responseBody = await response.Content.ReadAsStringAsync();
             return responseBody;
         }
+
+        #region 推荐的模拟POST请求,需要.net4.5,并引用System.Net.Http.dll;
+        public static string Post(string Url, string json)
+        {
+            var mclient = new HttpClient();
+
+            mclient.MaxResponseContentBufferSize = 2560000;
+            mclient.DefaultRequestHeaders.Add("Authorization", string.Format("{0}", SettingConfig.ApiTokenString));
+            mclient.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36");
+            var response = mclient.PostAsync(new Uri(SettingConfig.PostUrl+Url), new StringContent(json)).Result;
+            var result = response.Content.ReadAsStringAsync().Result;
+            return result;
+        }
+
+        public static string HttpPost(string posturl, string postData)
+        {
+            Stream outstream = null;
+            Stream instream = null;
+            StreamReader sr = null;
+            HttpWebResponse response = null;
+            HttpWebRequest request = null;
+            Encoding encoding = System.Text.Encoding.GetEncoding("utf-8");
+            byte[] data = encoding.GetBytes(postData);
+            // 准备请求...
+            try
+            {
+                posturl = SettingConfig.PostUrl + posturl;
+                // 设置参数
+                request = WebRequest.Create(posturl) as HttpWebRequest;
+                request.Headers.Add(HttpRequestHeader.Authorization, string.Format("{0}", SettingConfig.ApiTokenString));
+                //request.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36");
+                request.Headers.Add(HttpRequestHeader.ContentType, "application/json;charset=UTF-8");
+                request.Headers.Add(HttpRequestHeader.Accept, "application/json");                
+
+                request.AllowAutoRedirect = true;
+                request.Method = "POST";
+                request.ContentType = "application/json";
+                request.ContentLength = data.Length;
+                outstream = request.GetRequestStream();
+                outstream.Write(data, 0, data.Length);
+                outstream.Close();
+                //发送请求并获取相应回应数据
+                response = request.GetResponse() as HttpWebResponse;
+                //直到request.GetResponse()程序才开始向目标网页发送Post请求
+                instream = response.GetResponseStream();
+                sr = new StreamReader(instream, encoding);
+                //返回结果网页（html）代码
+                string content = sr.ReadToEnd();
+                string err = string.Empty;
+                return content;
+            }
+            catch (Exception ex)
+            {
+                string err = ex.Message;
+                return string.Empty;
+            }
+        }
+        #endregion
 
         /// <summary>
         /// 使用post方法异步请求

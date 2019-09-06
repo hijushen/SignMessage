@@ -72,7 +72,7 @@ namespace NexChip.SignMessage.Web.Controllers
 
         public JsonResult testSend(string OID,int type = 1)
         {
-            return Json(boxBiz.testSendUpdate(OID));
+            return Json(boxBiz.testSend(OID, type));
         }
     }
 }

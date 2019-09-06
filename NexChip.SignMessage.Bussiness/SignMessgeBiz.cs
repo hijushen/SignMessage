@@ -42,6 +42,7 @@ namespace NexChip.SignMessage.Bussiness
         }
 
 
+        //更新
         public BizResult<SignMessageBox> PostUpdateSignMsg(SignMessageSendDto msg, string appOID)
         {
             try
@@ -104,7 +105,7 @@ namespace NexChip.SignMessage.Bussiness
             }
         }
 
-
+        //新增
         public BizResult<SignMessageBox> PostNewSignMsg(SignMessageSendDto msg, string appOID)
         {
             try
@@ -148,8 +149,6 @@ namespace NexChip.SignMessage.Bussiness
                         handlemsgoid = saveEntity.OID,
                         updatetime=DateTime.Now
                     }).UpdateColumns(t => new { t.handleresult,t.handlemsgoid,t.updatetime }).ExecuteCommand();
-
-
 
                     messageboxService.db.CommitTran();
                     return new BizResult<SignMessageBox>

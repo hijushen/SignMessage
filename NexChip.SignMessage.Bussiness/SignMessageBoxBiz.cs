@@ -100,8 +100,9 @@ namespace NexChip.SignMessage.Bussiness
         /// 消息测试-更新
         /// </summary>
         /// <param name="OID"></param>
+        /// <param name="type">类型,1新增， 2更新</param>
         /// <returns></returns>
-        public BizResult<SignMessageBoxDto> testSendUpdate(string OID)
+        public BizResult<SignMessageBoxDto> testSend(string OID, int type)
         {
             try
             {
@@ -117,32 +118,54 @@ namespace NexChip.SignMessage.Bussiness
                     };
                 }
 
-                var postUrl = "/SignMessage/UpdateSignMsg";
+                string postUrl = "";
+                if (type == 1)
+                {
+                    postUrl = "/SignMessage/UpdateSignMsg";
+                }
+                else
+                {
+                    postUrl = "/SignMessage/NewSignMsg";
+                }
                 //var getUrl = "/v1/Values";
                 var postData = new SignMessageSendDto
                 {
-                    appname = "23",
+                    appname = signBox.appname,
                     sendtime = DateTime.Now,
-                    msgbody = new SignMessageSendBodyDto
+                    msgbody =
+                    type == 1 ? new SignMessageSendBodyDto  //更新
                     {
-                        sourceid = signBox.OID,
+                        //sourceid = signBox.OID,
                         callbackurl = "http://www.baidu.com",
                         fromid = signBox.fromempid,
                         toids = signBox.toempid,
                         fromname = signBox.fromempname,
                         tonames = signBox.toempname,
-                        handletype = (int)HandleTypeEnum.Completed,
-                        emergencylevel = (int)EmergencyLevelEnum.Normal
-                        ,
-                        msgsourceid = signBox.msgsourceid
+                        handletype = type, //1，2，3 新增/更新/删除
+                        emergencylevel = (int)EmergencyLevelEnum.Normal,
+                        msgsourceid = signBox.msgsourceid //必要条件
+                    }
+                    : new SignMessageSendBodyDto  //新增
+                    {
+                        //sourceid = signBox.OID,
+                        callbackurl = "http://www.baidu.com",
+                        fromid = signBox.fromempid,
+                        toids = signBox.toempid,
+                        fromname = signBox.fromempname,
+                        tonames = signBox.toempname,
+                        handletype = type, //1，2，3 新增/更新/删除
+                        emergencylevel = (int)EmergencyLevelEnum.Normal,
+                        msgsourceid = signBox.msgsourceid //必要条件
                     }
                 };
 
                 //var response = new CallAPI().PostCall(postUrl, postData.SerializeModel()).Content;
                 var response = RestSharpHttp.PostJson(postUrl, postData.SerializeModel());
 
-                //var response = HttpClinetHelper.PostAsyncJson(postUrl, postData.SerializeModel())
-                //    .ConfigureAwait(false).GetAwaiter().GetResult();
+                //var response = HttpClinetHelper.Post(postUrl, postData.SerializeModel());
+                //var response = HttpClinetHelper.HttpPost(postUrl, postData.SerializeModel());
+
+                   //.ConfigureAwait(false).GetAwaiter().GetResult();
 
                 if (response == "")
                 {

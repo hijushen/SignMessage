@@ -45,6 +45,10 @@ namespace NexChip.SignMessage.Bussiness
         //更新
         public BizResult<SignMessageBox> PostUpdateSignMsg(SignMessageSendDto msg, string appOID)
         {
+            //NewOA.Employee emp = NewOA.Employee.GetEmployee("", "cocoge");
+
+            var emp = getUserInfo("cocoge");
+
             try
             {
                 if (msg == null)
@@ -434,6 +438,13 @@ namespace NexChip.SignMessage.Bussiness
             };
         }
 
+
+        private string[] getUserInfo(string name)
+        {
+            DataTable dt =  roleService.getEmployee(name);
+
+            return new string[] {"","2" };
+        }
 
         //public object MessageList()
         //{

@@ -11,10 +11,4 @@
     <PackageReference Include="RestSharp" Version="106.6.10" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="OANet2016_JH">
-      <HintPath>refs\oa\5.0.0\OANet2016_JH.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

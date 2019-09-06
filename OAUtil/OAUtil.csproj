@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="NewOA_JH">
+      <HintPath>refs\newoa\2.0.0.2\NewOA_JH.dll</HintPath>
+    </Reference>
+    <Reference Include="OANet2016_JH">
+      <HintPath>refs\oa\5.0.0\OANet2016_JH.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

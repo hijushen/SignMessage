@@ -11,7 +11,7 @@ namespace NexChip.SignMessage.Utils
         public static string ApiTokenString = AppConfigManager.Configuration["ApiTokenString"];
 
 
-        public static string AllString = AppConfigManager.Configuration["AllString"];
+        public static string AllString =  AppConfigManager.Configuration["AllString"];
         public static string NoBroGTitle = AppConfigManager.Configuration["NoBroGTitle"];
 
     }

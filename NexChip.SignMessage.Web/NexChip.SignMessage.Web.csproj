@@ -5,6 +5,13 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="App_Log\servicelog\**" />
+    <Content Remove="App_Log\servicelog\**" />
+    <EmbeddedResource Remove="App_Log\servicelog\**" />
+    <None Remove="App_Log\servicelog\**" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.9.406" />
@@ -55,6 +62,7 @@
 
 
   <ItemGroup>
+    <Folder Include="App_Log\" />
     <Folder Include="wwwroot\css\新文件夹\" />
   </ItemGroup>
 

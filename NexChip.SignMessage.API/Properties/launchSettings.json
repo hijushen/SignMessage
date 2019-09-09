@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iis": {
-      "applicationUrl": "http://localhost:9000",
+      "applicationUrl": "http://localhost:9000/",
       "sslPort": 0
     },
     "iisExpress": {
@@ -22,7 +22,7 @@
       }
     },
     "NexChip.SignMessage.API": {
-      "commandName": "Project",
+      "commandName": "IIS",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {

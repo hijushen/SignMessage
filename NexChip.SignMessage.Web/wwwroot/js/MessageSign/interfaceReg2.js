@@ -66,6 +66,10 @@ function checkAll(obj) {
 };
 //新增
 function add() {
+    if ($("#appname").attr("readonly") == true) {
+        $("#appname").removeAttr("readonly");
+    };
+
     $("#Id").val("");
     $("#appname").val("");
     $("#appnamechs").val("");
@@ -82,6 +86,7 @@ function edit(id) {
         success: function (res) {
             var data = res.data || {};
             $("#Id").val(id);
+            $("#appname").attr("readonly", "readonly");
             $("#appname").val(data.appname);
             $("#appnamechs").val(data.appnamechs);
             $("#reservedkey1").val(data.reservedkey1);

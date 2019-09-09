@@ -26,6 +26,7 @@ namespace NexChip.SignMessage.Web.Controllers
         /// <returns></returns>
         public IActionResult Index(string logonid, string eid, string SHAEncry)
         {
+
             ViewBag.logonid = logonid;
             ViewBag.id = eid;
             ViewBag.SHAEncry = SHAEncry;

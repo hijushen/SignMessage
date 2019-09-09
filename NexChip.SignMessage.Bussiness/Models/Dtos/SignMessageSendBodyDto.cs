@@ -9,9 +9,9 @@ namespace NexChip.SignMessage.Bussiness
     public class SignMessageSendBodyDto
     {
         /// <summary>
-        /// 签核箱表id
+        /// 签核箱表oids
         /// </summary>
-        public string sourceid { get; set; }
+        public string boxOIDs { get; set; }
 
         /// <summary>
         /// 发送人id

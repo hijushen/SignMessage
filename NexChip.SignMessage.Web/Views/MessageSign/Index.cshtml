@@ -333,7 +333,7 @@
                     }, {
                         "title": "主旨", "data": "substance", "orderable": false
                     }, {
-                        "title": "操作", width: "15%",
+                        "title": "操作", width: "5%",
                         "data": null,
                         "orderable": false,
                         "render": function (data, type, full, meta) {
@@ -515,15 +515,16 @@
 
         ///操作列
         function createEditToolColumn(item) {
+           
             return "<button class='btn btn-info btn-xs' href='javascript:;' onclick='edit(\"" + item.oid
                 + "\")'><i class='fa fa-edit'></i> 详细 </button>"
                 //+ " <button class='btn btn-danger btn-xs' href='javascript:;' onclick='deleteSingle(\"" + item.oid
                 //+ "\")'><i class='fa fa-trash-o'></i> 删除 </button> "
-                + "<button class='btn btn-success btn-xs' href='javascript:;' onclick='testsend(\"" + item.oid
-                + "\",1)'<i class='fa fa-edit'></i>测试-更新</button>"
-                + "<button class='btn btn-warning btn-xs' href='javascript:;' onclick='testsend(\"" + item.oid
-                + "\",2)'<i class='fa fa-edit'></i>测试-新增</button>"
-                + "<button class='btn btn-success btn-xs' href='javascript:;' onclick='testsendAjax(this)'<i class='fa fa-edit'></i>AJAX更新</button>"
+               // + "<button class='btn btn-success btn-xs' href='javascript:;' onclick='testsend(\"" + item.oid
+               // + "\",1)'<i class='fa fa-edit'></i>测试-更新</button>"
+               // + "<button class='btn btn-warning btn-xs' href='javascript:;' onclick='testsend(\"" + item.oid
+                //+ "\",2)'<i class='fa fa-edit'></i>测试-新增</button>"
+               // + "<button class='btn btn-success btn-xs' href='javascript:;' onclick='testsendAjax(this)'<i class='fa fa-edit'></i>AJAX更新</button>"
         }
 
 

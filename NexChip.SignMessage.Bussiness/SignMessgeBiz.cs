@@ -43,7 +43,7 @@ namespace NexChip.SignMessage.Bussiness
 
 
         //更新
-        public BizResult<SignMessageBox> PostUpdateSignMsg(SignMessageSendDto msg, string appOID)
+        public BizResult<List<SignMessageBox>> PostUpdateSignMsg(SignMessageSendDto msg, string appOID)
         {
             //NewOA.Employee emp = NewOA.Employee.GetEmployee("", "cocoge");
 
@@ -69,8 +69,7 @@ namespace NexChip.SignMessage.Bussiness
                         OID = msg.interfaceOID,
                         handleresult = 1,
                         updatetime=DateTime.Now,
-                        handlemsgoid= msg.msgbody.sourceid //检查过存在
-
+                        handlemsgoid= msg.msgbody.boxOIDs //检查过存在
                     }).UpdateColumns(t => new { t.handleresult }).ExecuteCommand();
 
                     messageboxService.db.Updateable(new SignMessageBox
@@ -78,14 +77,15 @@ namespace NexChip.SignMessage.Bussiness
                         updatetime = DateTime.Now,
                         emergencylevel = msg.msgbody.emergencylevel ?? 1,
                         callbackurl = msg.msgbody.callbackurl
-                    }).Where(t=> t.msgsourceid == msg.msgbody.sourceid)
-                    .UpdateColumns(t => new {
-                        t.updatetime, t.emergencylevel,t.callbackurl
-                    }).ExecuteCommand();
-
+                    }).Where(t => t.msgsourceid == msg.msgbody.msgsourceid)
+                         .UpdateColumns(t => new {
+                             t.updatetime,
+                             t.emergencylevel,
+                             t.callbackurl
+                         }).ExecuteCommand();
 
                     messageboxService.db.CommitTran();
-                    return new BizResult<SignMessageBox>
+                    return new BizResult<List<SignMessageBox>>
                     {
                         Success = true
                     };
@@ -94,7 +94,7 @@ namespace NexChip.SignMessage.Bussiness
                 {
 
                     messageboxService.db.RollbackTran();
-                    return new BizResult<SignMessageBox>
+                    return new BizResult<List<SignMessageBox>>
                     {
                         Success = false,
                         Msg = ex.Message
@@ -108,21 +108,15 @@ namespace NexChip.SignMessage.Bussiness
             }
         }
 
-        //新增
-        public BizResult<SignMessageBox> PostNewSignMsg(SignMessageSendDto msg, string appOID)
+        private List<SignMessageBox> geneInsertSignMessageBox(SignMessageSendDto msg)
         {
-            try
+            List<SignMessageBox> lstSignMessageBox = new List<SignMessageBox>();
+
+            var ids = msg.msgbody.toids.Split(",");
+            var names = msg.msgbody.toids.Split(",");
+
+            for (int i = 0; i < ids.Length; i++)
             {
-                if (msg == null)
-                {
-                    return interfaceHandlerErrorReturn("接收类型为空，请检查");
-                }
-
-                msg.sendtime = msg.sendtime ?? DateTime.Now;
-
-                var res = checkPostAddData(msg, appOID);
-                if (!res.Success) return res;
-
                 SignMessageBox saveEntity = new SignMessageBox
                 {
                     OID = Guid.NewGuid().ToString(),
@@ -131,8 +125,8 @@ namespace NexChip.SignMessage.Bussiness
                     sendtime = msg.sendtime,
                     fromempid = msg.msgbody.fromid,
                     fromempname = msg.msgbody.fromname,
-                    toempid = msg.msgbody.toids,
-                    toempname = msg.msgbody.tonames,
+                    toempid = ids[i],
+                    toempname = names[i],
                     callbackurl = msg.msgbody.callbackurl,
                     substance = msg.msgbody.substance,
                     showmsg = msg.msgbody.showmsg,
@@ -141,30 +135,75 @@ namespace NexChip.SignMessage.Bussiness
                     emergencylevel = msg.msgbody.emergencylevel ?? 1
                 };
 
+                lstSignMessageBox.Add(saveEntity);
+            }            
+
+            return lstSignMessageBox;
+        }
+
+        private string getMessageBoxIds(List<SignMessageBox> saveEntities)
+        {
+            StringBuilder strRet = new StringBuilder();
+            foreach (var item in saveEntities)
+            {
+                strRet.Append(item);
+                strRet.Append(",");
+            }
+
+            return strRet.ToString().Substring(0, strRet.Length - 1);
+        }
+
+
+        //新增
+        public BizResult<List<SignMessageBox>> PostNewSignMsg(SignMessageSendDto msg, string appOID)
+        {
+            try
+            {
+                if (msg == null)
+                {
+                    return new BizResult<List<SignMessageBox>>
+                    {
+                        Success = false,
+                        Msg = "接收类型为空，请检查"
+                    };
+                }
+
+                msg.sendtime = msg.sendtime ?? DateTime.Now;
+
+                var res = checkPostAddData(msg, appOID);
+                if (!res.Success) return res;
+
+                var saveEntities = this.geneInsertSignMessageBox(msg);
+
                 try
                 {
                     messageboxService.db.BeginTran();
-                    messageboxService.InsertIgnoreNullColumn(saveEntity);
+
+                    foreach (var saveEntity in saveEntities)
+                    {
+                        messageboxService.InsertIgnoreNullColumn(saveEntity);
+                    }
+
                     messageboxService.db.Updateable(new SignMessageInterface
                     {
                         OID = msg.interfaceOID,
                         handleresult = 1,
-                        handlemsgoid = saveEntity.OID,
-                        updatetime=DateTime.Now
+                        handlemsgoid = getMessageBoxIds(saveEntities),
+                        updatetime =DateTime.Now
                     }).UpdateColumns(t => new { t.handleresult,t.handlemsgoid,t.updatetime }).ExecuteCommand();
 
                     messageboxService.db.CommitTran();
-                    return new BizResult<SignMessageBox>
+                    return new BizResult<List<SignMessageBox>>
                     {
                         Success = true,
-                        Data = saveEntity
+                        Data = saveEntities
                     };
 
                 }
                 catch(Exception ex)
                 {
                     messageboxService.db.RollbackTran();
-                    return new BizResult<SignMessageBox>
+                    return new BizResult<List<SignMessageBox>>
                     {
                         Success = false,
                         Msg = ex.Message
@@ -174,9 +213,12 @@ namespace NexChip.SignMessage.Bussiness
             }
             catch (Exception ex)
             {
-                return interfaceHandlerErrorReturn(ex.Message);
+                return new BizResult<List<SignMessageBox>>
+                {
+                    Success = false,
+                    Msg = ex.Message
+                };
             }
-
 
         }
 
@@ -198,7 +240,7 @@ namespace NexChip.SignMessage.Bussiness
                     createtime = DateTime.Now,
                     handleresult = handleResult ,
                     handleerrormsg = msg.handleerrormsg ?? "",
-                    handlemsgoid = msg.msgbody.sourceid ?? "",
+                    handlemsgoid = msg.msgbody.boxOIDs ?? "",
                     msgbody = msg.msgbody.SerializeModel()
                 };
 
@@ -246,7 +288,7 @@ namespace NexChip.SignMessage.Bussiness
         /// <param name="msg"></param>
         /// <param name="appOID"></param>
         /// <returns></returns>
-        private BizResult<SignMessageBox> checkCommonData(SignMessageSendDto msg, string appOID)
+        private BizResult<List<SignMessageBox>> checkCommonData(SignMessageSendDto msg, string appOID)
         {
             string appN = "";
             var roleEntity = roleService.sdb.GetSingle<SignMessageRole>(t => t.OID == appOID);
@@ -280,7 +322,7 @@ namespace NexChip.SignMessage.Bussiness
             return chkMsgBody;
             
         }
-        private BizResult<SignMessageBox> checkPostAddData(SignMessageSendDto msg, string appOID)
+        private BizResult<List<SignMessageBox>> checkPostAddData(SignMessageSendDto msg, string appOID)
         {
 
             var chkComm = this.checkCommonData(msg, appOID);
@@ -294,7 +336,7 @@ namespace NexChip.SignMessage.Bussiness
         /// <param name="msg"></param>
         /// <param name="appOID"></param>
         /// <returns></returns>
-        private BizResult<SignMessageBox> checkPostUpdateData(SignMessageSendDto msg, string appOID)
+        private BizResult<List<SignMessageBox>> checkPostUpdateData(SignMessageSendDto msg, string appOID)
         {
 
             var chkComm = this.checkCommonData(msg, appOID);
@@ -305,7 +347,7 @@ namespace NexChip.SignMessage.Bussiness
             //    msg.handleerrormsg = "更新需要原系统标识id";
             //    updateMsgInterfaceErrorHandle(msg);
 
-            //    return new BizResult<SignMessageBox>
+            //    return new BizResult<List<SignMessageBox>>
             //    {
             //        Success = false,
             //        Msg = msg.handleerrormsg
@@ -317,7 +359,7 @@ namespace NexChip.SignMessage.Bussiness
             {
                 msg.handleerrormsg = "提供msgsourceid找不到对应消息，请检查";
                 updateMsgInterfaceErrorHandle(msg);
-                return new BizResult<SignMessageBox>
+                return new BizResult<List<SignMessageBox>>
                 {
                     Success = false,
                     Msg = msg.handleerrormsg
@@ -326,18 +368,18 @@ namespace NexChip.SignMessage.Bussiness
             }
             else
             {
-                msg.msgbody.sourceid = existEntity.OID;
+                msg.msgbody.boxOIDs = existEntity.OID;
             }
 
 
-            return new BizResult<SignMessageBox>
+            return new BizResult<List<SignMessageBox>>
             {
                 Success = true
             };
         }
 
 
-        private BizResult<SignMessageBox> checkMsgInfo(SignMessageSendDto msg)
+        private BizResult<List<SignMessageBox>> checkMsgInfo(SignMessageSendDto msg)
         {
             var msgbody = msg.msgbody;
 
@@ -364,6 +406,16 @@ namespace NexChip.SignMessage.Bussiness
             {
                 errMsg.Append("tonames 不能为空;");
             }
+
+            if(!string.IsNullOrWhiteSpace(msgbody.toids) && !string.IsNullOrWhiteSpace(msgbody.tonames))
+            {
+                if(msgbody.toids.Split(",") != msgbody.tonames.Split(","))
+                {
+                    errMsg.Append("toids 和 tonames 数量不符");
+                }
+            }
+
+
             if (string.IsNullOrWhiteSpace(msgbody.handletype.ToString()))
             {
                 errMsg.Append("handletype 不能为空;");
@@ -380,7 +432,7 @@ namespace NexChip.SignMessage.Bussiness
                 msg.handleerrormsg = errMsgRes;
                 updateMsgInterfaceErrorHandle(msg);
 
-                return new BizResult<SignMessageBox>
+                return new BizResult<List<SignMessageBox>>
                 {
                     Success = false,
                     Msg = errMsgRes
@@ -392,7 +444,7 @@ namespace NexChip.SignMessage.Bussiness
             msgbody.emergencylevel = msgbody.emergencylevel ?? 1;
             msgbody.substance = msgbody.substance ?? msg.appname;
 
-            return new BizResult<SignMessageBox>
+            return new BizResult<List<SignMessageBox>>
             {
                 Success = true
             };
@@ -404,7 +456,7 @@ namespace NexChip.SignMessage.Bussiness
         /// <param name="msg"></param>
         /// <param name="roleEntity"></param>
         /// <returns></returns>
-        private BizResult<SignMessageBox> checkRoleInfo(SignMessageSendDto msg, SignMessageRole roleEntity)
+        private BizResult<List<SignMessageBox>> checkRoleInfo(SignMessageSendDto msg, SignMessageRole roleEntity)
         {
             if (msg.appname != roleEntity.appname)
             {
@@ -420,7 +472,7 @@ namespace NexChip.SignMessage.Bussiness
                 return interfaceHandlerErrorReturn(msg.handleerrormsg);
             }
 
-            return new BizResult<SignMessageBox>
+            return new BizResult<List<SignMessageBox>>
             {
                 Success = true
             };
@@ -428,9 +480,9 @@ namespace NexChip.SignMessage.Bussiness
 
         #endregion
 
-        private BizResult<SignMessageBox> interfaceHandlerErrorReturn(string msg)
+        private BizResult<List<SignMessageBox>> interfaceHandlerErrorReturn(string msg)
         {
-            return new BizResult<SignMessageBox>
+            return new BizResult<List<SignMessageBox>>
             {
                 Success = false,
                 Msg = msg

@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using NexChip.SignMessage.Bussiness;
 using NexChip.SignMessage.Bussiness.Models.Dtos;
+using NexChip.SignMessage.Utils;
 
 namespace NexChip.SignMessage.Web.Controllers
 {
     public class MessageController : Controller
     {
         private SignMessgeBiz biz = new SignMessgeBiz();
+        private SignMessageBoxBiz boxBiz = new SignMessageBoxBiz();
 
         public IActionResult Index()
         {
@@ -39,6 +41,11 @@ namespace NexChip.SignMessage.Web.Controllers
 
 
             ViewBag.NoBroGTitle = Utils.SettingConfig.NoBroGTitle;
+
+            //Email 
+            var email = LoginUserHelper.GetLoginUserName(logonid, User.Identity.Name);
+            var emplyee = boxBiz.getUserInfo(email);
+            ViewBag.UserName = emplyee.cname;
 
 
             //return Content("<script>alert('请先登录');</script>");

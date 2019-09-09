@@ -61,7 +61,7 @@ namespace NexChip.SignMessage.Bussiness
         }
 
 
-        private Employee getUserInfo(string email)
+        public Employee getUserInfo(string email)
         {
             DataTable dt = roleService.getEmployee(email);
 

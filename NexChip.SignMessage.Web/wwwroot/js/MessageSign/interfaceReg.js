@@ -71,71 +71,11 @@ var partshowtool = {
 
 //
 function createEditToolColumn(item) {
-    return "<button class='btn btn-info btn-xs' href='javascript:;' onclick='edit(\"" + item.oid + "\")'><i class='fa fa-edit'></i> 编辑 </button> <button class='btn btn-danger btn-xs' href='javascript:;' onclick='deleteSingle(\"" + item.oid + "\")'><i class='fa fa-trash-o'></i> 删除 </button> "
+    return "<button class='btn btn-info btn-xs' href='javascript:;' onclick='edit(\""
+        + item.oid + "\")'><i class='fa fa-edit'></i> 编辑 </button> <button class='btn btn-danger btn-xs' href='javascript:;' onclick='deleteSingle(\""
+        + item.oid + "\")'><i class='fa fa-trash-o'></i> 删除 </button> "
 }
 
-
-//保存
-function save() {
-    var postData = { "dto": { "OID": $("#Id").val(), "appname": $("#appname").val(), "appnamechs": $("#appnamechs").val(), "reservedkey1": $("#reservedkey1").val() } };
-    $.ajax({
-        type: "Post",
-        url: "/InterfaceReg/EditSave",
-        data: postData,
-        success: function (data) {
-            if (data.success) {
-                reloadTables();
-                $("#editModal").modal("hide");
-            } else {
-                layer.tips(data.msg, "#btnSave");
-            };
-        }
-    });
-};
-//编辑
-function edit(id) {
-    $.ajax({
-        type: "Get",
-        url: "/InterfaceReg/GetS?OID=" + id + "&_t=" + new Date().getTime(),
-        success: function (res) {
-            var data = res.data || {};
-            $("#Id").val(id);
-            $("#appname").val(data.appname);
-            $("#appnamechs").val(data.appnamechs);
-            $("#reservedkey1").val(data.reservedkey1);
-
-            $("#Remarks").val(data.remarks);
-
-            $("#Title").text("编辑应用程序")
-            $("#editModal").modal("show");
-        }
-    })
-};
-
-
-//删除单条数据
-function deleteSingle(id) {
-    layer.confirm("您确认删除选定的记录吗？", {
-        btn: ["确定", "取消"]
-    }, function () {
-        var ids = [];
-        ids.push(id);
-        $.ajax({
-            type: "POST",
-            url: "/InterfaceReg/Delete",
-            data: { "OIDs": ids },
-            success: function (data) {
-                if (data.success) {
-                    reloadTables()
-                    layer.closeAll();
-                }
-                else {
-                    layer.alert("删除失败！");
-                }
-            }
-        })
-    });
-};
 
 //初始化表格
 function loadDataTable() {
@@ -258,6 +198,12 @@ function loadDataTable() {
 
 //新增
 function add() {
+
+    if ($("#appname").attr("readonly")) {
+        $("#appname").removeAttr("readonly");
+    };
+
+
     $("#Id").val("");
     $("#appname").val("");
     $("#appnamechs").val("");
@@ -274,6 +220,9 @@ function edit(id) {
         success: function (res) {
             var data = res.data || {};
             $("#Id").val(id);
+
+            $("#appname").attr("readonly", "readonly");
+
             $("#appname").val(data.appname);
             $("#appnamechs").val(data.appnamechs);
             $("#reservedkey1").val(data.reservedkey1);

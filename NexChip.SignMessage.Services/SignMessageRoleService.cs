@@ -24,7 +24,7 @@ FROM    dbo.Student AS a
         {
             if (string.IsNullOrEmpty(saveEntity.OID)) //新增的判断重名
             {
-                int count = sdb.Count<SignMessageRole>(t => t.appname == saveEntity.appname);
+                int count = sdb.Count<SignMessageRole>(t => t.appname == saveEntity.appname || t.appnamechs == saveEntity.appnamechs);
                 if (count > 0)
                 {
                     return false;
@@ -38,7 +38,8 @@ FROM    dbo.Student AS a
             {
                 var existEntity = sdb.GetSingle<SignMessageRole>(t => t.OID == saveEntity.OID);
 
-                int count = sdb.Count<SignMessageRole>(t => (t.appname == saveEntity.appname) && (t.OID != existEntity.OID));
+                int count = sdb.Count<SignMessageRole>(t => (t.appname == saveEntity.appname || t.appnamechs == saveEntity.appnamechs) 
+                && (t.OID != existEntity.OID));
                 if (count > 0)
                 {
                     return false;
@@ -57,6 +58,17 @@ FROM    dbo.Student AS a
 WHERE email = @email;", new SugarParameter("@email", email));
 
             return dt;
+        }
+
+
+        public List<string> GetDistinctFormNames()
+        {
+            return db.Queryable<SignMessageRole>().Select(p => p.appnamechs).Distinct().ToList();
+        }
+
+        public string getAppNameByChs(string appNamechs)
+        {
+            return db.Queryable<SignMessageRole>().Where(p => p.appnamechs == appNamechs).Select(p => p.appname).Single();
         }
     }
 }

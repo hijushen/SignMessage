@@ -1,4 +1,5 @@
 ﻿
+using NexChip.SignMessage.Bussiness.Models;
 using NexChip.SignMessage.Bussiness.Models.Dtos;
 using NexChip.SignMessage.Entities;
 using NexChip.SignMessage.Services;
@@ -6,6 +7,7 @@ using NexChip.SignMessage.Utils;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -14,6 +16,7 @@ namespace NexChip.SignMessage.Bussiness
     public class SignMessageBoxBiz
     {
         private SignMessageBoxService Service = new SignMessageBoxService();
+        private SignMessageRoleService roleService = new SignMessageRoleService();
 
         public object Delete(string[] oIDs)
         {
@@ -57,8 +60,43 @@ namespace NexChip.SignMessage.Bussiness
             
         }
 
-        public BizListResultForDataTables<SignMessageBox> ListForDataTables(DataTablesRequsetDto reqP, string userName)
+
+        private Employee getUserInfo(string email)
         {
+            DataTable dt = roleService.getEmployee(email);
+
+            var json = dt.SerializeModel();
+            var employees = json.DeserializeModel<List<Employee>>();
+            if (employees.Count == 1)
+            {
+                return employees[0];
+            }
+            else
+            {
+                throw new Exception("根据email查询人员信息异常");
+            }
+        }
+
+        public List<string> GetDistinctFormNames()
+        {
+            var retListStr = new List<string>{ SettingConfig.AllString };            
+            var dbTypes =  roleService.GetDistinctFormNames();
+            retListStr.AddRange(dbTypes);
+
+            return retListStr;
+        }
+
+        public BizListResultForDataTables<SignMessageBox> ListForDataTables(DataTablesRequsetDto reqP, string email)
+        {
+            var emp = getUserInfo(email);
+            string toempid = emp.emp_id;//"TEST01";
+
+
+            string formtype = SettingConfig.AllString;
+            if(reqP.formtype != formtype)
+            {
+                formtype = roleService.getAppNameByChs(reqP.formtype);
+            }
 
             int limit = reqP.length;
             int start = reqP.start;
@@ -73,8 +111,7 @@ namespace NexChip.SignMessage.Bussiness
             var endD = new DateTime(timeSpan[3].ObjToInt(), timeSpan[4].ObjToInt(), timeSpan[5].ObjToInt());
 
 
-            userName = "TEST01-N";
-            var res = Service.GetPageList(pageIndex, limit, userName, startD, endD, reqP.formtype, reqP.handlestatus);
+            var res = Service.GetPageList(pageIndex, limit, toempid, startD, endD, formtype, reqP.handlestatus);
             return new BizListResultForDataTables<SignMessageBox>
             {
                 data = res.Rows,

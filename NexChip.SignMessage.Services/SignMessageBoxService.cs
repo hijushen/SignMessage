@@ -1,4 +1,5 @@
 ﻿using NexChip.SignMessage.Entities;
+using NexChip.SignMessage.Utils;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace NexChip.SignMessage.Services
 
         }
 
-        public BizListResult<SignMessageBox> GetPageList(int pageIndex , int pageSize, string userName
+        public BizListResult<SignMessageBox> GetPageList(int pageIndex , int pageSize, string toempid
             ,DateTime startD, DateTime endD, string formType, string handleStatus)
         {
             
@@ -53,11 +54,11 @@ namespace NexChip.SignMessage.Services
 
             var status = handleStatus == "未读" ? 0 : 1;
 
-            var queryable = db.Queryable<SignMessageBox>("t")
-                .Where(s => s.toempname == userName)
+            var queryable = db.Queryable<SignMessageBox>("s")
+                .Where(s => s.toempid == toempid)
                 .Where(s => s.sendtime >= startD && s.sendtime < endD.AddDays(1))
-                .WhereIF(formType != "所有", s => s.appname == formType)
-                .WhereIF(handleStatus!="所有", s=> s.msgstatus == status)
+                .WhereIF(formType != SettingConfig.AllString, s => s.appname == formType)
+                .WhereIF(handleStatus!= SettingConfig.AllString, s=> s.msgstatus == status)
                 .OrderBy(s=>s.createtime,OrderByType.Desc);
 
             //queryable.Where("t.msghandlestatus in (@status)", new { status = builderHanderStatus(handleStatus) });

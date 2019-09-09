@@ -36,6 +36,11 @@ namespace NexChip.SignMessage.Web.Controllers
             ViewBag.logonid = logonid;
             ViewBag.id = id;
             ViewBag.SHAEncry = SHAEncry;
+
+
+            ViewBag.NoBroGTitle = Utils.SettingConfig.NoBroGTitle;
+
+
             //return Content("<script>alert('请先登录');</script>");
             return View();
         }

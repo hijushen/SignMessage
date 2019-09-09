@@ -47,7 +47,6 @@ namespace NexChip.SignMessage.Bussiness
         {
             //NewOA.Employee emp = NewOA.Employee.GetEmployee("", "cocoge");
 
-            var emp = getUserInfo("cocoge");
 
             try
             {
@@ -436,14 +435,6 @@ namespace NexChip.SignMessage.Bussiness
                 Success = false,
                 Msg = msg
             };
-        }
-
-
-        private string[] getUserInfo(string name)
-        {
-            DataTable dt =  roleService.getEmployee(name);
-
-            return new string[] {"","2" };
         }
 
         //public object MessageList()

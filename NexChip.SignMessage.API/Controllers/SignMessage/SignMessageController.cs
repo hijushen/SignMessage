@@ -46,7 +46,7 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
         /// <returns></returns>
         [HttpPost]
         [Route("UpdateSignMsg")]
-        [Authorize(Policy="Client")]      
+        [Authorize(Policy="Client")]
         public JsonResult PostUpdateSignMsg([FromBody]SignMessageSendDto value)
         {
 

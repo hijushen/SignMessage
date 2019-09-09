@@ -543,7 +543,8 @@
                              new { eid = @ViewBag.id, logonid = @ViewBag.logonid, SHAEncry= @ViewBag.SHAEncry })';
         //addTab("测试Brog签核箱", testUrl, "iframetestBorG");
         addTab("BroG 签核箱", testLocalUrl, "iframelocalBorG");
-        addTab('非BroG 应用系统代办<span id="newmessage" class="m-badge">New</span>', newSignMessage, "iframeNewSignMessage");
+        addTab('@ViewBag.NoBroGTitle' +
+            '<span id="newmessage" class="m-badge">New</span>', newSignMessage, "iframeNewSignMessage");
         setTimeout(function () {
             $('#tabs').tabs('select', 0);
         },200)

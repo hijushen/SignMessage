@@ -1,18 +1,18 @@
 ﻿
 @{
     Layout = "_MessageSignLayout";
-    ViewData["Title"] = "App 签核消息中心";
+    ViewData["Title"] = ViewBag.Title;//"非BroG 签核消息";
 
-    ViewBag.formTypes = new List<string>()
-{
-"所有",
-"总务用品申请单(zwyp)",
-"总务用品申请单(zwyp)",
-"资产异动申请(zcyd)",
-"资产出售单(zccs)",
-"资产报废申请单(zcbf)",
-"专案代码申请单(zadm)"
-};
+    //    ViewBag.formTypes = new List<string>()
+    //{
+    //"所有",
+    //"总务用品申请单(zwyp)",
+    //"总务用品申请单(zwyp)",
+    //"资产异动申请(zcyd)",
+    //"资产出售单(zccs)",
+    //"资产报废申请单(zcbf)",
+    //"专案代码申请单(zadm)"
+    //};
 
 
     ViewBag.handleStatus = new List<string>()
@@ -242,7 +242,7 @@
 
         function getDefaultDateSpanStr() {
 
-            var start = moment().subtract(29, 'days');
+            var start = moment().subtract(180, 'days'); //moment().subtract(29, 'days');
             var end = moment();
 
             return start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD');
@@ -252,7 +252,7 @@
         /// 初始化日期控件
         function setDataPicker() {
 
-            var start = moment().subtract(29, 'days');
+            var start = moment().subtract(180, 'days');// moment().subtract(29, 'days');
             var end = moment();
 
             function cb(start, end) {

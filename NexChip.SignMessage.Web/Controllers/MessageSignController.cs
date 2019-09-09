@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NexChip.SignMessage.Bussiness;
 using NexChip.SignMessage.Bussiness.Models.Dtos;
+using NexChip.SignMessage.Utils;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -32,13 +33,17 @@ namespace NexChip.SignMessage.Web.Controllers
 
             ViewBag.WebAPIBaseUrl = Utils.SettingConfig.PostUrl;
             ViewBag.WebAPICallAuth = Utils.SettingConfig.ApiTokenString;
+            ViewBag.Title = Utils.SettingConfig.NoBroGTitle;
+
+            ViewBag.formTypes = boxBiz.GetDistinctFormNames();
+
             return View();
         }
 
         [HttpPost]
         public JsonResult DataTableList(DataTablesRequsetDto reqP)
         {
-            var userName = reqP.logonid ?? User.Identity.Name;
+            var userName = LoginUserHelper.GetLoginUserName(reqP.logonid, User.Identity.Name);
             var res = boxBiz.ListForDataTables(reqP, userName);
             return Json(res);
         }

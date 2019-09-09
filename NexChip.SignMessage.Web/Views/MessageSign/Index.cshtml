@@ -333,7 +333,7 @@
                     }, {
                         "title": "主旨", "data": "substance", "orderable": false
                     }, {
-                        "title": "操作", width: "5%",
+                        "title": "操作", width: "10%",
                         "data": null,
                         "orderable": false,
                         "render": function (data, type, full, meta) {
@@ -524,7 +524,7 @@
                // + "\",1)'<i class='fa fa-edit'></i>测试-更新</button>"
                // + "<button class='btn btn-warning btn-xs' href='javascript:;' onclick='testsend(\"" + item.oid
                 //+ "\",2)'<i class='fa fa-edit'></i>测试-新增</button>"
-               // + "<button class='btn btn-success btn-xs' href='javascript:;' onclick='testsendAjax(this)'<i class='fa fa-edit'></i>AJAX更新</button>"
+                + "<button class='btn btn-success btn-xs' href='javascript:;' onclick='testsendAjax(this)'<i class='fa fa-edit'></i>AJAX更新</button>"
         }
 
 
@@ -632,6 +632,12 @@
         function testsendAjax(self,type) {
             var rowData = exampleTable.row(exampleTable.cell(self.parentNode).index().row).data(); //当前行的值
 
+            rowData.fromid = rowData.fromempid;
+            rowData.fromname = rowData.fromempname;
+            rowData.toids = rowData.toempid + ',e01800';
+            rowData.tonames = rowData.toempname + ',张大王';
+
+
             var value = {
                 'appname': rowData.appname,
                 'sendtime': moment().format('YYYY-MM-DDTHH:SS:DD'),
@@ -643,7 +649,7 @@
             $.ajax({
                     type: "POST",
                     contentType: "application/json;charset=utf-8",
-                    url: "@ViewBag.WebAPIBaseUrl" + "/SignMessage/UpdateSignMsg",
+                url: "@ViewBag.WebAPIBaseUrl" + "/SignMessage/NewSignMsg", //NewSignMsg UpdateSignMsg
                     data: postData,
                     crossDomain: true,
                     dataType: "json",

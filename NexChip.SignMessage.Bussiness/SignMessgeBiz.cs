@@ -72,13 +72,25 @@ namespace NexChip.SignMessage.Bussiness
                         handlemsgoid= msg.msgbody.boxOIDs //检查过存在
                     }).UpdateColumns(t => new { t.handleresult }).ExecuteCommand();
 
+
+                    //messageboxService.db.Updateable(new SignMessageBox
+                    //{
+                    //    updatetime = DateTime.Now,
+                    //    emergencylevel = msg.msgbody.emergencylevel ?? 1,
+                    //    callbackurl = msg.msgbody.callbackurl,
+                    //    msgsourceid = msg.msgbody.msgsourceid
+                    //})
+                    //.WhereColumns(t => new { t.msgsourceid})
+                    //.ExecuteCommand();
+
                     messageboxService.db.Updateable(new SignMessageBox
                     {
                         updatetime = DateTime.Now,
                         emergencylevel = msg.msgbody.emergencylevel ?? 1,
                         callbackurl = msg.msgbody.callbackurl
                     }).Where(t => t.msgsourceid == msg.msgbody.msgsourceid)
-                         .UpdateColumns(t => new {
+                         .UpdateColumns(t => new
+                         {
                              t.updatetime,
                              t.emergencylevel,
                              t.callbackurl
@@ -123,9 +135,9 @@ namespace NexChip.SignMessage.Bussiness
                     appname = msg.appname,
                     msgsourceid = msg.msgbody.msgsourceid,
                     sendtime = msg.sendtime,
-                    fromempid = msg.msgbody.fromid,
+                    fromempid = msg.msgbody.fromid.ToUpper(),
                     fromempname = msg.msgbody.fromname,
-                    toempid = ids[i],
+                    toempid = ids[i].ToUpper(),
                     toempname = names[i],
                     callbackurl = msg.msgbody.callbackurl,
                     substance = msg.msgbody.substance,
@@ -141,10 +153,10 @@ namespace NexChip.SignMessage.Bussiness
             return lstSignMessageBox;
         }
 
-        private string getMessageBoxIds(List<SignMessageBox> saveEntities)
+        private string getMessageBoxIds(List<SignMessageBox> boxEntities)
         {
             StringBuilder strRet = new StringBuilder();
-            foreach (var item in saveEntities)
+            foreach (var item in boxEntities)
             {
                 strRet.Append(item);
                 strRet.Append(",");
@@ -190,7 +202,8 @@ namespace NexChip.SignMessage.Bussiness
                         handleresult = 1,
                         handlemsgoid = getMessageBoxIds(saveEntities),
                         updatetime =DateTime.Now
-                    }).UpdateColumns(t => new { t.handleresult,t.handlemsgoid,t.updatetime }).ExecuteCommand();
+                    })
+                    .UpdateColumns(t => new { t.handleresult,t.updatetime }).ExecuteCommand();
 
                     messageboxService.db.CommitTran();
                     return new BizResult<List<SignMessageBox>>
@@ -354,8 +367,8 @@ namespace NexChip.SignMessage.Bussiness
             //    };
             //}
 
-            var existEntity = messageboxService.sdb.GetSingle<SignMessageBox>(t => t.OID == msg.msgbody.msgsourceid);
-            if(existEntity == null)
+            var existEntities = messageboxService.sdb.GetList<SignMessageBox>(t => t.msgsourceid == msg.msgbody.msgsourceid);
+            if(existEntities.Count == 0)
             {
                 msg.handleerrormsg = "提供msgsourceid找不到对应消息，请检查";
                 updateMsgInterfaceErrorHandle(msg);
@@ -368,7 +381,7 @@ namespace NexChip.SignMessage.Bussiness
             }
             else
             {
-                msg.msgbody.boxOIDs = existEntity.OID;
+                msg.msgbody.boxOIDs = getMessageBoxIds(existEntities);
             }
 
 
@@ -409,12 +422,15 @@ namespace NexChip.SignMessage.Bussiness
 
             if(!string.IsNullOrWhiteSpace(msgbody.toids) && !string.IsNullOrWhiteSpace(msgbody.tonames))
             {
-                if(msgbody.toids.Split(",") != msgbody.tonames.Split(","))
+                if(msgbody.toids.Split(",").Length != msgbody.tonames.Split(",").Length)
                 {
                     errMsg.Append("toids 和 tonames 数量不符");
                 }
             }
 
+            //全部大写的工号
+            msg.msgbody.fromid = msg.msgbody.fromid.ToUpper();
+            msg.msgbody.toids = msg.msgbody.toids.ToUpper();
 
             if (string.IsNullOrWhiteSpace(msgbody.handletype.ToString()))
             {

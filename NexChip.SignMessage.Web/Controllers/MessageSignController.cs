@@ -35,6 +35,7 @@ namespace NexChip.SignMessage.Web.Controllers
             ViewBag.WebAPIBaseUrl = Utils.SettingConfig.PostUrl;
             ViewBag.WebAPICallAuth = Utils.SettingConfig.ApiTokenString;
             ViewBag.Title = Utils.SettingConfig.NoBroGTitle;
+            ViewBag.AllString = SettingConfig.AllString;
 
             ViewBag.formTypes = boxBiz.GetDistinctFormNames();
 
@@ -52,6 +53,20 @@ namespace NexChip.SignMessage.Web.Controllers
         public JsonResult GetS(string OID)
         {
             return Json(boxBiz.Get(OID));
+        }
+
+
+        /// <summary>
+        /// 判断是否需要刷新
+        /// </summary>
+        /// <param name="reqP"></param>
+        /// <returns></returns>
+        public IActionResult GetUnReadCount(DataTablesRequsetDto reqP)
+        {
+            var userName = LoginUserHelper.GetLoginUserName(reqP.logonid, User.Identity.Name);
+            var res =  boxBiz.GetUnReadCount(reqP,userName);
+
+            return Json(res);
         }
 
         /// <summary>

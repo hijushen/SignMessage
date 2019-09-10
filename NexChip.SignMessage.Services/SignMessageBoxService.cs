@@ -59,15 +59,17 @@ namespace NexChip.SignMessage.Services
                 .Where(s => s.sendtime >= startD && s.sendtime < endD.AddDays(1))
                 .WhereIF(formType != SettingConfig.AllString, s => s.appname == formType)
                 .WhereIF(handleStatus!= SettingConfig.AllString, s=> s.msgstatus == status)
-                .OrderBy(s=>s.createtime,OrderByType.Desc);
+                .OrderBy(s=>s.createtime,OrderByType.Desc);  
 
             //queryable.Where("t.msghandlestatus in (@status)", new { status = builderHanderStatus(handleStatus) });
 
             var data = queryable.ToPageList(pageIndex, pageSize, ref totalCount);
 
+            var existedUnreadCount = queryable.Where(s => s.msgstatus == 0).Count();
 
             var t = new BizListResult<SignMessageBox>
             {
+                Code= existedUnreadCount,
                 total = totalCount,
                 Rows = data,
                 Msg = "成功"
@@ -76,5 +78,30 @@ namespace NexChip.SignMessage.Services
         }
 
 
+        /// <summary>
+        /// 获得未
+        /// </summary>
+        /// <param name="toempid"></param>
+        /// <param name="startD"></param>
+        /// <param name="endD"></param>
+        /// <returns></returns>
+        public BizResult<SignMessageBox> GetUnReadCount(string toempid, DateTime startD, DateTime endD, string formType, string handleStatus)
+        {
+            var status = handleStatus == "未读" ? 0 : 1;
+
+            var count = db.Queryable<SignMessageBox>("s")
+                .Where(s => s.toempid == toempid)
+                .Where(s => s.sendtime >= startD && s.sendtime < endD.AddDays(1))
+                .WhereIF(formType != SettingConfig.AllString, s => s.appname == formType)
+                .WhereIF(handleStatus != SettingConfig.AllString, s => s.msgstatus == status)
+               .Where(s => s.msgstatus == 0).Count();
+
+
+            return new BizResult<SignMessageBox>
+            {
+                Success = true,
+                Msg = count.ToString()
+            };
+        }
     }
 }

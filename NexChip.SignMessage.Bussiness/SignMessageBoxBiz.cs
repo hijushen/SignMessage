@@ -117,7 +117,8 @@ namespace NexChip.SignMessage.Bussiness
                 data = res.Rows,
                 draw = reqP.draw + 1,
                 recordsFiltered = res.total,
-                recordsTotal = res.total
+                recordsTotal = res.total,
+                unReadCount = res.Code
             };
 
             //Expression<Func<SignMessageBox, object>> orderByExpression = p => p.createtime;
@@ -132,6 +133,26 @@ namespace NexChip.SignMessage.Bussiness
             //    recordsTotal = res.total
             //};
         }
+
+        public BizResult<SignMessageBox> GetUnReadCount(DataTablesRequsetDto reqP, string email)
+        {
+            var emp = getUserInfo(email);
+            string toempid = emp.emp_id;//"TEST01";
+
+            var timeSpan = reqP.timespan.Split("-");
+            //零点日期
+            var startD = new DateTime(timeSpan[0].ObjToInt(), timeSpan[1].ObjToInt(), timeSpan[2].ObjToInt());
+            var endD = new DateTime(timeSpan[3].ObjToInt(), timeSpan[4].ObjToInt(), timeSpan[5].ObjToInt());
+
+            string formtype = SettingConfig.AllString;
+            if (reqP.formtype != formtype)
+            {
+                formtype = roleService.getAppNameByChs(reqP.formtype);
+            }
+
+            return Service.GetUnReadCount(toempid, startD, endD, formtype, reqP.handlestatus);
+        }
+
 
         /// <summary>
         /// 消息测试-更新

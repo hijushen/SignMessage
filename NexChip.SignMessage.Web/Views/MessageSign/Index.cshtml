@@ -17,7 +17,7 @@
 
     ViewBag.handleStatus = new List<string>()
 {
-"所有",
+ViewBag.AllString,
 "未读",
 "已读"
 //"未处理",
@@ -172,7 +172,11 @@
             setDataPicker();
             setSelect();
             setModalCenter();
+
+            //console.log('是否iframe嵌套: ' + !(window.self === window.top));
         });
+
+
 
         ///设置select控件样式（select2组件）
         function setSelect() {
@@ -198,6 +202,80 @@
                 var m_top = ($(window).height() - $modal_dialog.height()) / 2;
                 $modal_dialog.css({ 'margin': m_top + 'px auto' });
             })
+        }
+
+        /**
+         * 刷新逻辑： 在当前Panel根据界面条件查询是否有新消息，并根据是否第一页决定是否继续刷新表格
+         * 不再当前Panel，则根据默认查询条件查询来决定是否显示 徽章。
+         * */
+        var pageCommMessageSign = {
+            unReadCount: 2,
+            lastRefreshTime: moment(),
+            unReadCheckAjax: function (curIsNewSignPanel) {
+                if (moment().subtract(1, 'seconds') < pageCommMessageSign.lastRefreshTime){// 减30秒钟) { //上次刷新到现在小于30秒
+                    return;
+                }
+
+                param = {};
+                if (curIsNewSignPanel) {
+                    param.timespan = $('#reportrange span').html() || getDefaultDateSpanStr(); //日期区间(初次加载为默认）)
+                    param.formtype = $('#formTypeSelect').val(); //表单类型
+                    param.handlestatus = $('#handleStatusSelect').val(); //消息状态
+                    param.logonid = "@ViewBag.logonid" || null;
+                }
+                else { //在其他Panel
+                    param.timespan = $('#reportrange span').html() || getDefaultDateSpanStr(); //日期区间(初次加载为默认）)
+                    param.formtype = "@ViewBag.AllString"; //表单类型
+                    param.handlestatus = "@ViewBag.AllString"; //消息状态
+                    param.logonid = "@ViewBag.logonid" || null;
+                }
+
+                $.ajax({
+                    type: "Post",
+                    url: "MessageSign/GetUnReadCount",
+                    data: param,
+                    success: function (data) {
+                        if (data.success) {
+                            pageCommMessageSign.lastRefreshTime = moment(); //更新刷新时间
+
+                            var count = parseInt(data.msg);
+                            pageCommMessageSign.unReadCount = count;
+                            pageCommMessageSign.clientRefreshNewSpan();
+
+                            if (curIsNewSignPanel) {
+                                if (count > 1) {
+                                    ///如果在第一页且有未读消息，则刷新DataTables.
+                                    if (exampleTable.page() == 0) {
+                                        reloadTables();
+                                    }
+                                } 
+                            }
+                        } else {
+                           
+                        };
+                    }
+                });
+            },
+            controlNewSapn: function (isShow) {
+                if (window.self === window.top) { //网页没有被iframe嵌套
+                    return;
+                }
+
+                if (top.controlNewSapn) {
+                    if (isShow) {
+                        top.controlNewSapn.show();
+                    } else {
+                        top.controlNewSapn.hide();
+                    }
+                }
+            },
+            clientRefreshNewSpan: function () {
+                if (pageCommMessageSign.unReadCount == 0) {
+                    pageCommMessageSign.controlNewSapn(false);
+                } else {
+                    pageCommMessageSign.controlNewSapn(true);
+                }
+            }
         }
 
         Date.prototype.Format = function (fmt) {
@@ -389,16 +467,24 @@
                             if ($('#example_processing').hide) {
                                 $('#example_processing').hide();
                             }
+
+                            //更新未读数 和最新刷新数据
+                            pageCommMessageSign.lastRefreshTime = moment();
+                            pageCommMessageSign.unReadCount = result.unReadCount;
+                            pageCommMessageSign.clientRefreshNewSpan();
+
+                            //更新数据
                             callback(result);
 
                             //setTimeout(function () {
-                               
+
                             //}, 200);
                         }
                     });
                 }
-
             });
+
+
 
             $('#example tbody').on('click', 'td', function () {
                 var table = exampleTable;
@@ -441,11 +527,13 @@
 
             $(row.node()).removeClass('selected');
             //$(row.node()).addClass('selected');
-            $(row.node()).removeClass('highlight');
+            if ($(row.node()).hasClass('highlight')) { //表格行未读成为已读，需要更新记录数
 
-            //var row = exampleTable.$('tr.selected');
-            //row.removeClass('selected');
-            //row.removeClass('highlight');
+                pageCommMessageSign.unReadCount = pageCommMessageSign.unReadCount - 1;               
+                pageCommMessageSign.clientRefreshNewSpan();
+
+                $(row.node()).removeClass('highlight');
+            }
         };
 
         //
@@ -482,40 +570,40 @@
             }
         };
 
-        var partshowtool = {
-            //默认现实的字符串长度
-            remarkShowLength: 30
-            ,
-            changeShowRemarks: function (obj) {//obj是td
-                debugger;
-                var content = $(obj).attr("content");
-                if (content != null && content != '') {
-                    if ($(obj).attr("isDetail") == 'true') {//当前显示的是详细备注，切换到显示部分
-                        //$(obj).removeAttr('isDetail');//remove也可以
-                        $(obj).attr('isDetail', false);
-                        $(obj).html(partshowtool.getPartialRemarksHtml(content));
-                    } else {//当前显示的是部分备注信息，切换到显示全部
-                        $(obj).attr('isDetail', true);
-                        $(obj).html(partshowtool.getTotalRemarksHtml(content));
-                    }
-                }
-            }
-            ,
-            //切换显示备注信息，显示部分或者全部
-            getPartialRemarksHtml: function (remarks) {
-                return remarks.substr(0, partshowtool.remarkShowLength) + '&nbsp;&nbsp;<a href="javascript:void(0);" ><b>...</b></a>';
-            }
-            ,
-            //全部备注信息
-            getTotalRemarksHtml: function (remarks) {
-                return remarks + '&nbsp;&nbsp;<a href="javascript:void(0);" >收起</a>';
-            }
+        //var partshowtool = {
+        //    //默认现实的字符串长度
+        //    remarkShowLength: 30
+        //    ,
+        //    changeShowRemarks: function (obj) {//obj是td
+        //        debugger;
+        //        var content = $(obj).attr("content");
+        //        if (content != null && content != '') {
+        //            if ($(obj).attr("isDetail") == 'true') {//当前显示的是详细备注，切换到显示部分
+        //                //$(obj).removeAttr('isDetail');//remove也可以
+        //                $(obj).attr('isDetail', false);
+        //                $(obj).html(partshowtool.getPartialRemarksHtml(content));
+        //            } else {//当前显示的是部分备注信息，切换到显示全部
+        //                $(obj).attr('isDetail', true);
+        //                $(obj).html(partshowtool.getTotalRemarksHtml(content));
+        //            }
+        //        }
+        //    }
+        //    ,
+        //    //切换显示备注信息，显示部分或者全部
+        //    getPartialRemarksHtml: function (remarks) {
+        //        return remarks.substr(0, partshowtool.remarkShowLength) + '&nbsp;&nbsp;<a href="javascript:void(0);" ><b>...</b></a>';
+        //    }
+        //    ,
+        //    //全部备注信息
+        //    getTotalRemarksHtml: function (remarks) {
+        //        return remarks + '&nbsp;&nbsp;<a href="javascript:void(0);" >收起</a>';
+        //    }
 
-        }
+        //}
 
         ///操作列
         function createEditToolColumn(item) {
-           
+
             return "<button class='btn btn-info btn-xs' href='javascript:;' onclick='edit(\"" + item.oid
                 + "\")'><i class='fa fa-edit'></i> 详细 </button>"
                 //+ " <button class='btn btn-danger btn-xs' href='javascript:;' onclick='deleteSingle(\"" + item.oid
@@ -634,8 +722,8 @@
 
             rowData.fromid = rowData.fromempid;
             rowData.fromname = rowData.fromempname;
-            rowData.toids = rowData.toempid + ',e01800';
-            rowData.tonames = rowData.toempname + ',张大王';
+            rowData.toids = rowData.toempid; //+ ',e01800';
+            rowData.tonames = rowData.toempname;// + ',张大王';
 
 
             var value = {
@@ -649,7 +737,7 @@
             $.ajax({
                     type: "POST",
                     contentType: "application/json;charset=utf-8",
-                url: "@ViewBag.WebAPIBaseUrl" + "/SignMessage/NewSignMsg", //NewSignMsg UpdateSignMsg
+                url: "@ViewBag.WebAPIBaseUrl" + "/SignMessage/UpdateSignMsg", //NewSignMsg UpdateSignMsg
                     data: postData,
                     crossDomain: true,
                     dataType: "json",

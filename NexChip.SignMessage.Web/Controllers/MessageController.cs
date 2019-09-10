@@ -79,5 +79,7 @@ namespace NexChip.SignMessage.Web.Controllers
 
             //return Content(JsonConvert.SerializeObject(jo), "application/json");
         }
+
+
     }
 }

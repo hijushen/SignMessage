@@ -15,5 +15,7 @@ namespace NexChip.SignMessage.Services
         public List<T> data { get; set; }
 
         public string error { get; set; }
+
+        public int unReadCount { get; set; }
     }
 }

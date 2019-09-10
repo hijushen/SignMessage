@@ -500,23 +500,30 @@
         //    $('#iframetestBorG').css('POSITION', 'relative');
         //}, 500)
 
-        setInterval(function () { //定时检测新消息是否送达
+        var NewSpanInterval= setInterval(function () { //定时检测新消息是否送达
+            var tab = $('#tabs').tabs('getSelected');
+            var index = $('#tabs').tabs('getTabIndex', tab);
 
-        }, 1000 * 15);
+            var IsNewSignPanel = false;
+            if (index == 1) {
+                IsNewSignPanel = true;
+            }
+
+            ///页面未读检查
+            if (document.getElementById('iframeNewSignMessage').contentWindow.pageCommMessageSign.unReadCheckAjax) {
+                document.getElementById('iframeNewSignMessage').contentWindow.pageCommMessageSign.unReadCheckAjax(IsNewSignPanel);
+            }
+
+        }, 1000 * 30);
     });
 
     var controlNewSapn = {
-        ajaxQuery: function () {
-
-        }
-        ,
-
         show: function () {
-            $('#newmessage').css("display", "none")
+            $('#newmessage').css("display", "inline-block")
         }
         ,
         hide: function () {
-            $('#newmessage').css("display", "")
+            $('#newmessage').css("display", "none")
         }
     }
 
@@ -545,9 +552,12 @@
         addTab("BroG 签核箱", testLocalUrl, "iframelocalBorG");
         addTab('@ViewBag.NoBroGTitle' +
             '<span id="newmessage" class="m-badge">New</span>', newSignMessage, "iframeNewSignMessage");
+
+
         setTimeout(function () {
             $('#tabs').tabs('select', 0);
-        },200)
+        }, 200);
+
     }
 
 

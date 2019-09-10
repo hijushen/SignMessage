@@ -212,7 +212,7 @@ ViewBag.AllString,
             unReadCount: 2,
             lastRefreshTime: moment(),
             unReadCheckAjax: function (curIsNewSignPanel) {
-                if (moment().subtract(1, 'seconds') < pageCommMessageSign.lastRefreshTime){// 减30秒钟) { //上次刷新到现在小于30秒
+                if (moment().subtract(@ViewBag.UnReadRefreshSeconds, 'seconds') < pageCommMessageSign.lastRefreshTime){// 减30秒钟) { //上次刷新到现在小于30秒
                     return;
                 }
 

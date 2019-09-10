@@ -47,7 +47,7 @@ namespace NexChip.SignMessage.Web.Controllers
             var emplyee = boxBiz.getUserInfo(email);
             ViewBag.UserName = emplyee.cname;
 
-
+            ViewBag.UnReadRefreshSeconds = Utils.SettingConfig.UnReadRefreshSeconds;
             //return Content("<script>alert('请先登录');</script>");
             return View();
         }

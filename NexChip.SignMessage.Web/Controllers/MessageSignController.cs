@@ -36,6 +36,8 @@ namespace NexChip.SignMessage.Web.Controllers
             ViewBag.WebAPICallAuth = Utils.SettingConfig.ApiTokenString;
             ViewBag.Title = Utils.SettingConfig.NoBroGTitle;
             ViewBag.AllString = Utils.SettingConfig.AllString;
+            ViewBag.UnReadRefreshSeconds = Utils.SettingConfig.UnReadRefreshSeconds;
+
 
             ViewBag.formTypes = boxBiz.GetDistinctFormNames();
 

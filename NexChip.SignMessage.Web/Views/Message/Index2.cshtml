@@ -514,7 +514,7 @@
                 document.getElementById('iframeNewSignMessage').contentWindow.pageCommMessageSign.unReadCheckAjax(IsNewSignPanel);
             }
 
-        }, 1000 * 30);
+        }, @ViewBag.UnReadRefreshSeconds * 1000);
     });
 
     var controlNewSapn = {

@@ -14,5 +14,7 @@ namespace NexChip.SignMessage.Utils
         public static string AllString =  AppConfigManager.Configuration["AllString"];
         public static string NoBroGTitle = AppConfigManager.Configuration["NoBroGTitle"];
 
+
+        public static string UnReadRefreshSeconds = AppConfigManager.Configuration["UnReadRefreshSeconds"];
     }
 }

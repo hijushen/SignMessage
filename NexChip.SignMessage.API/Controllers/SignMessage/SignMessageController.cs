@@ -56,5 +56,23 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
             return Json(bll.PostUpdateSignMsg(value, appOID));
         }
 
+
+        /// <summary>
+        /// 更新签核箱消息--通知类完成消息（调用后相应人员之前通知消息状态为过期）
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateNotifySignMsg")]
+        [Authorize(Policy = "Client")]
+        public JsonResult PostUpdateNotifySignMsg([FromBody]SignMessageSendDto value)
+        {
+
+            //LogHelper.Debug(Request.ToString());
+            var appOID = User.Identity.Name;
+
+            return Json(bll.PostUpdateNotifySignMsg(value, appOID));
+        }
+
     }
 }

@@ -92,6 +92,13 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="M:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController.PostUpdateNotifySignMsg(NexChip.SignMessage.Bussiness.SignMessageSendDto)">
+            <summary>
+            更新签核箱消息--通知类完成消息（调用后相应人员之前通知消息状态为过期）
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
         <member name="T:NexChip.SignMessage.API.Controllers.ValuesController">
             <summary>
             控制器注释测试

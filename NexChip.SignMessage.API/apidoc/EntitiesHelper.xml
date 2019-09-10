@@ -164,9 +164,9 @@
             处理错误提示
             </summary>
         </member>
-        <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.handlemsgoid">
+        <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.handlemsgoids">
             <summary>
-            处理完消息OID
+            处理完消息OIDs （单条或者多条）
             </summary>
         </member>
         <member name="P:NexChip.SignMessage.Entities.SignMessageInterface.createtime">

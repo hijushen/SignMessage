@@ -48,9 +48,9 @@ namespace NexChip.SignMessage.Entities
           public string handleerrormsg { get; set; }
 
         /// <summary>
-        /// 处理完消息OID
+        /// 处理完消息OIDs （单条或者多条）
         /// </summary>
-        public string handlemsgoid { get; set; }
+        public string handlemsgoids { get; set; }
 
         /// <summary>
         /// 处理时间

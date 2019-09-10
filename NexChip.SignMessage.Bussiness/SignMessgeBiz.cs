@@ -69,7 +69,7 @@ namespace NexChip.SignMessage.Bussiness
                         OID = msg.interfaceOID,
                         handleresult = 1,
                         updatetime=DateTime.Now,
-                        handlemsgoid= msg.msgbody.boxOIDs //检查过存在
+                        handlemsgoids= msg.msgbody.boxOIDs //检查过存在
                     }).UpdateColumns(t => new { t.handleresult }).ExecuteCommand();
 
 
@@ -119,6 +119,86 @@ namespace NexChip.SignMessage.Bussiness
                 return interfaceHandlerErrorReturn(ex.Message);
             }
         }
+
+
+        //更新
+        public BizResult<List<SignMessageBox>> PostUpdateNotifySignMsg(SignMessageSendDto msg, string appOID)
+        {
+            //NewOA.Employee emp = NewOA.Employee.GetEmployee("", "cocoge");
+
+
+            try
+            {
+                if (msg == null)
+                {
+                    return interfaceHandlerErrorReturn("接收类型为空，请检查");
+                }
+
+                msg.sendtime = msg.sendtime ?? DateTime.Now;
+
+                var res = this.checkPostUpdateData(msg, appOID);
+                if (!res.Success) return res;
+
+
+                try
+                {
+                    messageboxService.db.BeginTran();
+                    messageboxService.db.Updateable(new SignMessageInterface
+                    {
+                        OID = msg.interfaceOID,
+                        handleresult = 1,
+                        updatetime = DateTime.Now,
+                        handlemsgoids = msg.msgbody.boxOIDs //检查过存在
+                    }).UpdateColumns(t => new { t.handleresult }).ExecuteCommand();
+
+
+                    //messageboxService.db.Updateable(new SignMessageBox
+                    //{
+                    //    updatetime = DateTime.Now,
+                    //    emergencylevel = msg.msgbody.emergencylevel ?? 1,
+                    //    callbackurl = msg.msgbody.callbackurl,
+                    //    msgsourceid = msg.msgbody.msgsourceid
+                    //})
+                    //.WhereColumns(t => new { t.msgsourceid})
+                    //.ExecuteCommand();
+
+                    messageboxService.db.Updateable(new SignMessageBox
+                    {
+                        updatetime = DateTime.Now,
+                        emergencylevel = msg.msgbody.emergencylevel ?? 1,
+                        callbackurl = msg.msgbody.callbackurl
+                    }).Where(t => t.msgsourceid == msg.msgbody.msgsourceid)
+                         .UpdateColumns(t => new
+                         {
+                             t.updatetime,
+                             t.emergencylevel,
+                             t.callbackurl
+                         }).ExecuteCommand();
+
+                    messageboxService.db.CommitTran();
+                    return new BizResult<List<SignMessageBox>>
+                    {
+                        Success = true
+                    };
+                }
+                catch (Exception ex)
+                {
+
+                    messageboxService.db.RollbackTran();
+                    return new BizResult<List<SignMessageBox>>
+                    {
+                        Success = false,
+                        Msg = ex.Message
+                    };
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return interfaceHandlerErrorReturn(ex.Message);
+            }
+        }
+
 
         private List<SignMessageBox> geneInsertSignMessageBox(SignMessageSendDto msg)
         {
@@ -200,7 +280,7 @@ namespace NexChip.SignMessage.Bussiness
                     {
                         OID = msg.interfaceOID,
                         handleresult = 1,
-                        handlemsgoid = getMessageBoxIds(saveEntities),
+                        handlemsgoids = getMessageBoxIds(saveEntities),
                         updatetime =DateTime.Now
                     })
                     .UpdateColumns(t => new { t.handleresult,t.updatetime }).ExecuteCommand();
@@ -253,7 +333,7 @@ namespace NexChip.SignMessage.Bussiness
                     createtime = DateTime.Now,
                     handleresult = handleResult ,
                     handleerrormsg = msg.handleerrormsg ?? "",
-                    handlemsgoid = msg.msgbody.boxOIDs ?? "",
+                    handlemsgoids = msg.msgbody.boxOIDs ?? "",
                     msgbody = msg.msgbody.SerializeModel()
                 };
 

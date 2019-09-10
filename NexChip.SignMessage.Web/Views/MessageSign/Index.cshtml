@@ -225,8 +225,8 @@ ViewBag.AllString,
                 }
                 else { //在其他Panel
                     param.timespan = $('#reportrange span').html() || getDefaultDateSpanStr(); //日期区间(初次加载为默认）)
-                    param.formtype = "@ViewBag.AllString"; //表单类型
-                    param.handlestatus = "@ViewBag.AllString"; //消息状态
+                    param.formtype = '所有'; //表单类型
+                    param.handlestatus = '所有'; //消息状态
                     param.logonid = "@ViewBag.logonid" || null;
                 }
 
@@ -714,6 +714,11 @@ ViewBag.AllString,
                     }
                 }
             });
+        }
+
+        function decodeUnicode(str) {
+            str = str.replace(/\\/g, "%");
+            return unescape(str);
         }
 
         ///Ajax 方式请求WebAPI

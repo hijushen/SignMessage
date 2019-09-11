@@ -68,8 +68,8 @@ namespace NexChip.SignMessage.Bussiness
                     {
                         OID = msg.interfaceOID,
                         handleresult = 1,
-                        updatetime=DateTime.Now,
-                        handlemsgoids= msg.msgbody.boxOIDs //检查过存在
+                        updatetime = DateTime.Now,
+                        handlemsgoids = msg.msgbody.boxOIDs //检查过存在
                     }).UpdateColumns(t => new { t.handleresult }).ExecuteCommand();
 
 
@@ -136,9 +136,15 @@ namespace NexChip.SignMessage.Bussiness
 
                 msg.sendtime = msg.sendtime ?? DateTime.Now;
 
-                var res = this.checkPostUpdateData(msg, appOID);
+                var res = this.checkPostUpdateNotifyData(msg, appOID);
                 if (!res.Success) return res;
 
+                var needUpdateRows = res.Data;
+                foreach (var item in needUpdateRows)
+                {
+                    item.updatetime = DateTime.Now;
+                    item.msghandlestatus = "已完成";
+                }
 
                 try
                 {
@@ -149,31 +155,37 @@ namespace NexChip.SignMessage.Bussiness
                         handleresult = 1,
                         updatetime = DateTime.Now,
                         handlemsgoids = msg.msgbody.boxOIDs //检查过存在
-                    }).UpdateColumns(t => new { t.handleresult }).ExecuteCommand();
+                    }).UpdateColumns(t => new { t.handleresult,t.handlemsgoids }).ExecuteCommand();
 
+                    messageboxService.db.Updateable(needUpdateRows)
+                        .UpdateColumns(t => new { t.updatetime, t.msghandlestatus })
+                        .ExecuteCommand();
+
+                    #region 一样的错误方式
+                    //messageboxService.db.Updateable<SignMessageBox>()
+                    //    .SetColumns(t => new SignMessageBox()
+                    //    {
+                    //        updatetime = DateTime.Now,
+                    //        msghandlestatus = "已完成"
+                    //    })
+                    // .Where("t.OID in (@ids)", new { ids = msg.msgbody.boxOIDs }).ExecuteCommand();
 
                     //messageboxService.db.Updateable(new SignMessageBox
                     //{
                     //    updatetime = DateTime.Now,
-                    //    emergencylevel = msg.msgbody.emergencylevel ?? 1,
-                    //    callbackurl = msg.msgbody.callbackurl,
-                    //    msgsourceid = msg.msgbody.msgsourceid
-                    //})
-                    //.WhereColumns(t => new { t.msgsourceid})
-                    //.ExecuteCommand();
+                    //    //emergencylevel = msg.msgbody.emergencylevel ?? 1,
+                    //    //callbackurl = msg.msgbody.callbackurl,
+                    //    msghandlestatus = "已完成"
+                    //}).Where("t.OID in (@ids)",new {ids = msg.msgbody.boxOIDs })
+                    //     .UpdateColumns(t => new
+                    //     {
+                    //         t.updatetime,
+                    //         t.msghandlestatus
+                    //         //t.emergencylevel,
+                    //         //t.callbackurl
+                    //     }).ExecuteCommand();
+                    #endregion
 
-                    messageboxService.db.Updateable(new SignMessageBox
-                    {
-                        updatetime = DateTime.Now,
-                        emergencylevel = msg.msgbody.emergencylevel ?? 1,
-                        callbackurl = msg.msgbody.callbackurl
-                    }).Where(t => t.msgsourceid == msg.msgbody.msgsourceid)
-                         .UpdateColumns(t => new
-                         {
-                             t.updatetime,
-                             t.emergencylevel,
-                             t.callbackurl
-                         }).ExecuteCommand();
 
                     messageboxService.db.CommitTran();
                     return new BizResult<List<SignMessageBox>>
@@ -228,7 +240,7 @@ namespace NexChip.SignMessage.Bussiness
                 };
 
                 lstSignMessageBox.Add(saveEntity);
-            }            
+            }
 
             return lstSignMessageBox;
         }
@@ -238,7 +250,7 @@ namespace NexChip.SignMessage.Bussiness
             StringBuilder strRet = new StringBuilder();
             foreach (var item in boxEntities)
             {
-                strRet.Append(item);
+                strRet.Append(item.OID);
                 strRet.Append(",");
             }
 
@@ -281,9 +293,9 @@ namespace NexChip.SignMessage.Bussiness
                         OID = msg.interfaceOID,
                         handleresult = 1,
                         handlemsgoids = getMessageBoxIds(saveEntities),
-                        updatetime =DateTime.Now
+                        updatetime = DateTime.Now
                     })
-                    .UpdateColumns(t => new { t.handleresult,t.updatetime }).ExecuteCommand();
+                    .UpdateColumns(t => new { t.handleresult, t.updatetime,t.handlemsgoids }).ExecuteCommand();
 
                     messageboxService.db.CommitTran();
                     return new BizResult<List<SignMessageBox>>
@@ -293,7 +305,7 @@ namespace NexChip.SignMessage.Bussiness
                     };
 
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     messageboxService.db.RollbackTran();
                     return new BizResult<List<SignMessageBox>>
@@ -319,9 +331,9 @@ namespace NexChip.SignMessage.Bussiness
         /// 接受数据接口表信息生成
         /// </summary>
         /// <param name="msg"></param>
-        /// <param name="handleResult">当前状态类型(0待处理， -1处理结果为错误）</param>
+        /// <param name="handleResult">当前状态类型(-1待处理， 0处理结果为错误）</param>
         /// <returns>接口表主键</returns>
-        private void insertMsgInterface(SignMessageSendDto msg, int handleResult = 0)
+        private void insertMsgInterface(SignMessageSendDto msg, int handleResult = -1)
         {
             try
             {
@@ -331,7 +343,7 @@ namespace NexChip.SignMessage.Bussiness
                     appname = msg.appname,
                     sendtime = msg.sendtime ?? DateTime.Now,
                     createtime = DateTime.Now,
-                    handleresult = handleResult ,
+                    handleresult = handleResult,
                     handleerrormsg = msg.handleerrormsg ?? "",
                     handlemsgoids = msg.msgbody.boxOIDs ?? "",
                     msgbody = msg.msgbody.SerializeModel()
@@ -359,7 +371,7 @@ namespace NexChip.SignMessage.Bussiness
             SignMessageInterface face = new SignMessageInterface
             {
                 OID = msg.interfaceOID,
-                handleresult = -1,//msg.handleresult,
+                handleresult = 0,//msg.handleresult,
                 handleerrormsg = msg.handleerrormsg
             };
 
@@ -385,7 +397,7 @@ namespace NexChip.SignMessage.Bussiness
         {
             string appN = "";
             var roleEntity = roleService.sdb.GetSingle<SignMessageRole>(t => t.OID == appOID);
-            if(roleEntity != null)
+            if (roleEntity != null)
             {
                 appN = roleEntity.appname;
             }
@@ -394,11 +406,11 @@ namespace NexChip.SignMessage.Bussiness
             {
                 msg.handleerrormsg = "请检查数据：发送appname不能为空！";
                 msg.appname = string.IsNullOrWhiteSpace(appN) ? appOID : appN;
-                insertMsgInterface(msg, -1); //1. 插入接口表失败记录
+                insertMsgInterface(msg, 0); //1. 插入接口表失败记录
                 return interfaceHandlerErrorReturn(msg.handleerrormsg);
             }
 
-            insertMsgInterface(msg); //1. 插入接口表中，待处理
+            insertMsgInterface(msg, -1); //1. 插入接口表中，待处理
             if (msg.interfaceOID == "")
             {
                 msg.handleerrormsg = "请联系平台,错误信息： 接口表插入异常！";
@@ -409,11 +421,10 @@ namespace NexChip.SignMessage.Bussiness
             var chkrole = this.checkRoleInfo(msg, roleEntity);
             if (!chkrole.Success) return chkrole;
 
-
             //3. 检查本身内容完整性
-            var chkMsgBody = this.checkMsgInfo(msg);            
+            var chkMsgBody = this.checkMsgInfo(msg);
             return chkMsgBody;
-            
+
         }
         private BizResult<List<SignMessageBox>> checkPostAddData(SignMessageSendDto msg, string appOID)
         {
@@ -424,7 +435,7 @@ namespace NexChip.SignMessage.Bussiness
         }
 
         /// <summary>
-        /// 检查更新消息完整性
+        /// 检查更新类消息完整性
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="appOID"></param>
@@ -435,20 +446,8 @@ namespace NexChip.SignMessage.Bussiness
             var chkComm = this.checkCommonData(msg, appOID);
             if (!chkComm.Success) return chkComm;
 
-            //if(string.IsNullOrEmpty(msg.msgbody.msgsourceid))
-            //{
-            //    msg.handleerrormsg = "更新需要原系统标识id";
-            //    updateMsgInterfaceErrorHandle(msg);
-
-            //    return new BizResult<List<SignMessageBox>>
-            //    {
-            //        Success = false,
-            //        Msg = msg.handleerrormsg
-            //    };
-            //}
-
             var existEntities = messageboxService.sdb.GetList<SignMessageBox>(t => t.msgsourceid == msg.msgbody.msgsourceid);
-            if(existEntities.Count == 0)
+            if (existEntities.Count == 0)
             {
                 msg.handleerrormsg = "提供msgsourceid找不到对应消息，请检查";
                 updateMsgInterfaceErrorHandle(msg);
@@ -468,6 +467,47 @@ namespace NexChip.SignMessage.Bussiness
             return new BizResult<List<SignMessageBox>>
             {
                 Success = true
+            };
+        }
+
+
+        /// <summary>
+        /// 检查更新通知类消息完整性
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="appOID"></param>
+        /// <returns></returns>
+        private BizResult<List<SignMessageBox>> checkPostUpdateNotifyData(SignMessageSendDto msg, string appOID)
+        {
+
+            var chkComm = this.checkCommonData(msg, appOID);
+            if (!chkComm.Success) return chkComm;
+
+            List<SignMessageBox> existEntities = new List<SignMessageBox>();
+            existEntities = messageboxService.db.Queryable<SignMessageBox>("t")
+                .Where(t => t.appname == msg.appname && t.createtime <= msg.sendtime)
+                .Where("t.toempid in (@ids)", new { ids = msg.msgbody.toids }).ToList();
+
+            if (existEntities.Count == 0)
+            {
+                msg.handleerrormsg = "无需要更新消息";
+                updateMsgInterfaceErrorHandle(msg);
+                return new BizResult<List<SignMessageBox>>
+                {
+                    Success = false,
+                    Msg = msg.handleerrormsg
+                };
+
+            }
+            else
+            {
+                msg.msgbody.boxOIDs = getMessageBoxIds(existEntities);
+            }
+
+            return new BizResult<List<SignMessageBox>>
+            {
+                Success = true,
+                Data = existEntities
             };
         }
 
@@ -500,9 +540,9 @@ namespace NexChip.SignMessage.Bussiness
                 errMsg.Append("tonames 不能为空;");
             }
 
-            if(!string.IsNullOrWhiteSpace(msgbody.toids) && !string.IsNullOrWhiteSpace(msgbody.tonames))
+            if (!string.IsNullOrWhiteSpace(msgbody.toids) && !string.IsNullOrWhiteSpace(msgbody.tonames))
             {
-                if(msgbody.toids.Split(",").Length != msgbody.tonames.Split(",").Length)
+                if (msgbody.toids.Split(",").Length != msgbody.tonames.Split(",").Length)
                 {
                     errMsg.Append("toids 和 tonames 数量不符");
                 }

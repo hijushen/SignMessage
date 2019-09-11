@@ -332,10 +332,10 @@
         ///tab切换
         $('#tabs').tabs({
             onSelect: function (title) {
-                updataTabContent();
+                //updataTabContent();
                 //alert(title);
                 if (title == '测试Brog签核箱') {
-                    setTimeout(setFrameStyle, 1000);
+                    setTimeout(setFrameStyle, 500);
                     //setFrameStyle();
                 } else {
                 }
@@ -551,7 +551,7 @@
         //addTab("测试Brog签核箱", testUrl, "iframetestBorG");
         addTab("BroG 签核箱", testLocalUrl, "iframelocalBorG");
         addTab('@ViewBag.NoBroGTitle' +
-            '<span id="newmessage" class="m-badge">New</span>', newSignMessage, "iframeNewSignMessage");
+            '<span id="newmessage" class="m-badge" style="dispaly:none">New</span>', newSignMessage, "iframeNewSignMessage");
 
 
         setTimeout(function () {

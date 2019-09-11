@@ -411,7 +411,7 @@ ViewBag.AllString,
                     }, {
                         "title": "主旨", "data": "substance", "orderable": false
                     }, {
-                        "title": "操作", width: "10%",
+                        "title": "操作", width: "5%",
                         "data": null,
                         "orderable": false,
                         "render": function (data, type, full, meta) {
@@ -612,7 +612,7 @@ ViewBag.AllString,
                // + "\",1)'<i class='fa fa-edit'></i>测试-更新</button>"
                // + "<button class='btn btn-warning btn-xs' href='javascript:;' onclick='testsend(\"" + item.oid
                 //+ "\",2)'<i class='fa fa-edit'></i>测试-新增</button>"
-                + "<button class='btn btn-success btn-xs' href='javascript:;' onclick='testsendAjax(this)'<i class='fa fa-edit'></i>AJAX更新</button>"
+                //+ "<button class='btn btn-success btn-xs' href='javascript:;' onclick='testsendAjax(this)'<i class='fa fa-edit'></i>AJAX更新</button>"
         }
 
 
@@ -742,9 +742,9 @@ ViewBag.AllString,
             $.ajax({
                     type: "POST",
                     contentType: "application/json;charset=utf-8",
-                url: "@ViewBag.WebAPIBaseUrl" + "/SignMessage/UpdateSignMsg", //NewSignMsg UpdateSignMsg
+                url: "@ViewBag.WebAPIBaseUrl" + "/SignMessage/UpdateNotifySignMsg", //NewSignMsg UpdateSignMsg UpdateNotifySignMsg
                     data: postData,
-                    crossDomain: true,
+                    //crossDomain: true,
                     dataType: "json",
                     //xhrFields: {
                     //    withCredentials:true

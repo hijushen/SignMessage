@@ -94,7 +94,7 @@
         </member>
         <member name="M:NexChip.SignMessage.API.Controllers.SignMessage.SignMessageController.PostUpdateNotifySignMsg(NexChip.SignMessage.Bussiness.SignMessageSendDto)">
             <summary>
-            更新签核箱消息--通知类完成消息（调用后相应人员之前通知消息状态为过期）
+            更新签核箱消息--通知类完成消息（调用后相应人员之前通知消息状态为已处理）
             </summary>
             <param name="value"></param>
             <returns></returns>

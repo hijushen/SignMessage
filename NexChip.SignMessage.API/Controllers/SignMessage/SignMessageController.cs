@@ -33,6 +33,8 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
         [Authorize(Policy = "Client")]
         public JsonResult PostNewSignMsg([FromBody]SignMessageSendDto value)
         {
+            if (value == null) return null;
+
             var appOID = User.Identity.Name;
             return Json(bll.PostNewSignMsg(value, appOID));
 
@@ -49,6 +51,7 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
         [Authorize(Policy="Client")]
         public JsonResult PostUpdateSignMsg([FromBody]SignMessageSendDto value)
         {
+            if (value == null) return null;
 
             //LogHelper.Debug(Request.ToString());
             var appOID = User.Identity.Name;
@@ -58,7 +61,7 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
 
 
         /// <summary>
-        /// 更新签核箱消息--通知类完成消息（调用后相应人员之前通知消息状态为过期）
+        /// 更新签核箱消息--通知类完成消息（调用后相应人员之前通知消息状态为已处理）
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -67,6 +70,7 @@ namespace NexChip.SignMessage.API.Controllers.SignMessage
         [Authorize(Policy = "Client")]
         public JsonResult PostUpdateNotifySignMsg([FromBody]SignMessageSendDto value)
         {
+            if (value == null) return null;
 
             //LogHelper.Debug(Request.ToString());
             var appOID = User.Identity.Name;

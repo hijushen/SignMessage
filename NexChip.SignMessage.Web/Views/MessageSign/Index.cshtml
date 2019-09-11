@@ -422,14 +422,15 @@ ViewBag.AllString,
                     {
                         "title": "收到日期", width: "10%", "data": "createtime", "orderable": false, "text-align": "center",
                         render: function (data, type, row, meta) {
-                            return new Date(Date.parse(data)).Format("yyyy-MM-dd hh:mm")
+                            return data.substr(0, 10) + " " + data.substr(11, 8)
+                            //return new Date(Date.parse(data)).Format("yyyy-MM-dd hh:mm")
                             //return (new Date(data)).Format("yyyy-MM-dd");
                             //debugger;
                         }
                     }, {
                         "title": "寄件人", width: "10%", "data": "fromempname", "orderable": false
                     }, {
-                        "title": "AppName", width: "15%", "data": "appname", "orderable": false,
+                        "title": "应用系统名称", width: "15%", "data": "appnamechs", "orderable": false,
                     }, {
                         "title": "主旨", "data": "substance", "orderable": false
                     }, {

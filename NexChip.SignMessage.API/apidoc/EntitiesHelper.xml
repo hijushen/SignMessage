@@ -23,6 +23,11 @@
             Nullable:False
             </summary>           
         </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageBox.appnamechs">
+            <summary>
+            中文名称列
+            </summary>
+        </member>
         <member name="P:NexChip.SignMessage.Entities.SignMessageBox.msgsourceid">
             <summary>
             Desc:

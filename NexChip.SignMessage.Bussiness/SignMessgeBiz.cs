@@ -71,7 +71,7 @@ namespace NexChip.SignMessage.Bussiness
                         handleresult = 1,
                         updatetime = DateTime.Now,
                         handlemsgoids = msg.msgbody.boxOIDs //检查过存在
-                    }).UpdateColumns(t => new { t.handleresult }).ExecuteCommand();
+                    }).UpdateColumns(t => new { t.handleresult, t.handlemsgoids, t.updatetime }).ExecuteCommand();
 
 
                     //messageboxService.db.Updateable(new SignMessageBox
@@ -95,7 +95,8 @@ namespace NexChip.SignMessage.Bussiness
                          {
                              t.updatetime,
                              t.emergencylevel,
-                             t.callbackurl
+                             t.callbackurl,
+                             t.msghandlestatus
                          }).ExecuteCommand();
 
                     messageboxService.db.CommitTran();
@@ -157,7 +158,7 @@ namespace NexChip.SignMessage.Bussiness
                         handleresult = 1,
                         updatetime = DateTime.Now,
                         handlemsgoids = msg.msgbody.boxOIDs //检查过存在
-                    }).UpdateColumns(t => new { t.handleresult,t.handlemsgoids }).ExecuteCommand();
+                    }).UpdateColumns(t => new { t.handleresult, t.handlemsgoids }).ExecuteCommand();
 
                     messageboxService.db.Updateable(needUpdateRows)
                         .UpdateColumns(t => new { t.updatetime, t.msghandlestatus })
@@ -238,7 +239,7 @@ namespace NexChip.SignMessage.Bussiness
                     showmsg = msg.msgbody.showmsg,
                     createtime = DateTime.Now,
                     msgstatus = 0, //未读
-                    msghandlestatus= HandleStatusString.Undo,
+                    msghandlestatus = HandleStatusString.Undo,
                     emergencylevel = msg.msgbody.emergencylevel ?? 1
                 };
 
@@ -299,7 +300,7 @@ namespace NexChip.SignMessage.Bussiness
                         handlemsgoids = getMessageBoxIds(saveEntities),
                         updatetime = DateTime.Now
                     })
-                    .UpdateColumns(t => new { t.handleresult, t.updatetime,t.handlemsgoids }).ExecuteCommand();
+                    .UpdateColumns(t => new { t.handleresult, t.updatetime, t.handlemsgoids }).ExecuteCommand();
 
                     messageboxService.db.CommitTran();
                     return new BizResult<List<SignMessageBox>>
@@ -388,7 +389,7 @@ namespace NexChip.SignMessage.Bussiness
                 Console.WriteLine("updateMsgInterface Exception: " + ex.Message);
             }
         }
-        
+
 
         #region 相关验证工作
 
@@ -436,7 +437,7 @@ namespace NexChip.SignMessage.Bussiness
 
             var chkComm = this.checkCommonData(msg, appOID);
 
-            
+
             if (msg.msgbody.handletype != (int)HandleTypeEnum.Add)
             {
                 msg.handleerrormsg = "检查数据。消息处理类型错误";
@@ -481,7 +482,7 @@ namespace NexChip.SignMessage.Bussiness
             }
 
             var types = new int[] { (int)HandleTypeEnum.Completed, (int)HandleTypeEnum.Del };
-            if(Array.IndexOf(types, msg.msgbody.handletype) == -1)
+            if (Array.IndexOf(types, msg.msgbody.handletype) == -1)
             {
                 msg.handleerrormsg = "检查数据。消息处理类型错误";
                 updateMsgInterfaceErrorHandle(msg);

@@ -54,19 +54,22 @@ namespace NexChip.SignMessage.Services
 
             var status = msgStatus == "未读" ? 0 : 1;
 
-            var queryable = db.Queryable<SignMessageBox>("s")
+            var queryable = db.Queryable<SignMessageBox, SignMessageRole>(
+                (s, sc) => new JoinQueryInfos(JoinType.Inner, s.appname == sc.appname))
                 .Where(s => s.toempid == toempid)
                 .Where(s => s.sendtime >= startD && s.sendtime < endD.AddDays(1))
                 .Where(s => s.msghandlestatus == msgHandleStatus)
                 .WhereIF(formType != SettingConfig.AllString, s => s.appname == formType)
                 .WhereIF(msgStatus!= SettingConfig.AllString, s=> s.msgstatus == status)
-                .OrderBy(s=>s.createtime,OrderByType.Desc);  
+                .OrderBy(s=>s.createtime,OrderByType.Desc)
+                .Select("s.*, sc.appnamechs");
 
+            var tttt = queryable.ToSql();
             //queryable.Where("t.msghandlestatus in (@status)", new { status = builderHanderStatus(handleStatus) });
 
             var data = queryable.ToPageList(pageIndex, pageSize, ref totalCount);
 
-            var existedUnreadCount = queryable.Where(s => s.msgstatus == 0).Count();
+            var existedUnreadCount = queryable.Where(s => s.msgstatus == 0 && s.msghandlestatus== "未完成").Count();
 
             var t = new BizListResult<SignMessageBox>
             {

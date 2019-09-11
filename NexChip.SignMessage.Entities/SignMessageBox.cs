@@ -26,6 +26,12 @@ namespace NexChip.SignMessage.Entities
            /// </summary>           
            public string appname {get;set;}
 
+            /// <summary>
+            /// 中文名称列
+            /// </summary>
+            [SugarColumn(IsIgnore = true)]
+            public string appnamechs { get; set; }
+
            /// <summary>
            /// Desc:
            /// Default:

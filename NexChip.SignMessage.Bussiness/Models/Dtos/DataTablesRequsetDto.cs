@@ -29,6 +29,11 @@ namespace NexChip.SignMessage.Bussiness.Models.Dtos
         /// <summary>
         /// 处理状况
         /// </summary>
-        public string handlestatus { get; set; }
+        public string msgstatus { get; set; }
+
+        /// <summary>
+        /// 消息处理状况
+        /// </summary>
+        public string msghandlestatus { get; set; }
     }
 }

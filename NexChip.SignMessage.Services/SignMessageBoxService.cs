@@ -31,7 +31,7 @@ namespace NexChip.SignMessage.Services
         }
 
         public BizListResult<SignMessageBox> GetPageList(int pageIndex , int pageSize, string toempid
-            ,DateTime startD, DateTime endD, string formType, string handleStatus)
+            ,DateTime startD, DateTime endD, string formType, string msgStatus,string msgHandleStatus)
         {
             
             int totalCount = 0;
@@ -52,13 +52,14 @@ namespace NexChip.SignMessage.Services
             //    .ToExpression();
             //var data = sdb.GetPageList(exp, p);
 
-            var status = handleStatus == "未读" ? 0 : 1;
+            var status = msgStatus == "未读" ? 0 : 1;
 
             var queryable = db.Queryable<SignMessageBox>("s")
                 .Where(s => s.toempid == toempid)
                 .Where(s => s.sendtime >= startD && s.sendtime < endD.AddDays(1))
+                .Where(s => s.msghandlestatus == msgHandleStatus)
                 .WhereIF(formType != SettingConfig.AllString, s => s.appname == formType)
-                .WhereIF(handleStatus!= SettingConfig.AllString, s=> s.msgstatus == status)
+                .WhereIF(msgStatus!= SettingConfig.AllString, s=> s.msgstatus == status)
                 .OrderBy(s=>s.createtime,OrderByType.Desc);  
 
             //queryable.Where("t.msghandlestatus in (@status)", new { status = builderHanderStatus(handleStatus) });
@@ -85,15 +86,15 @@ namespace NexChip.SignMessage.Services
         /// <param name="startD"></param>
         /// <param name="endD"></param>
         /// <returns></returns>
-        public BizResult<SignMessageBox> GetUnReadCount(string toempid, DateTime startD, DateTime endD, string formType, string handleStatus)
+        public BizResult<SignMessageBox> GetUnReadCount(string toempid, DateTime startD, DateTime endD, string formType, string msgstatus)
         {
-            var status = handleStatus == "未读" ? 0 : 1;
+            var status = msgstatus == "未读" ? 0 : 1;
 
             var count = db.Queryable<SignMessageBox>("s")
                 .Where(s => s.toempid == toempid)
                 .Where(s => s.sendtime >= startD && s.sendtime < endD.AddDays(1))
                 .WhereIF(formType != SettingConfig.AllString, s => s.appname == formType)
-                .WhereIF(handleStatus != SettingConfig.AllString, s => s.msgstatus == status)
+                .Where(s => s.msghandlestatus == "未处理")
                .Where(s => s.msgstatus == 0).Count();
 
 

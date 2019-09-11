@@ -15,7 +15,7 @@
     //};
 
 
-    ViewBag.handleStatus = new List<string>()
+    ViewBag.msgStatus = new List<string>()
 {
 ViewBag.AllString,
 "未读",
@@ -28,6 +28,13 @@ ViewBag.AllString,
 //"暂存",
 //"职代处理通知"
 };
+
+    ViewBag.msgHandleStatus = new List<string>()
+    {
+        "未完成或未更新",
+        "已完成"
+    };
+
 }
 
 @section styles  {
@@ -40,12 +47,9 @@ ViewBag.AllString,
             color: green;
         }
 
-        #select2-formTypeSelect-container {
-            color: green;
-        }
-
-        #select2-handleStatusSelect-container {
-            color: green;
+        /* 选择内容颜色*/
+        .select2-container span {
+            color:green;
         }
 
         h5 {
@@ -98,16 +102,14 @@ ViewBag.AllString,
 
 }
 
-<div class="easyui-layout" data-options="fit:true">
+<div class="easyui-layout" data-options="fit:true" >
 
-    <div data-options="region:'north',title:'North Title',split:false,collapse:false" style="height:100px;border:1px solid black;overflow:hidden"
-         title="查询区域">
+    <div data-options="region:'north',title:'查询区域'" style="height:100px;border:1px solid black;overflow:hidden">
         <div style="padding:5px 10px 5px 10px" class="queryzone">
-
             <table id="queryZone">
                 <tr>
                     <td>
-                        <span>日期区间： </span>
+                        <span>日期区间：</span>
                     </td>
                     <td>
                         <div id="reportrange"
@@ -117,7 +119,7 @@ ViewBag.AllString,
                         </div>
                     </td>
                     <td>
-                        <span>表单类型： </span>
+                        <span>表单类型：</span>
                     </td>
                     <td>
                         <select id="formTypeSelect">
@@ -128,17 +130,28 @@ ViewBag.AllString,
                         </select>
                     </td>
                     <td>
-                        <sapn>处理状况： </sapn>
+                        <sapn>处理状况：</sapn>
                     </td>
                     <td>
-                        <select id="handleStatusSelect">
-                            @foreach (var y in ViewBag.handleStatus)
+                        <select id="msgStatusSelect">
+                            @foreach (var y in ViewBag.msgStatus)
                             {
                                 <option>@y</option>
                             }
                         </select>
                     </td>
 
+                    <td>
+                        <sapn>消息时效：</sapn>
+                    </td>
+                    <td>
+                        <select id="msgHandleStatusSelect">
+                            @foreach (var y in ViewBag.msgHandleStatus)
+                            {
+                                <option>@y</option>
+                            }
+                        </select>
+                    </td>
                     <td>
                         <button type="button" style="margin-left: 50px; width:80px" id="btn-query" class="btn btn-primary">查询</button>
                     </td>
@@ -185,8 +198,14 @@ ViewBag.AllString,
                 language: "zh-CN"
             });
 
-            $("#handleStatusSelect").select2({
+            $("#msgStatusSelect").select2({
                 width: "80px",
+                language: "zh-CN",
+                minimumResultsForSearch: Infinity
+            });
+
+            $("#msgHandleStatusSelect").select2({
+                width: "130px",
                 language: "zh-CN",
                 minimumResultsForSearch: Infinity
             });
@@ -220,13 +239,15 @@ ViewBag.AllString,
                 if (curIsNewSignPanel) {
                     param.timespan = $('#reportrange span').html() || getDefaultDateSpanStr(); //日期区间(初次加载为默认）)
                     param.formtype = $('#formTypeSelect').val(); //表单类型
-                    param.handlestatus = $('#handleStatusSelect').val(); //消息状态
+                    param.msgstatus = $('#msgStatusSelect').val(); //消息状态
+                    //param.msghandlestatus = ; //消息更新状态
                     param.logonid = "@ViewBag.logonid" || null;
                 }
                 else { //在其他Panel
                     param.timespan = $('#reportrange span').html() || getDefaultDateSpanStr(); //日期区间(初次加载为默认）)
                     param.formtype = '所有'; //表单类型
-                    param.handlestatus = '所有'; //消息状态
+                    param.msgstatus = '所有'; //消息状态
+                    //param.msghandlestatus = '未处理'; //消息更新状态
                     param.logonid = "@ViewBag.logonid" || null;
                 }
 
@@ -401,7 +422,8 @@ ViewBag.AllString,
                     {
                         "title": "收到日期", width: "10%", "data": "createtime", "orderable": false, "text-align": "center",
                         render: function (data, type, row, meta) {
-                            return (new Date(data)).Format("yyyy-MM-dd");
+                            return new Date(Date.parse(data)).Format("yyyy-MM-dd hh:mm")
+                            //return (new Date(data)).Format("yyyy-MM-dd");
                             //debugger;
                         }
                     }, {
@@ -446,7 +468,9 @@ ViewBag.AllString,
                     param.start = data.start; //开始的记录序号
                     param.timespan = $('#reportrange span').html() || getDefaultDateSpanStr(); //日期区间(初次加载为默认）)
                     param.formtype = $('#formTypeSelect').val(); //表单类型
-                    param.handlestatus = $('#handleStatusSelect').val(); //消息状态
+                    param.msgstatus = $('#msgStatusSelect').val(); //消息状态
+                    param.msghandlestatus = $('#msgHandleStatusSelect').val().substr(0,3); //消息更新状态
+
                     param.logonid = "@ViewBag.logonid" || null;
 
                     //param.page = (data.start / data.length) + 1; //当前页码
@@ -733,7 +757,7 @@ ViewBag.AllString,
 
             var value = {
                 'appname': rowData.appname,
-                'sendtime': moment().format('YYYY-MM-DDTHH:SS:DD'),
+                'sendtime': moment().format('YYYY-MM-DDTHH:mm:ss'),
                 'msgbody': rowData
             };
 

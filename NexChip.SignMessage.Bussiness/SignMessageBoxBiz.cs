@@ -111,7 +111,7 @@ namespace NexChip.SignMessage.Bussiness
             var endD = new DateTime(timeSpan[3].ObjToInt(), timeSpan[4].ObjToInt(), timeSpan[5].ObjToInt());
 
 
-            var res = Service.GetPageList(pageIndex, limit, toempid, startD, endD, formtype, reqP.handlestatus);
+            var res = Service.GetPageList(pageIndex, limit, toempid, startD, endD, formtype, reqP.msgstatus, reqP.msghandlestatus);
             return new BizListResultForDataTables<SignMessageBox>
             {
                 data = res.Rows,
@@ -150,7 +150,7 @@ namespace NexChip.SignMessage.Bussiness
                 formtype = roleService.getAppNameByChs(reqP.formtype);
             }
 
-            return Service.GetUnReadCount(toempid, startD, endD, formtype, reqP.handlestatus);
+            return Service.GetUnReadCount(toempid, startD, endD, formtype, reqP.msgstatus);
         }
 
 

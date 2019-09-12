@@ -140,7 +140,10 @@ namespace NexChip.SignMessage.Bussiness
                 msg.sendtime = msg.sendtime ?? DateTime.Now;
 
                 var res = this.checkPostUpdateNotifyData(msg, appOID);
-                if (!res.Success) return res;
+                if (!res.Success)
+                {
+                    return res;
+                }
 
                 var needUpdateRows = res.Data;
                 foreach (var item in needUpdateRows)
@@ -158,7 +161,7 @@ namespace NexChip.SignMessage.Bussiness
                         handleresult = 1,
                         updatetime = DateTime.Now,
                         handlemsgoids = msg.msgbody.boxOIDs //检查过存在
-                    }).UpdateColumns(t => new { t.handleresult, t.handlemsgoids }).ExecuteCommand();
+                    }).UpdateColumns(t => new { t.handleresult,t.updatetime, t.handlemsgoids }).ExecuteCommand();
 
                     messageboxService.db.Updateable(needUpdateRows)
                         .UpdateColumns(t => new { t.updatetime, t.msghandlestatus })
@@ -258,7 +261,11 @@ namespace NexChip.SignMessage.Bussiness
                 strRet.Append(",");
             }
             var str = strRet.ToString().Substring(0, strRet.Length - 1);
-            str = str.Substring(0, 4000); //防止超过数据库长度，超过4000日志不记录.
+
+            if (str.Length > 4000)
+            {
+                str = str.Substring(0, 4000); //防止超过数据库长度，超过4000日志不记录.
+            }
             return str;
         }
 
@@ -378,11 +385,12 @@ namespace NexChip.SignMessage.Bussiness
                 OID = msg.interfaceOID,
                 handleresult = 0,//msg.handleresult,
                 handleerrormsg = msg.handleerrormsg
+                ,updatetime = DateTime.Now
             };
 
             try
             {
-                interfaceService.UpdateOnlyColumn(face, t => new { t.handleresult, t.handleerrormsg });
+                interfaceService.UpdateOnlyColumn(face, t => new { t.handleresult, t.handleerrormsg,t.updatetime });
             }
             catch (Exception ex)
             {
@@ -500,6 +508,20 @@ namespace NexChip.SignMessage.Bussiness
             };
         }
 
+        private string buildSperateIds(string ids)
+        {
+            StringBuilder sb = new StringBuilder();
+            string[] strids = ids.Split(",");
+
+            foreach (var item in strids)
+            {
+                sb.Append("'");
+                sb.Append(item);
+                sb.Append("',");
+            }
+
+            return sb.ToString().Substring(0, sb.Length - 1);
+        }
 
         /// <summary>
         /// 检查更新通知类消息完整性
@@ -513,10 +535,16 @@ namespace NexChip.SignMessage.Bussiness
             var chkComm = this.checkCommonData(msg, appOID);
             if (!chkComm.Success) return chkComm;
 
+            List<string> lstId = new List<string>(msg.msgbody.toids.Split(","));
+
             List<SignMessageBox> existMsgBoxEntities = new List<SignMessageBox>();
             existMsgBoxEntities = messageboxService.db.Queryable<SignMessageBox>("t")
                 .Where(t => t.appname == msg.appname && t.createtime <= msg.sendtime)
-                .Where("t.toempid in (@ids)", new { ids = msg.msgbody.toids }).ToList();
+                .Where(t => t.msghandlestatus == HandleStatusString.Undo)
+                .Where(t => lstId.Contains(t.toempid))
+                //.Where("t.toempid in (@ids)", new { ids = buildSperateIds(msg.msgbody.toids) })
+                .ToList();
+
 
             if (existMsgBoxEntities.Count == 0)
             {

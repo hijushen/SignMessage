@@ -420,7 +420,7 @@ ViewBag.AllString,
                 //对应列表表头字段
                 columns: [
                     {
-                        "title": "收到日期", width: "10%", "data": "createtime", "orderable": false, "text-align": "center",
+                        "title": "收到日期", width: "15%", "data": "createtime", "orderable": false, "text-align": "center",
                         render: function (data, type, row, meta) {
                             return data.substr(0, 10) + " " + data.substr(11, 8)
                             //return new Date(Date.parse(data)).Format("yyyy-MM-dd hh:mm")

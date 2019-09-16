@@ -58,18 +58,19 @@ namespace NexChip.SignMessage.Services
                 (s, sc) => new JoinQueryInfos(JoinType.Inner, s.appname == sc.appname))
                 .Where(s => s.toempid == toempid)
                 .Where(s => s.sendtime >= startD && s.sendtime < endD.AddDays(1))
-                .Where(s => s.msghandlestatus == msgHandleStatus)
+                //.Where(s => s.msghandlestatus == msgHandleStatus)
                 .WhereIF(formType != SettingConfig.AllString, s => s.appname == formType)
                 .WhereIF(msgStatus!= SettingConfig.AllString, s=> s.msgstatus == status)
                 .OrderBy(s=>s.createtime,OrderByType.Desc)
                 .Select("s.*, sc.appnamechs");
 
-            var tttt = queryable.ToSql();
+            //var tttt = queryable.ToSql();
             //queryable.Where("t.msghandlestatus in (@status)", new { status = builderHanderStatus(handleStatus) });
 
-            var data = queryable.ToPageList(pageIndex, pageSize, ref totalCount);
+            var data = queryable.Clone().Where(s => s.msghandlestatus == msgHandleStatus)
+                .ToPageList(pageIndex, pageSize, ref totalCount);
 
-            var existedUnreadCount = queryable.Where(s => s.msgstatus == 0 && s.msghandlestatus== "未完成").Count();
+            var existedUnreadCount = queryable.Clone().Where(s => s.msgstatus == 0 && s.msghandlestatus== "未完成").Count();
 
             var t = new BizListResult<SignMessageBox>
             {
@@ -89,16 +90,16 @@ namespace NexChip.SignMessage.Services
         /// <param name="startD"></param>
         /// <param name="endD"></param>
         /// <returns></returns>
-        public BizResult<SignMessageBox> GetUnReadCount(string toempid, DateTime startD, DateTime endD, string formType, string msgstatus)
+        public BizResult<SignMessageBox> GetUnReadCount(string toempid, DateTime startD, DateTime endD, string formType, string msghandlestatus, int msgstatus)
         {
-            var status = msgstatus == "未读" ? 0 : 1;
+            //var status = msgstatus == "未读" ? 0 : 1;
 
             var count = db.Queryable<SignMessageBox>("s")
                 .Where(s => s.toempid == toempid)
                 .Where(s => s.sendtime >= startD && s.sendtime < endD.AddDays(1))
                 .WhereIF(formType != SettingConfig.AllString, s => s.appname == formType)
-                .Where(s => s.msghandlestatus == "未处理")
-               .Where(s => s.msgstatus == 0).Count();
+                .Where(s => s.msghandlestatus == msghandlestatus)
+               .Where(s => s.msgstatus == msgstatus).Count();
 
 
             return new BizResult<SignMessageBox>

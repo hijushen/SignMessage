@@ -241,9 +241,9 @@ namespace NexChip.SignMessage.Bussiness
                     substance = msg.msgbody.substance,
                     showmsg = msg.msgbody.showmsg,
                     createtime = DateTime.Now,
-                    msgstatus = 0, //未读
+                    msgstatus = (int)ReadStatusEnum.UnRead,
                     msghandlestatus = HandleStatusString.Undo,
-                    emergencylevel = msg.msgbody.emergencylevel ?? 1
+                    emergencylevel = msg.msgbody.emergencylevel ??(int) EmergencyLevelEnum.Normal
                 };
 
                 lstSignMessageBox.Add(saveEntity);
@@ -508,20 +508,20 @@ namespace NexChip.SignMessage.Bussiness
             };
         }
 
-        private string buildSperateIds(string ids)
-        {
-            StringBuilder sb = new StringBuilder();
-            string[] strids = ids.Split(",");
+        //private string buildSperateIds(string ids)
+        //{
+        //    StringBuilder sb = new StringBuilder();
+        //    string[] strids = ids.Split(",");
 
-            foreach (var item in strids)
-            {
-                sb.Append("'");
-                sb.Append(item);
-                sb.Append("',");
-            }
+        //    foreach (var item in strids)
+        //    {
+        //        sb.Append("'");
+        //        sb.Append(item);
+        //        sb.Append("',");
+        //    }
 
-            return sb.ToString().Substring(0, sb.Length - 1);
-        }
+        //    return sb.ToString().Substring(0, sb.Length - 1);
+        //}
 
         /// <summary>
         /// 检查更新通知类消息完整性

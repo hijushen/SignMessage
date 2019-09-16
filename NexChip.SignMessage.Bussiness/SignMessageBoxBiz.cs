@@ -1,4 +1,5 @@
 ﻿
+using NexChip.SignMessage.Bussiness.Enum;
 using NexChip.SignMessage.Bussiness.Models;
 using NexChip.SignMessage.Bussiness.Models.Dtos;
 using NexChip.SignMessage.Entities;
@@ -150,7 +151,7 @@ namespace NexChip.SignMessage.Bussiness
                 formtype = roleService.getAppNameByChs(reqP.formtype);
             }
 
-            return Service.GetUnReadCount(toempid, startD, endD, formtype, reqP.msgstatus);
+            return Service.GetUnReadCount(toempid, startD, endD, formtype, HandleStatusString.Undo,(int)ReadStatusEnum.UnRead);
         }
 
 

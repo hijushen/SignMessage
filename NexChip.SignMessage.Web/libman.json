@@ -52,6 +52,10 @@
     {
       "library": "select2@3.5.3",
       "destination": "wwwroot/lib/select2/"
+    },
+    {
+      "library": "css3pie@2.0beta1",
+      "destination": "wwwroot/js/css3pie/"
     }
   ]
 }

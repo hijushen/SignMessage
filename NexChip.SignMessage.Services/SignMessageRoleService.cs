@@ -63,7 +63,7 @@ WHERE email = @email;", new SugarParameter("@email", email));
 
         public List<string> GetDistinctFormNames()
         {
-            return db.Queryable<SignMessageRole>().Select(p => p.appnamechs).Distinct().ToList();
+            return db.Queryable<SignMessageRole>().Where(p => p.isshow == 1).Select(p => p.appnamechs).Distinct().ToList();
         }
 
         public string getAppNameByChs(string appNamechs)

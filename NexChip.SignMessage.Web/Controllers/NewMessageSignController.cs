@@ -16,46 +16,46 @@ namespace NexChip.SignMessage.Web.Controllers
         public SignMessageBoxBiz boxBiz = new SignMessageBoxBiz();
 
         ///GET: /<controller>/
-        public IActionResult Index()
-        {
-            return null;
-            return View();
-        }
+        //public IActionResult Index()
+        //{
+        //    return null;
+        //    return View();
+        //}
 
-        [HttpPost]
-        public JsonResult DataTableList(DataTablesRequsetDto reqP)
-        {
-            var userName = LoginUserHelper.GetLoginUserName(reqP.logonid, User.Identity.Name);
+        //[HttpPost]
+        //public JsonResult DataTableList(DataTablesRequsetDto reqP)
+        //{
+        //    var userName = LoginUserHelper.GetLoginUserName(reqP.logonid, User.Identity.Name);
 
-            var res = boxBiz.ListForDataTables(reqP, userName);
-            return Json(res);
-        }
+        //    var res = boxBiz.ListForDataTables(reqP, userName);
+        //    return Json(res);
+        //}
 
-        public JsonResult GetS(string OID)
-        {
-            return Json(boxBiz.Get(OID));
-        }
+        //public JsonResult GetS(string OID)
+        //{
+        //    return Json(boxBiz.Get(OID));
+        //}
 
-        /// <summary>
-        /// 编辑保存
-        /// </summary>
-        /// <param name = "dto" ></ param >
-        /// < returns ></ returns >
-        [HttpPost]
-        public JsonResult EditSave([FromForm]SignMessageRoleDto dto)
-        {
-            return Json(boxBiz.EditSave(dto));
-        }
+        ///// <summary>
+        ///// 编辑保存
+        ///// </summary>
+        ///// <param name = "dto" ></ param >
+        ///// < returns ></ returns >
+        //[HttpPost]
+        //public JsonResult EditSave([FromForm]SignMessageRoleDto dto)
+        //{
+        //    return Json(boxBiz.EditSave(dto));
+        //}
 
 
-        public JsonResult Delete(string[] OIDs)
-        {
-            return Json(boxBiz.Delete(OIDs));
-        }
+        //public JsonResult Delete(string[] OIDs)
+        //{
+        //    return Json(boxBiz.Delete(OIDs));
+        //}
 
-        public JsonResult testSend(string OID, int type)
-        {
-            return Json(boxBiz.testSend(OID,type));
-        }
+        //public JsonResult testSend(string OID, int type)
+        //{
+        //    return Json(boxBiz.testSend(OID,type));
+        //}
     }
 }

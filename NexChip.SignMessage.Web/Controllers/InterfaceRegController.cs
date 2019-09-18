@@ -22,16 +22,7 @@ namespace NexChip.SignMessage.Web.Controllers
             return View();
         }
 
-        public IActionResult Reg()
-        {
-            return View();
-        }
-
-        public IActionResult Reg2()
-        {
-            return View();
-        }
-
+       
         public IActionResult Register(SignMessageRoleDto dto)
         {
             return Json(roleBiz.register(dto,User));

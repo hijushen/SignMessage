@@ -54,6 +54,11 @@ namespace NexChip.SignMessage.Entities
            /// </summary>           
            public int rolestatus {get;set;}
 
+        /// <summary>
+        /// 是否展示
+        /// </summary>
+           public int isshow { get; set; }
+
            /// <summary>
            /// Desc:
            /// Default:dateadd(year,(10),getdate())

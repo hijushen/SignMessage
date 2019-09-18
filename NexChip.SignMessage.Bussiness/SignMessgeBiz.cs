@@ -652,6 +652,14 @@ namespace NexChip.SignMessage.Bussiness
         /// <returns></returns>
         private BizResult<List<SignMessageBox>> checkRoleInfo(SignMessageSendDto msg, SignMessageRole roleEntity)
         {
+            if(roleEntity == null)
+            {
+                msg.handleerrormsg = "用户身份未找到";
+                updateMsgInterfaceErrorHandle(msg);
+                return interfaceHandlerErrorReturn(msg.handleerrormsg);
+            }
+
+
             if (msg.appname != roleEntity.appname)
             {
                 msg.handleerrormsg = "请检查数据: 用户身份与appname不一致！";

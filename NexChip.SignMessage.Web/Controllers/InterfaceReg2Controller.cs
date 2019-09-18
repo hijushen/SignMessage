@@ -16,60 +16,60 @@ namespace NexChip.SignMessage.Web.Controllers
     public class InterfaceReg2Controller : Controller
     {
         public SignMessageRoleBiz roleBiz = new SignMessageRoleBiz();
-        // GET: /<controller>/
-        public IActionResult Index()
-        {
-            return View();
-        }
+        //// GET: /<controller>/
+        ////public IActionResult Index()
+        ////{
+        ////    return View();
+        ////}
 
-        public IActionResult Reg()
-        {
-            return View();
-        }
+        ////public IActionResult Reg()
+        ////{
+        ////    return View();
+        ////}
 
-        public IActionResult Reg2()
-        {
-            return View();
-        }
+        ////public IActionResult Reg2()
+        ////{
+        ////    return View();
+        ////}
 
-        public IActionResult Register(SignMessageRoleDto dto)
-        {
-            return Json(roleBiz.register(dto, User));
-        }
+        //public IActionResult Register(SignMessageRoleDto dto)
+        //{
+        //    return Json(roleBiz.register(dto, User));
+        //}
 
-        public JsonResult List([FromHeader]SignMessageRoleDto reqP)
-        {
-            return Json(roleBiz.List(reqP));
-        }
+        //public JsonResult List([FromHeader]SignMessageRoleDto reqP)
+        //{
+        //    return Json(roleBiz.List(reqP));
+        //}
 
-        [HttpPost]
-        public JsonResult DataTableList(DataTablesRequsetDto reqP)
-        {
-            var res = roleBiz.ListForDataTables(reqP);
-            return Json(res);
-        }
+        //[HttpPost]
+        //public JsonResult DataTableList(DataTablesRequsetDto reqP)
+        //{
+        //    var res = roleBiz.ListForDataTables(reqP);
+        //    return Json(res);
+        //}
 
-        public JsonResult GetS(string OID)
-        {
-            return Json(roleBiz.GetS(OID));
-        }
+        //public JsonResult GetS(string OID)
+        //{
+        //    return Json(roleBiz.GetS(OID));
+        //}
 
-        /// <summary>
-        /// 编辑保存
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public JsonResult EditSave([FromForm]SignMessageRoleDto dto)
-        {
-            return Json(roleBiz.EditSave(dto));
-        }
+        ///// <summary>
+        ///// 编辑保存
+        ///// </summary>
+        ///// <param name="dto"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //public JsonResult EditSave([FromForm]SignMessageRoleDto dto)
+        //{
+        //    return Json(roleBiz.EditSave(dto));
+        //}
 
 
-        public JsonResult Delete(string[] OIDs)
-        {
-            return Json(roleBiz.Delete(OIDs));
-        }
+        //public JsonResult Delete(string[] OIDs)
+        //{
+        //    return Json(roleBiz.Delete(OIDs));
+        //}
     }
 
 

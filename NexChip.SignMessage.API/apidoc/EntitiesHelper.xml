@@ -238,6 +238,11 @@
             Nullable:False
             </summary>           
         </member>
+        <member name="P:NexChip.SignMessage.Entities.SignMessageRole.isshow">
+            <summary>
+            是否展示
+            </summary>
+        </member>
         <member name="P:NexChip.SignMessage.Entities.SignMessageRole.invalidtime">
             <summary>
             Desc:

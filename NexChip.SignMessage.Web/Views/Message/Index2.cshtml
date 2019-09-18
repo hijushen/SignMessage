@@ -191,8 +191,8 @@
             font-size: 12px;
             text-align: center;
             white-space: nowrap;
-            padding: 1px 2px; 
-        
+            padding: 1px 2px;
+
             border-style: solid;
             border-radius:10px;
             behavior:@Url.Content("~/js/css3pie/PIE_IE678.js");
@@ -547,13 +547,14 @@
 
         if ('@ViewBag.id'.length > 3) {
             //console.log(buildQueryStr([ 'id', '@ViewBag.id' ], [ 'logonid', '@ViewBag.logonid' ], [ 'SHAEncry', '@ViewBag.SHAEncry' ]));
-            testLocalUrl += buildQueryStr([ 'id', '@ViewBag.id' ], [ 'logonid', '@ViewBag.logonid' ], [ 'SHAEncry', '@ViewBag.SHAEncry' ]);
+            testLocalUrl += buildQueryStr(['id', '@ViewBag.id'], ['logonid', '@ViewBag.logonid'], ['SHAEncry', '@ViewBag.SHAEncry']);
+            testUrl += buildQueryStr(['id', '@ViewBag.id'], ['logonid', '@ViewBag.logonid'], ['SHAEncry', '@ViewBag.SHAEncry']);
         }
 
         var newSignMessage = '@Url.Action("Index", "MessageSign",
                              new { eid = @ViewBag.id, logonid = @ViewBag.logonid, SHAEncry= @ViewBag.SHAEncry })';
         //addTab("测试Brog签核箱", testUrl, "iframetestBorG");
-        addTab("BroG 签核箱", testLocalUrl, "iframelocalBorG");
+        addTab("BroG 签核箱", testUrl, "iframelocalBorG");
         addTab('@ViewBag.NoBroGTitle' +
             '<span id="newmessage" class="m-badge" style="dispaly:none">New</span>', newSignMessage, "iframeNewSignMessage");
 
@@ -602,5 +603,28 @@
     function getCookie(name) {//取cookies函数
         var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
         if (arr != null) return unescape(arr[2]); return null;
+    }
+
+    ///关闭窗口
+    function closeWindow() {
+        if (navigator.userAgent.indexOf("MSIE") > 0) {//close IE
+            if (navigator.userAgent.indexOf("MSIE 6.0") > 0) {
+                window.opener = null;
+                window.close();
+            } else {
+                window.open('', '_top');
+                window.top.close();
+            }
+        }
+        else if (navigator.userAgent.indexOf("Firefox") > 0) {//close firefox
+            window.location.href = 'about:blank ';
+        } else {//close chrome;It is effective when it is only one.
+            window.opener = null;
+            window.open('', '_self');
+            window.location.href = 'about:blank ';
+
+            //window.close();
+        }
+
     }
 </script>

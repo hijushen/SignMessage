@@ -437,7 +437,7 @@ ViewBag.AllString,
                     }, {
                         "title": "寄件人", width: "10%", "data": "fromempname", "orderable": false
                     }, {
-                        "title": "应用系统名称", width: "15%", "data": "appnamechs", "orderable": false,
+                        "title": "应用系统名称", width: "15%", "data": "appnamechs", "orderable": false
                     }, {
                         "title": "主旨", "data": "substance", "orderable": false
                     }, {
@@ -533,7 +533,9 @@ ViewBag.AllString,
 
                 var data = table.row(idx.row).data();
                 rowClickHandler(table.row(idx.row));
-                window.open(data.callbackurl, '_blank');
+
+                //var strFeatures = "menubar=no,status=no,toolbar=no,scrollbars=yes,resizable=yes";
+                window.open(data.callbackurl, "_blank");
 
                 ///更新已读状态
                 $.ajax({

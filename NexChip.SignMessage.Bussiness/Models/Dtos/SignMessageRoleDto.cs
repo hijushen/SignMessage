@@ -39,6 +39,8 @@ namespace NexChip.SignMessage.Bussiness.Models.Dtos
         /// </summary>           
         public int rolestatus { get; set; }
 
+        public int isshow { get; set; }
+
         /// <summary>
         /// Desc:
         /// Default:dateadd(year,(10),getdate())

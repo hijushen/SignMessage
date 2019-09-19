@@ -195,7 +195,17 @@
                         }, {
                             "title": "appname", "data": "appname"
                         }, {
-                            "title": "appnamechs", "data": "appnamechs", "orderable": false,
+                            "title": "appnamechs", "data": "appnamechs", "orderable": false
+                        }, {
+                                "title": "是否显示", "data": "isshow", "orderable": false,
+                                "render": function (data, type, full, meta) {
+                                    
+                                    if (data == 1) {
+                                        return '是'
+                                    } else {
+                                        return '否'
+                                    }
+                                }
                         }, {
                             "title": "reservedkey1", "data": "reservedkey1", "orderable": false
                         }, {
@@ -292,6 +302,8 @@
                     $("#appname").val("");
                     $("#appnamechs").val("");
                     $("#reservedkey1").val("");
+                    $("#showdiv input:radio[value='1']").attr('checked', 'true')
+
                     $("#Title").text("新增应用程序");
                     //弹出新增窗体
                     $("#editModal").modal("show");
@@ -312,6 +324,7 @@
                             $("#reservedkey1").val(data.reservedkey1);
 
                             $("#Remarks").val(data.remarks);
+                            $("#showdiv input:radio[value='" + data.isshow + "']").attr('checked','checked')
 
                             $("#Title").text("编辑应用程序")
                             $("#editModal").modal("show");
@@ -320,7 +333,7 @@
                 };
                 //保存
                 function save() {
-                    var postData = { "dto": { "OID": $("#Id").val(), "appname": $("#appname").val(), "appnamechs": $("#appnamechs").val(), "reservedkey1": $("#reservedkey1").val() } };
+                    var postData = { "dto": { "OID": $("#Id").val(), "appname": $("#appname").val(), "appnamechs": $("#appnamechs").val(), "reservedkey1": $("#reservedkey1").val(), "isshow": $("#showdiv input:radio:checked").val() } };
                     $.ajax({
                         type: "Post",
                         url: "/InterfaceReg/EditSave",

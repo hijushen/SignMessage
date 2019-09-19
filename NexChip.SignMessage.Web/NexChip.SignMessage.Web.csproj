@@ -64,6 +64,8 @@
   <ItemGroup>
     <Folder Include="App_Log\" />
     <Folder Include="wwwroot\css\新文件夹\" />
+    <Folder Include="wwwroot\img\" />
+    <Folder Include="wwwroot\doc\" />
   </ItemGroup>
 
 

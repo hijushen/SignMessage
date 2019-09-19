@@ -89,6 +89,7 @@ namespace NexChip.SignMessage.Bussiness
 
             saveEntity.creater = "admin";
             saveEntity.createtime = DateTime.Now;
+
             int i = Service.InsertIgnoreNullColumn(saveEntity);
             return true;
         }
@@ -103,7 +104,7 @@ namespace NexChip.SignMessage.Bussiness
             saveEntity.updater = "admin";
             saveEntity.updatetime = DateTime.Now;
 
-            int i = Service.UpdateOnlyColumn(saveEntity, it => new { it.updater, it.updatetime, it.appname, it.appnamechs, it.reservedkey1 });
+            int i = Service.UpdateOnlyColumn(saveEntity, it => new { it.updater, it.updatetime, it.appname, it.appnamechs, it.reservedkey1,it.isshow });
             return true;
         }
 
@@ -129,6 +130,7 @@ namespace NexChip.SignMessage.Bussiness
                     appname = dto.appname,
                     appnamechs = dto.appnamechs,
                     reservedkey1 = dto.reservedkey1,
+                    isshow=dto.isshow,
                     rolestatus = (int)StatusEnum.Valid
                 };
 
@@ -197,7 +199,7 @@ namespace NexChip.SignMessage.Bussiness
             }
 
             Expression<Func<SignMessageRole, bool>> whereExpression = null;
-            Expression<Func<SignMessageRole, object>> orderByExpression = p => p.createtime;
+            Expression<Func<SignMessageRole, object>> orderByExpression = p => new {p.isshow, p.createtime };
 
             var res =  Service.GetPageList(start, limit, orderByExpression, ordertype, whereExpression);
             return new BizListResultForDataTables<SignMessageRole>

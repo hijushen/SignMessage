@@ -53,6 +53,11 @@ namespace NexChip.SignMessage.Web.Controllers
         }
 
 
+        public IActionResult SystemHelper()
+        {
+            return View();
+        }
+
         public IActionResult MessageSignView()
         {
             return View();

@@ -90,14 +90,13 @@
                     //$("#checkAll").click(function () { checkAll(this) });
                     loadDataTable();
 
-
                 });
 
                 function reloadTables() {
                     exampleTable.ajax.reload(null, true);
                 }
 
-
+                
 
                 //提示信息
                 var lang = {
@@ -160,6 +159,13 @@
                         + item.oid + "\")'><i class='fa fa-trash-o'></i> 删除 </button> "
                 }
 
+
+                var urlObj = {
+                    DataTableListUrl: '@Url.Action("DataTableList", "InterfaceReg")'
+                    , GetS: '@Url.Action("GetS", "InterfaceReg")'
+                    , EditSave: '@Url.Action("EditSave","InterfaceReg")'
+                    , Delete:'@Url.Action("Delete", "InterfaceReg")'
+                };
 
                 //初始化表格
                 function loadDataTable() {
@@ -253,7 +259,7 @@
 
                             //ajax请求数据
                             $.ajax({
-                                url: "/InterfaceReg/DataTableList",
+                                url: urlObj.DataTableListUrl,
                                 type: "POST",
                                 cache: false, //禁用缓存
                                 data: data, //传入组装的参数
@@ -312,7 +318,7 @@
                 function edit(id) {
                     $.ajax({
                         type: "Get",
-                        url: "/InterfaceReg/GetS?OID=" + id + "&_t=" + new Date().getTime(),
+                        url: urlObj.GetS + "?OID=" + id + "&_t=" + new Date().getTime(),
                         success: function (res) {
                             var data = res.data || {};
                             $("#Id").val(id);
@@ -336,7 +342,7 @@
                     var postData = { "dto": { "OID": $("#Id").val(), "appname": $("#appname").val(), "appnamechs": $("#appnamechs").val(), "reservedkey1": $("#reservedkey1").val(), "isshow": $("#showdiv input:radio:checked").val() } };
                     $.ajax({
                         type: "Post",
-                        url: "/InterfaceReg/EditSave",
+                        url: urlObj.EditSave,
                         data: postData,
                         success: function (data) {
                             if (data.success) {
@@ -391,7 +397,7 @@
                         ids.push(id);
                         $.ajax({
                             type: "POST",
-                            url: "/InterfaceReg/Delete",
+                            url: urlObj.Delete,
                             data: { "OIDs": ids },
                             success: function (data) {
                                 if (data.success) {

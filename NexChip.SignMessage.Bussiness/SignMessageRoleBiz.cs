@@ -64,6 +64,24 @@ namespace NexChip.SignMessage.Bussiness
         {
             try
             {
+                var appNames = Service.db.Queryable<SignMessageRole>("t")
+                    .Where(t => new List<string>(OIDs).Contains(t.OID))
+                    .Select(t => t.appname)
+                    .ToList();
+                var checkRes = Service.db.Queryable<SignMessageBox>("t")
+                    .Where(t => appNames.Contains(t.appname)).Count();
+
+                if(checkRes > 0)
+                {
+                    return new BizResult<SignMessageRole>()
+                    {
+                        Success = false,
+                        Msg = "应用程序ID已启用，不允许删除"
+                    };
+                }
+
+
+
                 var res = Service.Dels(OIDs);
                 return new BizResult<SignMessageRole>()
                 {
@@ -104,7 +122,7 @@ namespace NexChip.SignMessage.Bussiness
             saveEntity.updater = "admin";
             saveEntity.updatetime = DateTime.Now;
 
-            int i = Service.UpdateOnlyColumn(saveEntity, it => new { it.updater, it.updatetime, it.appname, it.appnamechs, it.reservedkey1,it.isshow });
+            int i = Service.UpdateOnlyColumn(saveEntity, it => new { it.updater, it.updatetime, it.appnamechs, it.reservedkey1,it.isshow });
             return true;
         }
 

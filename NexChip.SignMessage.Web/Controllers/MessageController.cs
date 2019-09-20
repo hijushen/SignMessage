@@ -39,7 +39,7 @@ namespace NexChip.SignMessage.Web.Controllers
             ViewBag.id = id;
             ViewBag.SHAEncry = SHAEncry;
 
-
+            
             ViewBag.NoBroGTitle = Utils.SettingConfig.NoBroGTitle;
 
             //Email 
@@ -48,7 +48,7 @@ namespace NexChip.SignMessage.Web.Controllers
             ViewBag.UserName = emplyee.cname;
 
             ViewBag.UnReadRefreshSeconds = Utils.SettingConfig.UnReadRefreshSeconds;
-            //return Content("<script>alert('请先登录');</script>");
+            //return View("ValiFailError");
             return View();
         }
 

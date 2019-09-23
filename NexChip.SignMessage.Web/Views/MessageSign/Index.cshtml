@@ -30,86 +30,98 @@ ViewBag.AllString,
 };
 
     ViewBag.msgHandleStatus = new List<string>()
-    {
-        "未完成或未更新",
-        "已完成"
-    };
+{
+"未完成或未更新",
+"已完成"
+};
 
 }
 
 @section styles  {
-    <style>
-        #reportrange span {
-            color: green;
+<style>
+    #reportrange span {
+        color: green;
+    }
+
+    .filter-option-inner-inner {
+        color: green;
+    }
+
+    /* 选择内容颜色*/
+    .select2-container span {
+        color:green;
+    }
+
+    h5 {
+        font-size: 14px;
+        font-family: 'Microsoft YaHei UI'
+    }
+
+    .highlight {
+        font-weight: bold;
+        font-size:1.2em;
+
+    }
+
+    /* 斑马行*/
+    tbody tr.odd {
+       background-color: #f9f9f9
+    }
+
+    thead > tr > th {
+        text-align: center;
+        font-size: 14px;
+    }
+
+    #example_wrapper {
+        margin-top: 20px;
+    }
+
+
+    /*bootstrap兼容问题和easyui的bug*/
+    .panel-header, .panel-body {
+        border-width: 0px;
+    }
+
+    .datagrid, .combo-p {
+        border: solid 1px #D4D4D4;
+    }
+
+        .datagrid * {
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
         }
 
-        .filter-option-inner-inner {
-            color: green;
-        }
+    /* 下拉框高度*/
+    .select2-container--default .select2-results > .select2-results__options {
+        max-height: 350px;
+    }
 
-        /* 选择内容颜色*/
-        .select2-container span {
-            color:green;
-        }
+    .queryzone table tr td {
+        padding: 5px;
+    }
 
-        h5 {
-            font-size: 14px;
-            font-family: 'Microsoft YaHei UI'
-        }
+    .center-block {
+        text-align: center;
+    }
 
-        .highlight {
-            font-weight: bold;
-            font-size:1.2em;
+    .daterangepicker{
+        width:auto;
+    }
 
-        }
-
-        /* 斑马行*/
-        tbody tr.odd {
-           background-color: #f9f9f9
-        }
-
-        thead > tr > th {
-            text-align: center;
-            font-size: 14px;
-        }
-
-        #example_wrapper {
-            margin-top: 20px;
-        }
+    .daterangepicker .ranges, .daterangepicker .drp-calendar {
+        float: left;
+    }
 
 
-        /*bootstrap兼容问题和easyui的bug*/
-        .panel-header, .panel-body {
-            border-width: 0px;
-        }
 
-        .datagrid, .combo-p {
-            border: solid 1px #D4D4D4;
-        }
+</style>
+    }
 
-            .datagrid * {
-                -webkit-box-sizing: content-box;
-                -moz-box-sizing: content-box;
-                box-sizing: content-box;
-            }
 
-        /* 下拉框高度*/
-        .select2-container--default .select2-results > .select2-results__options {
-            max-height: 350px;
-        }
 
-        .queryzone table tr td {
-            padding: 5px;
-        }
-
-        .center-block {
-            text-align: center;
-        }
-    </style>
-
-}
-
-<div class="easyui-layout" data-options="fit:true" >
+<div class="easyui-layout" data-options="fit:true">
 
     <div data-options="region:'north',title:'查询区域'" style="height:100px;border:1px solid black;overflow:hidden">
         <div style="padding:5px 10px 5px 10px" class="queryzone">
@@ -120,7 +132,7 @@ ViewBag.AllString,
                     </td>
                     <td>
                         <div id="reportrange"
-                             style="display:inline; font-size:13px; color:rgb(255,255,255); background:rgb(255,255,255); cursor: pointer; padding: 5px 10px; border: 1px solid rgb(157,157,157); width: 100% height:min-content;">
+                             style="display:inline; font-size:13px; color:rgb(255,255,255); background:rgb(255,255,255); cursor: pointer; padding: 5px 10px; border: 1px solid rgb(157,157,157); width: 100% ">
                             <i class="fa fa-calendar"></i>&nbsp;
                             <span></span> <i class="fa fa-caret-down"></i>
                         </div>
@@ -276,10 +288,10 @@ ViewBag.AllString,
                                     if (exampleTable.page() == 0) {
                                         reloadTables();
                                     }
-                                } 
+                                }
                             }
                         } else {
-                           
+
                         };
                     }
                 });
@@ -516,7 +528,7 @@ ViewBag.AllString,
                 }
             });
 
-            
+
 
             $('#example tbody').on('click', 'td', function () {
                 var table = exampleTable;
@@ -526,9 +538,9 @@ ViewBag.AllString,
 
 
                 //if ($(title).html() === '操作') {
-                //    //return; 
+                //    //return;
                 //} else { //行点击事件
-                    
+
                 //} //行点击事件结束
 
                 var data = table.row(idx.row).data();
@@ -572,7 +584,7 @@ ViewBag.AllString,
             //$(row.node()).addClass('selected');
             if ($(row.node()).hasClass('highlight')) { //表格行未读成为已读，需要更新记录数
 
-                pageCommMessageSign.unReadCount = pageCommMessageSign.unReadCount - 1;               
+                pageCommMessageSign.unReadCount = pageCommMessageSign.unReadCount - 1;
                 pageCommMessageSign.clientRefreshNewSpan();
 
                 $(row.node()).removeClass('highlight');

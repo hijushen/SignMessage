@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using NexChip.SignMessage.Bussiness;
 using NexChip.SignMessage.Utils;
 using NexChip.SignMessage.Web.Models;
@@ -25,7 +26,11 @@ namespace NexChip.SignMessage.Web.Controllers
 
             if(checkContain(partShowStr, emplyee.dept_id))
             {
-                return RedirectToRoute(new { controller = "Message", action = "Index2" + queryString });
+
+                var routeDictionary = new RouteValueDictionary { { "action", "Index2" }, { "controller", "Message" },
+                    {"loginid",logonid },{ "id",id},{"SHAEncry",SHAEncry } };
+                return RedirectToRoute(routeDictionary);
+                    //new { controller = "Message", action = "Index2" , new string[]{ loginid, id, SHAEncry } });
             }
 
             return Redirect(oldSignMessageUrl + queryString);

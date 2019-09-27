@@ -2,17 +2,68 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using NexChip.SignMessage.Bussiness;
+using NexChip.SignMessage.Utils;
 using NexChip.SignMessage.Web.Models;
 
 namespace NexChip.SignMessage.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private SignMessageBoxBiz boxBiz = new SignMessageBoxBiz();
+
+
+        public IActionResult Index(string logonid, string id, string SHAEncry)
         {
-            var s = Request.QueryString.Value;
-            return RedirectToRoute(new {controller="Message",action="Index2"+s});
+            var queryString = Request.QueryString.Value;
+
+
+            var partShowStr = Utils.SettingConfig.SignMessageBoxPartShow.Trim();
+            var oldSignMessageUrl = Utils.SettingConfig.BrogSignMessageUrl;
+            var email = LoginUserHelper.GetLoginUserName(logonid, User.Identity.Name);
+            var emplyee = boxBiz.getUserInfo(email);
+
+            if(checkContain(partShowStr, emplyee.dept_id))
+            {
+                return RedirectToRoute(new { controller = "Message", action = "Index2" + queryString });
+            }
+
+            return Redirect(oldSignMessageUrl + queryString);
+
             //return View();
+        }
+
+
+        /// <summary>
+        /// 是否配置了特定部门代码，没配置返回true
+        /// </summary>
+        /// <param name="partShowStr"></param>
+        /// <param name="depid"></param>
+        /// <returns></returns>
+        private bool checkContain(string partShowStr, string depid)
+        {
+            if (string.IsNullOrWhiteSpace(depid))
+            {
+                return false;
+            }
+
+            if(string.IsNullOrWhiteSpace(partShowStr)) //未配置返回首页
+            {
+                return true;
+            }
+
+
+            bool res = false;
+            string[] lstPartShow = partShowStr.Split(",");
+            foreach (var item in lstPartShow)
+            {
+                if (depid.Contains(item))
+                {
+                    res = true;
+                    return res;
+                }
+            }
+            return res;
         }
 
         public IActionResult Privacy()

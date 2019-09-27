@@ -18,7 +18,7 @@ namespace NexChip.SignMessage.Bussiness.Models
         /// <summary>
         /// 部门代码
         /// </summary>
-        public string dep_id { get; set; }
+        public string dept_id { get; set; }
         /// <summary>
         /// 课别代码
         /// </summary>

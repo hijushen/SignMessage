@@ -55,7 +55,7 @@ FROM    dbo.Student AS a
         public DataTable getEmployee(string email)
         {
             var dt = db.Ado.GetDataTable(@"SELECT * FROM [NHOADBS02].[HRDATA].[dbo].[HR_EMPLOYEE]
-WHERE email = @email;", new SugarParameter("@email", email));
+WHERE email = @email order by is_active desc;", new SugarParameter("@email", email));
 
             return dt;
         }

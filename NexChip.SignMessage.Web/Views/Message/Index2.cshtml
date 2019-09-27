@@ -211,6 +211,8 @@
             z-index: 999;
         }
 
+        
+
     </style>
 </head>
 
@@ -568,17 +570,18 @@
         //var localUrl = "http://localhost/PSC-COM2/ListTodoTask_CHS/TodoTaskSearch_New.aspx";
         var testUrl = "http://JHQSPMT01.CHN.NEXCHIP/PSC-COM2/ListTodoTask_CHS/TodoTaskSearch_New.aspx"
         var testLocalUrl = "http://e10101j00682.chn.nexchip/PSC-COM2/ListTodoTask_CHS/TodoTaskSearch_New.aspx"
+        var brogSignMessageUrl = '@ViewBag.BrogSignMessageUrl';   // testUrl; //;
 
         if ('@ViewBag.id'.length > 3) {
             //console.log(buildQueryStr([ 'id', '@ViewBag.id' ], [ 'logonid', '@ViewBag.logonid' ], [ 'SHAEncry', '@ViewBag.SHAEncry' ]));
             testLocalUrl += buildQueryStr(['id', '@ViewBag.id'], ['logonid', '@ViewBag.logonid'], ['SHAEncry', '@ViewBag.SHAEncry']);
-            testUrl += buildQueryStr(['id', '@ViewBag.id'], ['logonid', '@ViewBag.logonid'], ['SHAEncry', '@ViewBag.SHAEncry']);
+            brogSignMessageUrl += buildQueryStr(['id', '@ViewBag.id'], ['logonid', '@ViewBag.logonid'], ['SHAEncry', '@ViewBag.SHAEncry']);
         }
 
         var newSignMessage = '@Url.Action("Index", "MessageSign",
                              new { eid = @ViewBag.id, logonid = @ViewBag.logonid, SHAEncry= @ViewBag.SHAEncry })';
-        //addTab("测试Brog签核箱", testUrl, "iframetestBorG");
-        addTab("BroG 表单签核", testUrl, "iframelocalBorG");
+        //addTab("测试Brog签核箱", brogSignMessageUrl, "iframetestBorG");
+        addTab("BroG 表单签核", brogSignMessageUrl, "iframelocalBorG");
         addTab('@ViewBag.NoBroGTitle' +
             '<span id="newmessage" class="m-badge" style="dispaly:none">New</span>', newSignMessage, "iframeNewSignMessage");
 

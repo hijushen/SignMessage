@@ -48,6 +48,7 @@ namespace NexChip.SignMessage.Web.Controllers
             ViewBag.UserName = emplyee.cname;
 
             ViewBag.UnReadRefreshSeconds = Utils.SettingConfig.UnReadRefreshSeconds;
+            ViewBag.BrogSignMessageUrl = Utils.SettingConfig.BrogSignMessageUrl;
             //return View("ValiFailError");
             return View();
         }

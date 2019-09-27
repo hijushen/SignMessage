@@ -68,7 +68,7 @@ namespace NexChip.SignMessage.Bussiness
 
             var json = dt.SerializeModel();
             var employees = json.DeserializeModel<List<Employee>>();
-            if (employees.Count == 1)
+            if (employees.Count >= 1)
             {
                 return employees[0];
             }

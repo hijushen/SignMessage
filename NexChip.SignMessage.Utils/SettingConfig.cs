@@ -16,5 +16,8 @@ namespace NexChip.SignMessage.Utils
 
 
         public static string UnReadRefreshSeconds = AppConfigManager.Configuration["UnReadRefreshSeconds"];
+
+        public static string SignMessageBoxPartShow = AppConfigManager.Configuration["SignMessageBoxPartShow"];
+        public static string BrogSignMessageUrl = AppConfigManager.Configuration["BrogSignMessageUrl"];
     }
 }

@@ -8,6 +8,7 @@ namespace NexChip.SignMessage.Bussiness
     {
         Add = 1,
         Completed = 2,
-        Del = 3
+        Del = 3,
+        CompletedWithOID = 4 //加上signboxid的更新
     }
 }

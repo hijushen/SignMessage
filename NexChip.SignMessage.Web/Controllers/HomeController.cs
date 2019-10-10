@@ -28,7 +28,7 @@ namespace NexChip.SignMessage.Web.Controllers
             {
 
                 var routeDictionary = new RouteValueDictionary { { "action", "Index2" }, { "controller", "Message" },
-                    {"loginid",logonid },{ "id",id},{"SHAEncry",SHAEncry } };
+                    {"logonid",logonid },{ "id",id},{"SHAEncry",SHAEncry } };
                 return RedirectToRoute(routeDictionary);
                     //new { controller = "Message", action = "Index2" , new string[]{ loginid, id, SHAEncry } });
             }

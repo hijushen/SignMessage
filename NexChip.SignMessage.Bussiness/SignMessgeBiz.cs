@@ -64,6 +64,15 @@ namespace NexChip.SignMessage.Bussiness
 
                 try
                 {
+                    var needUpdateRows = res.Data;
+                    foreach (var item in needUpdateRows)
+                    {                         
+                        item.updatetime = DateTime.Now;
+                        item.msghandlestatus = HandleStatusString.Done;
+                        item.emergencylevel = msg.msgbody.emergencylevel ?? 1;
+                        item.callbackurl = msg.msgbody.callbackurl;
+                    }
+
                     messageboxService.db.BeginTran();
                     messageboxService.db.Updateable(new SignMessageInterface
                     {
@@ -73,6 +82,9 @@ namespace NexChip.SignMessage.Bussiness
                         handlemsgoids = msg.msgbody.boxOIDs //检查过存在
                     }).UpdateColumns(t => new { t.handleresult, t.handlemsgoids, t.updatetime }).ExecuteCommand();
 
+                    messageboxService.db.Updateable(needUpdateRows)
+                        .UpdateColumns(t => new { t.updatetime, t.msghandlestatus,t.emergencylevel,t.callbackurl })
+                        .ExecuteCommand();
 
                     //messageboxService.db.Updateable(new SignMessageBox
                     //{
@@ -84,20 +96,20 @@ namespace NexChip.SignMessage.Bussiness
                     //.WhereColumns(t => new { t.msgsourceid})
                     //.ExecuteCommand();
 
-                    messageboxService.db.Updateable(new SignMessageBox
-                    {
-                        updatetime = DateTime.Now,
-                        emergencylevel = msg.msgbody.emergencylevel ?? 1,
-                        callbackurl = msg.msgbody.callbackurl,
-                        msghandlestatus = HandleStatusString.Done,
-                    }).Where(t => t.msgsourceid == msg.msgbody.msgsourceid)
-                         .UpdateColumns(t => new
-                         {
-                             t.updatetime,
-                             t.emergencylevel,
-                             t.callbackurl,
-                             t.msghandlestatus
-                         }).ExecuteCommand();
+                    //messageboxService.db.Updateable(new SignMessageBox
+                    //{
+                    //    updatetime = DateTime.Now,
+                    //    emergencylevel = msg.msgbody.emergencylevel ?? 1,
+                    //    callbackurl = msg.msgbody.callbackurl,
+                    //    msghandlestatus = HandleStatusString.Done,
+                    //}).Where(t => t.msgsourceid == msg.msgbody.msgsourceid)
+                    //     .UpdateColumns(t => new
+                    //     {
+                    //         t.updatetime,
+                    //         t.emergencylevel,
+                    //         t.callbackurl,
+                    //         t.msghandlestatus
+                    //     }).ExecuteCommand();
 
                     messageboxService.db.CommitTran();
                     return new BizResult<List<SignMessageBox>>
@@ -161,7 +173,7 @@ namespace NexChip.SignMessage.Bussiness
                         handleresult = 1,
                         updatetime = DateTime.Now,
                         handlemsgoids = msg.msgbody.boxOIDs //检查过存在
-                    }).UpdateColumns(t => new { t.handleresult,t.updatetime, t.handlemsgoids }).ExecuteCommand();
+                    }).UpdateColumns(t => new { t.handleresult, t.updatetime, t.handlemsgoids }).ExecuteCommand();
 
                     messageboxService.db.Updateable(needUpdateRows)
                         .UpdateColumns(t => new { t.updatetime, t.msghandlestatus })
@@ -201,7 +213,6 @@ namespace NexChip.SignMessage.Bussiness
                 }
                 catch (Exception ex)
                 {
-
                     messageboxService.db.RollbackTran();
                     return new BizResult<List<SignMessageBox>>
                     {
@@ -243,7 +254,7 @@ namespace NexChip.SignMessage.Bussiness
                     createtime = DateTime.Now,
                     msgstatus = (int)ReadStatusEnum.UnRead,
                     msghandlestatus = HandleStatusString.Undo,
-                    emergencylevel = msg.msgbody.emergencylevel ??(int) EmergencyLevelEnum.Normal
+                    emergencylevel = msg.msgbody.emergencylevel ?? (int)EmergencyLevelEnum.Normal
                 };
 
                 lstSignMessageBox.Add(saveEntity);
@@ -385,12 +396,13 @@ namespace NexChip.SignMessage.Bussiness
                 OID = msg.interfaceOID,
                 handleresult = 0,//msg.handleresult,
                 handleerrormsg = msg.handleerrormsg
-                ,updatetime = DateTime.Now
+                ,
+                updatetime = DateTime.Now
             };
 
             try
             {
-                interfaceService.UpdateOnlyColumn(face, t => new { t.handleresult, t.handleerrormsg,t.updatetime });
+                interfaceService.UpdateOnlyColumn(face, t => new { t.handleresult, t.handleerrormsg, t.updatetime });
             }
             catch (Exception ex)
             {
@@ -472,10 +484,32 @@ namespace NexChip.SignMessage.Bussiness
             var chkComm = this.checkCommonData(msg, appOID);
             if (!chkComm.Success) return chkComm;
 
-            var existEntities = messageboxService.sdb.GetList<SignMessageBox>(t => t.msgsourceid == msg.msgbody.msgsourceid);
+            List<SignMessageBox> existEntities = new List<SignMessageBox>();
+            if (msg.msgbody.handletype == (int)HandleTypeEnum.CompletedWithOID) //如果是TOID 部分更新类型
+            {
+                List<string> lstId = new List<string>(msg.msgbody.toids.Split(",")); //需要更新人员
+
+                existEntities = messageboxService.db.Queryable<SignMessageBox>("t")
+                .Where(t => lstId.Contains(t.toempid))
+                .Where(t => t.msgsourceid == msg.msgbody.msgsourceid)
+                .ToList();
+            }
+            else
+            {
+                existEntities = messageboxService.sdb.GetList<SignMessageBox>(t => t.msgsourceid == msg.msgbody.msgsourceid);
+            }
+
             if (existEntities.Count == 0)
             {
-                msg.handleerrormsg = "提供msgsourceid找不到对应消息，请检查";
+                if (msg.msgbody.handletype == (int)HandleTypeEnum.CompletedWithOID) //如果是TOID 部分更新类型
+                {
+                    msg.handleerrormsg = "提供msgsourceid,toids找不到对应消息，请检查";
+                }
+                else
+                {
+                    msg.handleerrormsg = "提供msgsourceid找不到对应消息，请检查";
+                }
+
                 updateMsgInterfaceErrorHandle(msg);
                 return new BizResult<List<SignMessageBox>>
                 {
@@ -489,7 +523,10 @@ namespace NexChip.SignMessage.Bussiness
                 msg.msgbody.boxOIDs = getMessageBoxIds(existEntities);
             }
 
-            var types = new int[] { (int)HandleTypeEnum.Completed, (int)HandleTypeEnum.Del };
+            var types = new int[]
+            {
+                (int)HandleTypeEnum.Completed, (int)HandleTypeEnum.Del,(int)HandleTypeEnum.CompletedWithOID
+            };
             if (Array.IndexOf(types, msg.msgbody.handletype) == -1)
             {
                 msg.handleerrormsg = "检查数据。消息处理类型错误";
@@ -504,7 +541,8 @@ namespace NexChip.SignMessage.Bussiness
 
             return new BizResult<List<SignMessageBox>>
             {
-                Success = true
+                Success = true,
+                Data = existEntities
             };
         }
 
@@ -652,7 +690,7 @@ namespace NexChip.SignMessage.Bussiness
         /// <returns></returns>
         private BizResult<List<SignMessageBox>> checkRoleInfo(SignMessageSendDto msg, SignMessageRole roleEntity)
         {
-            if(roleEntity == null)
+            if (roleEntity == null)
             {
                 msg.handleerrormsg = "用户身份未找到";
                 updateMsgInterfaceErrorHandle(msg);

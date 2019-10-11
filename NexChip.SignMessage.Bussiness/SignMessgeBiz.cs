@@ -496,7 +496,11 @@ namespace NexChip.SignMessage.Bussiness
             }
             else
             {
-                existEntities = messageboxService.sdb.GetList<SignMessageBox>(t => t.msgsourceid == msg.msgbody.msgsourceid);
+                existEntities = messageboxService.db.Queryable<SignMessageBox>("t")
+                    .Where(t => t.msgsourceid == msg.msgbody.msgsourceid)
+                    .ToList();
+                    //.GetList<SignMessageBox>(t => t.msgsourceid == msg.msgbody.msgsourceid);
+                //existEntities = messageboxService.sdb.GetList<SignMessageBox>(t => t.msgsourceid == msg.msgbody.msgsourceid);
             }
 
             if (existEntities.Count == 0)

@@ -19,5 +19,8 @@ namespace NexChip.SignMessage.Utils
 
         public static string SignMessageBoxPartShow = AppConfigManager.Configuration["SignMessageBoxPartShow"];
         public static string BrogSignMessageUrl = AppConfigManager.Configuration["BrogSignMessageUrl"];
+
+        public static string NewOAUrl = AppConfigManager.Configuration["NewOAUrl"];
+        public static string NewOACheck = AppConfigManager.Configuration["NewOACheck"];
     }
 }

@@ -3,3 +3,26 @@
 *@
 @{
 }
+
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<style>
+    .error-title {
+        color:red;
+    }
+
+    .error-issue{
+        color:red;
+    }
+
+    .error-tips{
+        color:darkgreen;
+    }
+</style>
+
+<h3 class="error-title">资料验证错误，请重新开启签核箱!</h3>
+<h4 class="error-issue">错误原因: @Model.ErrorMsg</h4>
+<h4 class="error-tips">解决办法：请关闭或刷新页面重试</h4>

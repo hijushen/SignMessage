@@ -9,24 +9,30 @@ using NexChip.SignMessage.Web.Models;
 
 namespace NexChip.SignMessage.Web.Controllers
 {
+
     public class HomeController : Controller
     {
         private SignMessageBoxBiz boxBiz = new SignMessageBoxBiz();
 
-
         public IActionResult Index(string logonid, string id, string SHAEncry)
         {
             var queryString = Request.QueryString.Value;
-
+            
 
             var partShowStr = Utils.SettingConfig.SignMessageBoxPartShow.Trim();
             var oldSignMessageUrl = Utils.SettingConfig.BrogSignMessageUrl;
+
+            //return RedirectToAction("ValiFailError", new {ErrorMsg = "测试错误" });
+            //Utils.LoginUserHelper.ValiResult valiLogonUser = LoginUserHelper.valiUser(logonid, SHAEncry);
+            //if (!valiLogonUser.Success)
+            //{
+            //    return RedirectToAction("ValiFailError" , new {ErrorMsg = valiLogonUser.Msg });
+            //}
+
             var email = LoginUserHelper.GetLoginUserName(logonid, User.Identity.Name);
             var emplyee = boxBiz.getUserInfo(email);
-
             if(checkContain(partShowStr, emplyee.dept_id))
             {
-
                 var routeDictionary = new RouteValueDictionary { { "action", "Index2" }, { "controller", "Message" },
                     {"logonid",logonid },{ "id",id},{"SHAEncry",SHAEncry } };
                 return RedirectToRoute(routeDictionary);
@@ -85,6 +91,18 @@ namespace NexChip.SignMessage.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult ValiFailError(string ErrorMsg)
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier ,ErrorMsg=ErrorMsg});
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult MessageSignEmpty()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
     }
 }

@@ -351,21 +351,6 @@
         currTab.panel('refresh');
     }
 
-    function tabSelectEvent() {
-        ///tab切换
-        $('#tabs').tabs({
-            onSelect: function (title) {
-                //updataTabContent();
-                //alert(title);
-                if (title == '测试Brog签核箱') {
-                    setTimeout(setFrameStyle, 500);
-                    //setFrameStyle();
-                } else {
-                }
-
-            }
-        });
-    };
 
     // 更新帮助
     function showsyshelper() {
@@ -526,10 +511,6 @@
 
         initTab(); //初始化Tab页面
 
-        //setInterval(function () {
-        //    $('#iframetestBorG').css('POSITION', 'relative');
-        //}, 500)
-
         var NewSpanInterval= setInterval(function () { //定时检测新消息是否送达
             var tab = $('#tabs').tabs('getSelected');
             var index = $('#tabs').tabs('getTabIndex', tab);
@@ -540,8 +521,10 @@
             }
 
             ///页面未读检查
-            if (document.getElementById('iframeNewSignMessage').contentWindow.pageCommMessageSign.unReadCheckAjax) {
-                document.getElementById('iframeNewSignMessage').contentWindow.pageCommMessageSign.unReadCheckAjax(IsNewSignPanel);
+            if (document.getElementById('iframeNewSignMessage').contentWindow.pageCommMessageSign) {
+                if (document.getElementById('iframeNewSignMessage').contentWindow.pageCommMessageSign.unReadCheckAjax) {
+                    document.getElementById('iframeNewSignMessage').contentWindow.pageCommMessageSign.unReadCheckAjax(IsNewSignPanel);
+                }
             }
 
         }, @ViewBag.UnReadRefreshSeconds * 1000);
@@ -556,6 +539,59 @@
             $('#newmessage').css("display", "none")
         }
     }
+    var retSHAObj = {
+        '1': '',
+        '0': '资料验证错误',
+        '-1':'网页网址已经过时',
+        '-2': '无法取得登入帐号',
+        '-3': '身分验证错误',
+        '-4': '身分验证错误(Hash)',
+        '-5': '对不起！您不是合法管理人员，请由晶合Portal切换身分开启签核箱，谢谢',
+        '-6': '对不起！您使用的浏览器为 IE edge 或 Chrome，目前不支持此浏览器，谢谢'
+    };
+
+    var BroGVali = {
+        retSHA: 1,
+        ValiLogonId: '',
+        newSignMessagePassUrl: '@Url.Action("Index", "MessageSign",
+                               new { eid = @ViewBag.id, logonid = @ViewBag.logonid, SHAEncry= @ViewBag.SHAEncry })',
+        newSignMessageEmptyUrl: '@Url.Action("MessageSignEmpty","Home")',
+        getSignMessageUrl: function () {
+            return BroGVali.newSignMessagePassUrl;
+            @*if (BroGVali.needVali()) {
+                return BroGVali.newSignMessagePassUrl;
+            } else {
+                if (BroGVali.retSHA == 1 && BroGVali.ValiLogonId == '@ViewBag.logonid') {
+                    return BroGVali.newSignMessagePassUrl;
+                } else {
+                    return BroGVali.newSignMessageEmptyUrl;
+                }
+            }*@
+        },
+        needVali: function () {
+            if ('@ViewBag.logonid' == '') {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    };
+    
+    function tabSelectEvent() {
+        ///tab切换
+        $('#tabs').tabs({
+            onSelect: function (title) {
+                //updataTabContent();
+                //alert(title);
+                if (title == 'BroG 表单签核') {
+                    setTimeout(setFrameStyle, 500);
+                    //setFrameStyle();
+                } else {
+                }
+
+            }
+        });
+    };
 
     function buildQueryStr() {
         var s = '?';
@@ -577,14 +613,12 @@
             testLocalUrl += buildQueryStr(['id', '@ViewBag.id'], ['logonid', '@ViewBag.logonid'], ['SHAEncry', '@ViewBag.SHAEncry']);
             brogSignMessageUrl += buildQueryStr(['id', '@ViewBag.id'], ['logonid', '@ViewBag.logonid'], ['SHAEncry', '@ViewBag.SHAEncry']);
         }
-
-        var newSignMessage = '@Url.Action("Index", "MessageSign",
-                             new { eid = @ViewBag.id, logonid = @ViewBag.logonid, SHAEncry= @ViewBag.SHAEncry })';
+        
         //addTab("测试Brog签核箱", brogSignMessageUrl, "iframetestBorG");
         addTab("BroG 表单签核", brogSignMessageUrl, "iframelocalBorG");
         addTab('@ViewBag.NoBroGTitle' +
-            '<span id="newmessage" class="m-badge" style="dispaly:none">New</span>', newSignMessage, "iframeNewSignMessage");
-
+            '<span id="newmessage" class="m-badge" style="dispaly:none">New</span>',
+            BroGVali.getSignMessageUrl(), "iframeNewSignMessage");
 
         setTimeout(function () {
             $('#tabs').tabs('select', 0);
@@ -596,7 +630,9 @@
 
     function setFrameStyle() {
         //alert('setFrameStyle');
-        var miframetestBorG = document.getElementById('iframetestBorG');
+        controlNewSapn.hide();
+
+        var miframetestBorG = document.getElementById('iframelocalBorG');
         if (typeof (miframetestBorG) != undefined) {
             if ($('#iframetestBorG').css('position') != 'relative') { //强制设置样式
                 $('#iframetestBorG').css('cssText', "position:relative!important");

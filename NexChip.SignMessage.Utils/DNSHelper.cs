@@ -41,7 +41,12 @@ namespace NexChip.SignMessage.Utils
                 {
                     if (item.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                     {
-                        ipv4OptionPort = item.ToString();
+                        var ip = item.ToString();
+                        if(ip == "127.0.0.1")
+                        {
+                            ip = "localhost";
+                        }
+                        ipv4OptionPort = ip;
                     }
                 };
 

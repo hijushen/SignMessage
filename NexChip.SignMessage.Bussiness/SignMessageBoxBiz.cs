@@ -64,17 +64,25 @@ namespace NexChip.SignMessage.Bussiness
 
         public Employee getUserInfo(string email)
         {
-            DataTable dt = roleService.getEmployee(email);
+            try
+            {
+                DataTable dt = roleService.getEmployee(email);
 
-            var json = dt.SerializeModel();
-            var employees = json.DeserializeModel<List<Employee>>();
-            if (employees.Count >= 1)
-            {
-                return employees[0];
+                var json = dt.SerializeModel();
+                var employees = json.DeserializeModel<List<Employee>>();
+                if (employees.Count >= 1)
+                {
+                    return employees[0];
+                }
+                else
+                {
+                    LogHelper.Error("根据email查询人员信息异常", new Exception("根据email查询人员信息异常"));
+                    return null;
+                }
             }
-            else
+            catch
             {
-                throw new Exception("根据email查询人员信息异常");
+                return null;
             }
         }
 

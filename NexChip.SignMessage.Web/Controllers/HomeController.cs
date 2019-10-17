@@ -31,6 +31,11 @@ namespace NexChip.SignMessage.Web.Controllers
 
             var email = LoginUserHelper.GetLoginUserName(logonid, User.Identity.Name);
             var emplyee = boxBiz.getUserInfo(email);
+            if(emplyee == null)
+            {
+                return RedirectToAction("ValiFailError", "Home", new { ErrorMsg = "根据Email查询用户失败" });
+            }
+
             if(checkContain(partShowStr, emplyee.dept_id))
             {
                 var routeDictionary = new RouteValueDictionary { { "action", "Index2" }, { "controller", "Message" },

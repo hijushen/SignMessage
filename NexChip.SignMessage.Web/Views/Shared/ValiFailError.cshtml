@@ -11,18 +11,97 @@
 
 <style>
     .error-title {
-        color:red;
+        color: red;
     }
 
-    .error-issue{
-        color:red;
+    .error-issue {
+        color: red;
     }
 
-    .error-tips{
-        color:darkgreen;
+    .error-tips {
+        color: darkgreen;
     }
 </style>
 
 <h3 class="error-title">资料验证错误，请重新开启签核箱!</h3>
 <h4 class="error-issue">错误原因: @Model.ErrorMsg</h4>
-<h4 class="error-tips">解决办法：请关闭或刷新页面重试</h4>
+<h4 class="error-tips">解决办法：请重新开启签核箱!</h4>
+
+<script src="~/js/jquery1.9.1.min.js"></script>
+<script>
+    var HtmlUtil = {
+        /*1.用浏览器内部转换器实现html转码*/
+        htmlEncode: function (html) {
+            //1.首先动态创建一个容器标签元素，如DIV
+            var temp = document.createElement("div");
+            //2.然后将要转换的字符串设置为这个元素的innerText(ie支持)或者textContent(火狐，google支持)
+            (temp.textContent != undefined) ? (temp.textContent = html) : (temp.innerText = html);
+            //3.最后返回这个元素的innerHTML，即得到经过HTML编码转换的字符串了
+            var output = temp.innerHTML;
+            temp = null;
+            return output;
+        },
+        /*2.用浏览器内部转换器实现html解码*/
+        htmlDecode: function (text) {
+            //1.首先动态创建一个容器标签元素，如DIV
+            var temp = document.createElement("div");
+            //2.然后将要转换的字符串设置为这个元素的innerHTML(ie，火狐，google都支持)
+            temp.innerHTML = text;
+            //3.最后返回这个元素的innerText(ie支持)或者textContent(火狐，google支持)，即得到经过HTML解码的字符串了。
+            var output = temp.innerText || temp.textContent;
+            temp = null;
+            return output;
+        }
+    };
+
+    function htmlEncodeJQ ( str ) {
+        return $('').text( str ).html();
+    }
+
+    function htmlDecodeJQ ( str ) {
+        return $('').html( str ).text();
+    }
+
+    ///关闭窗口
+    function closeWindow() {
+        if (navigator.userAgent.indexOf("MSIE") > 0) {//close IE
+            if (navigator.userAgent.indexOf("MSIE 6.0") > 0) {
+                window.opener = null;
+                window.close();
+            } else {
+                window.open('', '_top');
+                window.top.close();
+            }
+        }
+        else if (navigator.userAgent.indexOf("Firefox") > 0) {//close firefox
+            window.location.href = 'about:blank ';
+        } else {//close chrome;It is effective when it is only one.
+            window.opener = null;
+            window.open('', '_self');
+            window.location.href = 'about:blank ';
+
+            //window.close();
+        }
+
+    }
+
+    $(function () {
+        var errMsg = HtmlUtil.htmlDecode('@Model.ErrorMsg');
+        alert(errMsg+ '，请重新开启签核箱!');
+
+        if (window.top !== window.self) {
+            try {
+                if (window.top) {
+                    //if(window.top.BroGVali){
+                    //    window.top.BroGVali.retSHA = 0;
+                    //}
+                    if (window.top.closeWindow) {
+                        window.top.closeWindow();
+                    }
+                }
+            } catch (ex) { }
+        } else {
+            closeWindow();
+        }
+    });
+</script>

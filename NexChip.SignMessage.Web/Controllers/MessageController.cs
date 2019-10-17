@@ -45,6 +45,11 @@ namespace NexChip.SignMessage.Web.Controllers
             //Email 
             var email = LoginUserHelper.GetLoginUserName(logonid, User.Identity.Name);
             var emplyee = boxBiz.getUserInfo(email);
+            if (emplyee == null)
+            {
+                return RedirectToAction("ValiFailError", "Home", new { ErrorMsg = "根据Email查询用户失败" });
+            }
+
             ViewBag.UserName = emplyee.cname;
 
             ViewBag.UnReadRefreshSeconds = Utils.SettingConfig.UnReadRefreshSeconds;

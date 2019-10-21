@@ -228,11 +228,11 @@
                 <span style="cursor:hand" onclick="showsyshelper()">查看系统公告</span>
             </ul>
             <ul class="ui-skin-nav">
-                <li class="li-skinitem" title="gray"><span class="gray" rel="gray"></span></li>
+                @*<li class="li-skinitem" title="gray"><span class="gray" rel="gray"></span></li>
                 <li class="li-skinitem" title="default"><span class="default" rel="default"></span></li>
                 <li class="li-skinitem" title="bootstrap"><span class="bootstrap" rel="bootstrap"></span></li>
                 <li class="li-skinitem" title="black"><span class="black" rel="black"></span></li>
-                <li class="li-skinitem" title="metro"><span class="metro" rel="metro"></span></li>
+                <li class="li-skinitem" title="metro"><span class="metro" rel="metro"></span></li>*@
                 @*<li class="li-skinitem" title="pepper-grinder"><span class="pepper-grinder" rel="pepper-grinder"></span></li>
                     <li class="li-skinitem" title="blue"><span class="blue" rel="blue"></span></li>
                     <li class="li-skinitem" title="cupertino"><span class="cupertino" rel="cupertino"></span></li>
@@ -355,7 +355,7 @@
     // 更新帮助
     function showsyshelper() {
         var url = '@Url.Action("SystemHelper", "Message")';
-        var sFeatures = "dialogWidth:650px;dialogHeight:330px;status:no;center=yes;help=no;title=test;scroll:no";
+        var sFeatures = "dialogWidth:650px;dialogHeight:330px;status:no;center=yes;help=no;title='系统公告';scroll:no";
         var result = window.showModalDialog(url, window, sFeatures);
     }
 
@@ -615,7 +615,7 @@
         }
         
         //addTab("测试Brog签核箱", brogSignMessageUrl, "iframetestBorG");
-        addTab("BroG 表单签核", brogSignMessageUrl, "iframelocalBorG");
+        addTab("BorG表单", brogSignMessageUrl, "iframelocalBorG");
         addTab('@ViewBag.NoBroGTitle' +
             '<span id="newmessage" class="m-badge" style="dispaly:none">New</span>',
             BroGVali.getSignMessageUrl(), "iframeNewSignMessage");

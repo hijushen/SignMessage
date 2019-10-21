@@ -40,16 +40,16 @@ ViewBag.AllString,
 @section styles  {
 <style>
     #reportrange span {
-        color: green;
+        color: black;
     }
 
     .filter-option-inner-inner {
-        color: green;
+        color: black;
     }
 
     /* 选择内容颜色*/
     .select2-container span {
-        color:green;
+        color:black;
     }
 
     h5 {
@@ -118,83 +118,109 @@ ViewBag.AllString,
         max-height: 400px;
     }
 
+    #query-title {
+        font-family:Verdana;
+        color:#195a4f;
+        font-size:12px;
+        font-weight:bold;
+    }
+
+    .dataTables_info {
+        font-weight:bold;
+    }
+
+    #example_paginate {
+        font-size:14px;
+    }
+
+    #example tr td:last-child button{
+        float:right
+    }
+   
+    #result-tips{
+        margin-left:80px;
+        font-family:Verdana;
+        color:blue;
+        font-size:12px;
+        font-weight:bold;
+        /*display:none;*/
+    }
 </style>
     }
 
 
 
 <div class="easyui-layout" data-options="fit:true">
+        <div data-options="region:'north',title:'<span id=\'query-title\'>[查询条件]</span><span id=\'result-tips\'></span>'" style="height:100px;border:1px solid black;overflow:hidden">
+            <div style="padding:5px 10px 5px 10px" class="queryzone">
+                <table id="queryZone">
+                    <tr>
+                        <td>
+                            <span>日期区间:</span>
+                        </td>
+                        <td>
+                            <div id="reportrange"
+                                 style="display:inline; font-size:13px; color:rgb(255,255,255); background:rgb(255,255,255); cursor: pointer; padding: 5px 10px; border: 1px solid rgb(157,157,157); width: 100% ">
+                                <i class="fa fa-calendar"></i>&nbsp;
+                                <span></span> <i class="fa fa-caret-down"></i>
+                            </div>
+                        </td>
+                        <td style="padding-left:35px">
+                            <span>表单类型:</span>
+                        </td>
+                        <td>
+                            <select id="formTypeSelect">
+                                @foreach (var x in ViewBag.formTypes)
+                                {
+                                    <option>@x</option>
+                                }
+                            </select>
+                        </td>
+                        <td style="display:none">
+                            <sapn>处理状况:</sapn>
+                        </td>
+                        <td style="display:none">
+                            <select id="msgStatusSelect">
+                                @foreach (var y in ViewBag.msgStatus)
+                                {
+                                    <option>@y</option>
+                                }
+                            </select>
+                        </td>
 
-    <div data-options="region:'north',title:'查询区域'" style="height:100px;border:1px solid black;overflow:hidden">
-        <div style="padding:5px 10px 5px 10px" class="queryzone">
-            <table id="queryZone">
-                <tr>
-                    <td>
-                        <span>日期区间：</span>
-                    </td>
-                    <td>
-                        <div id="reportrange"
-                             style="display:inline; font-size:13px; color:rgb(255,255,255); background:rgb(255,255,255); cursor: pointer; padding: 5px 10px; border: 1px solid rgb(157,157,157); width: 100% ">
-                            <i class="fa fa-calendar"></i>&nbsp;
-                            <span></span> <i class="fa fa-caret-down"></i>
-                        </div>
-                    </td>
-                    <td>
-                        <span>表单类型：</span>
-                    </td>
-                    <td>
-                        <select id="formTypeSelect">
-                            @foreach (var x in ViewBag.formTypes)
-                            {
-                                <option>@x</option>
-                            }
-                        </select>
-                    </td>
-                    <td style="display:none">
-                        <sapn>处理状况：</sapn>
-                    </td>
-                    <td style="display:none">
-                        <select id="msgStatusSelect">
-                            @foreach (var y in ViewBag.msgStatus)
-                            {
-                                <option>@y</option>
-                            }
-                        </select>
-                    </td>
-
-                    <td>
-                        <sapn>处理状况：</sapn>
-                    </td>
-                    <td>
-                        <select id="msgHandleStatusSelect">
-                            @foreach (var y in ViewBag.msgHandleStatus)
-                            {
-                                <option>@y</option>
-                            }
-                        </select>
-                    </td>
-                    <td>
-                        <button type="button" style="margin-left: 50px; width:80px" id="btn-query" class="btn btn-primary">查询</button>
-                    </td>
-                </tr>
-            </table>
+                        <td style="padding-left:35px;">
+                            <sapn>处理状况：</sapn>
+                        </td>
+                        <td>
+                            <select id="msgHandleStatusSelect">
+                                @foreach (var y in ViewBag.msgHandleStatus)
+                                {
+                                    <option>@y</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <button type="button" style="margin-left: 50px; width:60px; height:26px;" id="btn-query">查询</button>
+                        </td>
+                    </tr>
+                </table>
 
 
+            </div>
         </div>
+        <div data-options="region:'center',title:'center title'" style="padding:5px; overflow-x:hidden" title="">
+            <table id="example" style="" @*table-layout:fixed; word-wrap:break-word;*@
+                   class="display table-striped table-bordered table-hover table-condensed" cellspacing="0" width="100%"></table>
+        </div>
+
+
     </div>
-    <div data-options="region:'center',title:'center title'" style="padding:5px; overflow-x:hidden" title="">
-        <table id="example" style="" @*table-layout:fixed; word-wrap:break-word;*@
-               class="display table-striped table-bordered table-hover table-condensed" cellspacing="0" width="95%"></table>
-    </div>
 
+    @Html.Partial("_Detail")
+    @section scripts{
+        @*<script defer="defer" src="~/js/MessageSign/MessageSign.js"></script>*@
 
-</div>
-
-@Html.Partial("_Detail")
-@section scripts{
-    @*<script defer="defer" src="~/js/MessageSign/MessageSign.js"></script>*@
-
-    <script defer="defer" type="text/javascript">
+        <script defer="defer" type="text/javascript">
 
         $(function () {
             $("#btn-query").click(function () { reloadTables(); });
@@ -206,6 +232,8 @@ ViewBag.AllString,
             setDataPicker();
             setSelect();
             setModalCenter();
+
+            $("#result-tips").html("tips: 当前标签页消息【已读或已完成】不显示<font color='red'>New</font>标识");
 
             //console.log('是否iframe嵌套: ' + !(window.self === window.top));
         });
@@ -306,8 +334,10 @@ ViewBag.AllString,
                 if (top.controlNewSapn) {
                     if (isShow) {
                         top.controlNewSapn.show();
+                        //pageCommMessageSign.controlResultTips(true);
                     } else {
                         top.controlNewSapn.hide();
+                        //pageCommMessageSign.controlResultTips(false);
                     }
                 }
             },
@@ -316,6 +346,13 @@ ViewBag.AllString,
                     pageCommMessageSign.controlNewSapn(false);
                 } else {
                     pageCommMessageSign.controlNewSapn(true);
+                }
+            },
+            controlResultTips: function (isShow) {
+                if (isShow) {
+                    $("#result-tips").css("display", "inline");
+                } else {
+                    $("#result-tips").css("display", "none");
                 }
             }
         }
@@ -499,7 +536,7 @@ ViewBag.AllString,
 
                     //ajax请求数据
                     $.ajax({
-                        url: "MessageSign/DataTableList",
+                        url: '@Url.Action("DataTableList","MessageSign")',//"MessageSign/DataTableList",
                         type: "POST",
                         cache: false, //禁用缓存
                         data: param, //传入组装的参数
@@ -554,7 +591,7 @@ ViewBag.AllString,
                 ///更新已读状态
                 $.ajax({
                     type: "POST",
-                    url: "MessageSign/UpdateRead",
+                    url: '@Url.Action("UpdateRead","MessageSign")',//"MessageSign/UpdateRead",
                     data: { "OID": data.oid },
                     success: function (data) {
                         if (data.success) {
@@ -617,7 +654,7 @@ ViewBag.AllString,
             "search": "搜索:",
             "infoPostFix": "", //追加到所有其他主要信息字符串之后
             "url": "",
-            "emptyTable": "表中数据为空",
+            "emptyTable": " ",
             "infoThousands": ",",
             "paginate": {
                 "first": "首页",
@@ -854,6 +891,6 @@ ViewBag.AllString,
         };
 
 
-    </script>
-}
+        </script>
+    }
 

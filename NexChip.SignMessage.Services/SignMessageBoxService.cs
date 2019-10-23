@@ -30,6 +30,13 @@ namespace NexChip.SignMessage.Services
 
         }
 
+        public enum ShowEnum
+        {
+            Display = 0,
+            IsShow = 1
+        }
+
+
         public BizListResult<SignMessageBox> GetPageList(int pageIndex , int pageSize, string toempid
             ,DateTime startD, DateTime endD, string formType, string msgStatus,string msgHandleStatus)
         {
@@ -56,6 +63,7 @@ namespace NexChip.SignMessage.Services
 
             var queryable = db.Queryable<SignMessageBox, SignMessageRole>(
                 (s, sc) => new JoinQueryInfos(JoinType.Inner, s.appname == sc.appname))
+                .Where((s,sc) => sc.isshow == (int)ShowEnum.IsShow)
                 .Where(s => s.toempid == toempid)
                 .Where(s => s.sendtime >= startD && s.sendtime < endD.AddDays(1))
                 //.Where(s => s.msghandlestatus == msgHandleStatus)

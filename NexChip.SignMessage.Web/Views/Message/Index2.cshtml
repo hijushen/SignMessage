@@ -194,6 +194,7 @@
 
     </style>
     <style type="text/css">
+        /*标签页未读提示*/
         .m-badge {
             display: inline-block;
             min-width: 10px;
@@ -211,7 +212,16 @@
             z-index: 999;
         }
 
-        
+
+        /*提示语样式*/
+        #title-tips{
+            margin-left:80px;
+            font-family:Verdana;
+            color:blue;
+            font-size:12px;
+            font-weight:bold;
+        }        
+
 
     </style>
 </head>
@@ -220,7 +230,7 @@
     <div region="north" border="true" class="cs-north">
         <div class="cs-north-bg">
             <div class="cs-north-logo">
-                <span>签核箱新版</span>
+                <span>签核箱新版</span><span id='title-tips'>tips: 【其他应用系统】标签页存在未读且未更新消息时将显示<font color='red'>New</font>标识</span>
                 
             </div>
             <ul class="systemhelper">
@@ -532,7 +542,8 @@
 
     var controlNewSapn = {
         show: function () {
-            $('#newmessage').css("display", "inline-block")
+            $('#newmessage').html('New');
+            $('#newmessage').css("display", "inline-block");
         }
         ,
         hide: function () {
@@ -617,7 +628,7 @@
         //addTab("测试Brog签核箱", brogSignMessageUrl, "iframetestBorG");
         addTab("BorG表单", brogSignMessageUrl, "iframelocalBorG");
         addTab('@ViewBag.NoBroGTitle' +
-            '<span id="newmessage" class="m-badge" style="dispaly:none">New</span>',
+            '<span id="newmessage" class="m-badge" style="dispaly:none"></span>',
             BroGVali.getSignMessageUrl(), "iframeNewSignMessage");
 
         setTimeout(function () {

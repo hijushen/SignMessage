@@ -215,11 +215,16 @@
 
         /*提示语样式*/
         #title-tips{
-            margin-left:80px;
+            /*margin-top:20px;*/
+            /*position:absolute;*/
+            /*margin-left:10px;*/
             font-family:Verdana;
             color:blue;
             font-size:12px;
             font-weight:bold;
+
+            line-height:25px;
+            padding:1px 50px;
         }        
 
 
@@ -230,8 +235,9 @@
     <div region="north" border="true" class="cs-north">
         <div class="cs-north-bg">
             <div class="cs-north-logo">
-                <span>签核箱新版</span><span id='title-tips'>tips: 【其他应用系统】标签页存在未读、未完成或未更新消息时将显示<font color='red'>New</font>标识</span>
-                
+                <span>签核箱新版</span>
+                @*<span id='title-tips'>tips: 【其他应用系统】标签页存在未完成或未更新消息且未读时将显示<font color='red'>New</font>标识</span>*@
+
             </div>
             <ul class="systemhelper">
                 <img title="查看系统公告" style="cursor:hand" onclick="showsyshelper()" src="~/img/intro.gif" />
@@ -542,6 +548,10 @@
 
     var controlNewSapn = {
         show: function () {
+            if ($("#newmessage").hasClass("m-badge") === false) {
+                $("#newmessage").addClass("m-badge");
+            }
+
             $('#newmessage').html('New');
             $('#newmessage').css("display", "inline-block");
         }
@@ -628,12 +638,15 @@
         //addTab("测试Brog签核箱", brogSignMessageUrl, "iframetestBorG");
         addTab("BorG表单", brogSignMessageUrl, "iframelocalBorG");
         addTab('@ViewBag.NoBroGTitle' +
-            '<span id="newmessage" class="m-badge" style="dispaly:none"></span>',
+            '<span id="newmessage"  style="dispaly:none"></span>', /*class="m-badge"*/
             BroGVali.getSignMessageUrl(), "iframeNewSignMessage");
 
         setTimeout(function () {
             $('#tabs').tabs('select', 0);
         }, 200);
+
+
+        $('#tabs .tabs').append("<span id='title-tips'>tips:【其他应用系统】标签页有未读新消息时，显示<font color='red'>New</font>标识</span>")
 
     }
 

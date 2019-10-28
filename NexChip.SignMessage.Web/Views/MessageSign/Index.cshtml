@@ -320,12 +320,15 @@ ViewBag.AllString,
                             pageCommMessageSign.clientRefreshNewSpan();
 
                             if (curIsNewSignPanel) {
-                                if (count > 1) {
-                                    ///如果在第一页且有未读消息，则刷新DataTables.
-                                    if (exampleTable.page() == 0) {
-                                        reloadTables();
-                                    }
+                                if (exampleTable.page() == 0) { //在第一页就刷新。
+                                    reloadTables();
                                 }
+                                //if (count > 1) {
+                                    ///如果在第一页且有未读消息，则刷新DataTables.
+                                    //if (exampleTable.page() == 0) {
+                                    //    reloadTables();
+                                    //}
+                                //}
                             }
                         } else {
 

@@ -3,20 +3,29 @@
 <html>
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>欢迎使用 </title>
+    <title>系统使用说明 </title>
     <style type="text/css">
         h3 {
-            text-align: center;
+            text-align: left;
+            font-size:16px;
+            font-weight:bold;
+            color:red;
+            font-family:"";
+            margin-left:20px;
         }
 
         BODY {
             FONT-SIZE: 12pt;
-            FONT-FAMILY: 'Microsoft YaHei UI';
+            FONT-FAMILY: 'Times New Roman';
         }
 
         TABLE {
             FONT-SIZE: 12pt;
-            FONT-FAMILY: 'Microsoft YaHei UI';
+            FONT-FAMILY: 'Times New Roman';
+        }
+
+        li {
+            margin-left:15px;
         }
     </style>
     <script src="~/js/jquery1.9.1.min.js"></script>
@@ -43,18 +52,57 @@
             <h3>系统使用说明</h3>
             <ul>
                 <li>【BorG 表单】为BorG 表单签核事项 </li>
-                <li>【其他应用系统】为非BorG 应用程序通过MIS开发API接口传递代办事项</li>
-            </ul>
-            <h3>应用系统开发文档</h3>
-            <ul>
-                <li><a href="~/doc/新签核箱业务系统接口调用规范.docx">开发标准 </a></li>
-                <li><a href="~/doc/新签核箱业务系统接口调用规范参考实现（Net2.0版本）.docx">开发参考实现（.NET 2.0版本）</a></li>
-                <li><a href="~/doc/新签核箱业务系统接口调用规范参考实现（Net3.5版本）.docx">开发参考实现（.NET 3.5版本）</a></li>
-                <li><a href="~/doc/新签核箱业务系统接口调用规范参考实现（Net4.5版本）.docx">开发参考实现（.NET 4.5版本）</a></li>
+                <li>【其他应用系统】为除基于BorG开发的表单外，通过邮件等方式通知审批的应用系统</li>
             </ul>
 
-            <div>如有问题，联系 MIS 平台服务课:<a href="mailto:cocoge@nexchip.com.cn">cocoge@nexchip.com.cn</a></div>
-            
+            <h3>
+                已接入【其他应用系统】列表
+            </h3>
+            <ul>
+                <li>考勤系统（主管签核所辖出勤异常表单）</li>
+                <li>用餐系统（用餐收费 秘书确认/主管签核）</li>
+                <li>PSR</li>
+                <li>FMEA</li>
+                <li>TECN</li>
+                <li>TMS</li>
+                <li>Module_WEB</li>
+            </ul>
+
+            <h3>
+                待接入【其他应用系统】列表
+            </h3>
+            <ul>
+                <li>放行单请款 系统负责人:<a href="mailto:IrisTang@nexchip.com.cn" title="点击发邮件">IrisTang</a> 预计上线日期:2019/12/20</li>
+                <li>STTEST 系统负责人:<a href="mailto:cuisansan@nexchip.com.cn" title="点击发邮件">cuisansan</a> 预计上线日期:2019/12/31</li>
+            </ul>
+            <h3>
+                申请接入【其他应用系统】方法
+            </h3>
+            <ul>
+                <li>
+                    业务系统使用者：系统（非BorG引擎开发程序或表单）使用过程中，认为需将签核或代办在签核箱显示的，联系业务系统负责人，由其评估是否申请加入。
+                </li>
+                <li>
+                    业务系统负责人：联系 MIS <a href="mailto:cocoge@nexchip.com.cn" title="点击发邮件">cocoge</a>，申请接入权限，得到授权文件后即可按照开发标准参考开发实现接入。
+                </li>
+            </ul>
+
+
+            <h3>业务系统开发文档</h3>
+            <ul>
+                <li><a href="~/doc/新签核箱业务系统接口调用规范.docx">开发标准</a></li>
+                <li>
+                    参考实现 <a href="~/doc/新签核箱业务系统接口调用规范参考实现（Net2.0版本）.docx">.NET 2.0版本</a>、
+                    <a href="~/doc/新签核箱业务系统接口调用规范参考实现（Net3.5版本）.docx">
+                        .NET 3.5版本
+                    </a>、
+                    <a href="~/doc/新签核箱业务系统接口调用规范参考实现（Net4.5版本）.docx">.NET 4.5版本</a>
+                </li>
+            </ul>
+
+            <div style="margin-left:20px;">其他相关问题，联系 MIS 平台服务课:<a href="mailto:cocoge@nexchip.com.cn" title="点击发邮件">cocoge,616803</a> ; 
+                                     <a href="mailto:jcui@nexchip.com.cn" title="点击发邮件">jcui,616795</a></div>
+
             <br />
             <div align="center">
                 <input id="btnGo" onclick="AddClicked()" type="button" value="关闭">
